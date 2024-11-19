@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "997683806249",
+    "firebase_url": "https://syafiraproject-550ac-default-rtdb.firebaseio.com",
+    "project_id": "syafiraproject-550ac",
+    "storage_bucket": "syafiraproject-550ac.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:997683806249:android:7f303f9b54b5813d205c38",
+        "android_client_info": {
+          "package_name": "com.example.project"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBiSoKDK4jRNC1nFAKjbhEOOjAR6Vzo5gA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
