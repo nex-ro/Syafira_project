@@ -7,31 +7,42 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.google.firebase.database.FirebaseDatabase
 import android.util.Log
-
+import com.example.project.databinding.ActivityMainBinding
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.database.DatabaseReference
+import androidx.fragment.app.Fragment
 
 class MainActivity : AppCompatActivity() {
-    private lateinit var ref: DatabaseReference
-
+    private lateinit var binding: ActivityMainBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        binding = ActivityMainBinding.inflate(layoutInflater)
 
-        // Inisialisasi Firebase Realtime Database
-        ref = FirebaseDatabase.getInstance().reference
+        setContentView(binding.root)
 
-        // Tambahkan data ke Realtime Database
-//        addTestData()
+        val Dashboard = Dashboard()
+        val kamar = kamar()
+        val profile = profile()
+        val Statistik_Medis = Statistik_Medis()
+
+
+        setCurrentFragment(Dashboard)
+
+        binding.bottomNavigationView.setOnNavigationItemSelectedListener {
+            when (it.itemId) {
+                R.id.Dashboard -> setCurrentFragment(Dashboard)
+                R.id.kamar -> setCurrentFragment(kamar)
+                R.id.medis -> setCurrentFragment(Statistik_Medis)
+                R.id.profil -> setCurrentFragment(profile)
+            }
+            true
+        }
+
     }
 
-    private fun addTestData() {
-        val testData = "test"
-        ref.child("messages").push().setValue(testData)
-            .addOnSuccessListener {
-                Log.d("Firebase", "Data berhasil ditambahkan!")
-            }
-            .addOnFailureListener { exception ->
-                Log.e("Firebase", "Gagal menambahkan data: ${exception.message}")
-            }
-    }
+    private fun setCurrentFragment(fragment: Fragment) =
+        supportFragmentManager.beginTransaction().apply {
+            replace(R.id.flFragment, fragment)
+            commit()
+        }
 }

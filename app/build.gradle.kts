@@ -34,6 +34,9 @@ android {
     kotlinOptions {
         jvmTarget = "1.8"
     }
+    buildFeatures{
+        viewBinding=true;
+    }
 }
 
 dependencies {
@@ -41,6 +44,7 @@ dependencies {
     implementation("com.google.firebase:firebase-database:20.1.0")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.5.1")
     implementation("androidx.core:core-ktx:1.9.0")
+    implementation("com.google.android.material:material:1.2.0")
     implementation("androidx.appcompat:appcompat:1.5.1")
     implementation("androidx.appcompat:appcompat-resources:1.5.1")
     implementation("androidx.emoji2:emoji2-views-helper:1.2.0")
