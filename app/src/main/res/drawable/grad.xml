@@ -1,0 +1,19 @@
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Gambar sebagai latar belakang -->
+    <item>
+        <bitmap
+            android:src="@drawable/bg"
+            android:gravity="fill" />
+    </item>
+
+    <!-- Gradient di atas gambar -->
+    <item>
+        <shape android:shape="rectangle">
+            <gradient
+                android:angle="270"
+                android:startColor="#80DC89CB"
+            android:endColor="#80FFFFFF"
+            android:gradientRadius="90" />
+        </shape>
+    </item>
+</layer-list>

@@ -7,6 +7,16 @@ plugins {
 android {
     namespace = "com.example.project"
     compileSdk = 35
+    sourceSets {
+        getByName("main") {
+            res.srcDirs(
+                "src/main/res/layouts/layouts_category2",
+                "src/main/res/layouts",
+                "src/main/res"
+            )
+        }
+    }
+
 
     defaultConfig {
         applicationId = "com.example.project"
@@ -14,7 +24,6 @@ android {
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
-
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -38,6 +47,7 @@ android {
         viewBinding=true;
     }
 }
+
 
 dependencies {
     implementation(libs.firebase.database)
