@@ -7,15 +7,8 @@ plugins {
 android {
     namespace = "com.example.project"
     compileSdk = 35
-    sourceSets {
-        getByName("main") {
-            res.srcDirs(
-                "src/main/res/layouts/layouts_category2",
-                "src/main/res/layouts",
-                "src/main/res"
-            )
-        }
-    }
+
+
 
 
     defaultConfig {
@@ -46,6 +39,7 @@ android {
     buildFeatures{
         viewBinding=true;
     }
+
 }
 
 
