@@ -27,7 +27,6 @@ class MainActivity : AppCompatActivity() {
         val profile = profile()
         val Statistik_Medis = Statistik_Medis()
         val belum_login = belum_login()
-
         sharedPreferences = getSharedPreferences("UserSession", Context.MODE_PRIVATE)
         setCurrentFragment(Dashboard)
         binding.bottomNavigationView.setOnNavigationItemSelectedListener {
@@ -43,9 +42,6 @@ class MainActivity : AppCompatActivity() {
                         setCurrentFragment(belum_login)
                     }
                 }
-
-                R.id.medis -> setCurrentFragment(Statistik_Medis)
-
                 R.id.profil ->{
                     val isLoggedIn = sharedPreferences.getBoolean("isLoggedIn", false)
                     if (isLoggedIn) {
