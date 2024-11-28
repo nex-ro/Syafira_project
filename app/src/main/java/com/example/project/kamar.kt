@@ -6,7 +6,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.example.project.Data.ruangan
+import com.example.project.Data.Ruangan
 import com.example.project.databinding.FragmentKamarBinding
 import com.google.firebase.database.*
 
@@ -29,7 +29,7 @@ class kamar : Fragment() {
 
                     for (dataSnapshot in snapshot.children) {
                         // Ambil data sebagai objek Ruangan
-                        val ruangan = dataSnapshot.getValue(ruangan::class.java)
+                        val ruangan = dataSnapshot.getValue(Ruangan::class.java)
 
                         // Tambahkan data ke StringBuilder
                         if (ruangan != null) {
