@@ -1,34 +1,143 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
+<ScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    android:background="@color/pink"
+    android:padding="16dp"
+    tools:context=".profile">
 
-
-
-    <TextView
-        android:id="@+id/firstFragment"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Profil"
-        android:textColor="#43a047"
-        android:textSize="40sp"
-        android:textStyle="italic|bold"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-    <Button
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/buttonLogout"
-        android:text="Logout"
-        />
+        android:layout_height="wrap_content">
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_gravity="center"
+            android:gravity="center">
 
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/imgProfile"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:src="@drawable/lc_profile"
+                android:scaleType="centerCrop"
+                android:layout_marginBottom="16dp"
+                android:background="@drawable/circle_background"/>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="8dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Username"
+                    android:textSize="14sp"
+                    android:textColor="@color/white"/>
+                <EditText
+                    android:id="@+id/edtUsername"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="jennie"
+                    android:background="@drawable/input_background"
+                    android:padding="12dp"
+                    android:textColor="@color/white"
+                    android:layout_marginBottom="12dp"
+                    android:enabled="true"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Nama Lengkap"
+                    android:textSize="14sp"
+                    android:textColor="@color/white"/>
+                <EditText
+                    android:id="@+id/edtFullName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="jennie Nurlela"
+                    android:background="@drawable/input_background"
+                    android:padding="12dp"
+                    android:textColor="@color/white"
+                    android:layout_marginBottom="12dp"
+                    android:enabled="true"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Email"
+                    android:textSize="18sp"
+                    android:textColor="@color/white"/>
+                <EditText
+                    android:id="@+id/edtEmail"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="jennie@gmaul.com"
+                    android:background="@drawable/input_background"
+                    android:padding="12dp"
+                    android:textColor="@color/white"
+                    android:layout_marginBottom="12dp"
+                    android:enabled="true"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="No HP"
+                    android:textSize="18sp"
+                    android:textColor="@color/white"/>
+                <EditText
+                    android:id="@+id/edtNoHP"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="08888887"
+                    android:background="@drawable/input_background"
+                    android:padding="12dp"
+                    android:textColor="@color/white"
+                    android:layout_marginBottom="12dp"
+                    android:enabled="true"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Jenis Kelamin"
+                    android:textSize="18sp"
+                    android:textColor="@color/white"/>
+                <EditText
+                    android:id="@+id/edtJenisKelamin"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Perempuan"
+                    android:background="@drawable/input_background"
+                    android:padding="12dp"
+                    android:textColor="@color/white"
+                    android:layout_marginBottom="12dp"
+                    android:enabled="true"/>
+
+                <Button
+                    android:id="@+id/btnSave"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Simpan"
+                    android:background="@color/green" />
+
+            </LinearLayout>
+        </LinearLayout>
+
+        <ImageButton
+            android:id="@+id/buttonLogout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentTop="true"
+            android:background="@null"
+            android:src="@drawable/ic_logout"
+        android:contentDescription="logout" />
+
+    </RelativeLayout>
+</ScrollView>

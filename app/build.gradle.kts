@@ -54,6 +54,7 @@ dependencies {
     implementation("androidx.emoji2:emoji2-views-helper:1.2.0")
     implementation("androidx.emoji2:emoji2:1.2.0")
     implementation("androidx.lifecycle:lifecycle-process:2.5.1")
+    implementation ("de.hdodenhof:circleimageview:3.1.0")
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
