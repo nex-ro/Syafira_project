@@ -15,18 +15,28 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
             android:layout_gravity="center"
-            android:gravity="center">
+            android:gravity="center"
+            android:orientation="vertical">
 
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/imgProfile"
                 android:layout_width="100dp"
                 android:layout_height="100dp"
-                android:src="@drawable/lc_profile"
-                android:scaleType="centerCrop"
                 android:layout_marginBottom="16dp"
-                android:background="@drawable/circle_background"/>
+                android:background="@drawable/circle_background"
+                android:scaleType="centerCrop"
+                android:src="@drawable/lc_profile" />
+            <TextView
+                android:id="@+id/txtGreeting"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Hi, User!"
+                android:textColor="@color/white"
+                android:textSize="18sp"
+                android:layout_marginBottom="12dp"
+                android:gravity="center"
+                android:textStyle="bold" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -37,96 +47,112 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
                     android:text="Username"
-                    android:textSize="14sp"
-                    android:textColor="@color/white"/>
+                    android:textColor="@color/white"
+                    android:textStyle="bold"
+                    android:textSize="18sp" />
+
                 <EditText
                     android:id="@+id/edtUsername"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="jennie"
-                    android:background="@drawable/input_background"
-                    android:padding="12dp"
-                    android:textColor="@color/white"
                     android:layout_marginBottom="12dp"
-                    android:enabled="true"/>
+                    android:background="@drawable/input_background"
+                    android:enabled="true"
+                    android:padding="12dp"
+                    android:text="jennie"
+                    android:textColor="@color/white" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
                     android:text="Nama Lengkap"
-                    android:textSize="14sp"
-                    android:textColor="@color/white"/>
+                    android:textColor="@color/white"
+                    android:textStyle="bold"
+                    android:textSize="18sp" />
+
                 <EditText
                     android:id="@+id/edtFullName"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="jennie Nurlela"
-                    android:background="@drawable/input_background"
-                    android:padding="12dp"
-                    android:textColor="@color/white"
                     android:layout_marginBottom="12dp"
-                    android:enabled="true"/>
+                    android:background="@drawable/input_background"
+                    android:enabled="true"
+                    android:padding="12dp"
+                    android:text="jennie Nurlela"
+                    android:textColor="@color/white" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
                     android:text="Email"
-                    android:textSize="18sp"
-                    android:textColor="@color/white"/>
+                    android:textColor="@color/white"
+                    android:textStyle="bold"
+                    android:textSize="18sp" />
+
                 <EditText
                     android:id="@+id/edtEmail"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="jennie@gmaul.com"
-                    android:background="@drawable/input_background"
-                    android:padding="12dp"
-                    android:textColor="@color/white"
                     android:layout_marginBottom="12dp"
-                    android:enabled="true"/>
+                    android:background="@drawable/input_background"
+                    android:enabled="true"
+                    android:padding="12dp"
+                    android:text="jennie@gmaul.com"
+                    android:textColor="@color/white" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
                     android:text="No HP"
-                    android:textSize="18sp"
-                    android:textColor="@color/white"/>
+                    android:textColor="@color/white"
+                    android:textStyle="bold"
+                    android:textSize="18sp" />
+
                 <EditText
                     android:id="@+id/edtNoHP"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="08888887"
-                    android:background="@drawable/input_background"
-                    android:padding="12dp"
-                    android:textColor="@color/white"
                     android:layout_marginBottom="12dp"
-                    android:enabled="true"/>
+                    android:background="@drawable/input_background"
+                    android:enabled="true"
+                    android:padding="12dp"
+                    android:text="08888887"
+                    android:textColor="@color/white" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Jenis Kelamin"
-                    android:textSize="18sp"
-                    android:textColor="@color/white"/>
+                    android:layout_marginBottom="10dp"
+                    android:textStyle="bold"
+                    android:textColor="@color/white"
+                    android:textSize="18sp" />
+
                 <EditText
                     android:id="@+id/edtJenisKelamin"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Perempuan"
-                    android:background="@drawable/input_background"
-                    android:padding="12dp"
-                    android:textColor="@color/white"
                     android:layout_marginBottom="12dp"
-                    android:enabled="true"/>
+                    android:background="@drawable/input_background"
+                    android:enabled="true"
+                    android:padding="12dp"
+                    android:text="Perempuan"
+                    android:textColor="@color/white" />
 
-                <Button
-                    android:id="@+id/btnSave"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Simpan"
-                    android:background="@color/green" />
 
             </LinearLayout>
+
+            <Button
+                android:id="@+id/btnSave"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/green"
+                android:text="Simpan" />
         </LinearLayout>
 
         <ImageButton
