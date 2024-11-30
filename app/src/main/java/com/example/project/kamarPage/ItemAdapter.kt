@@ -26,6 +26,7 @@ class ItemAdapter(
         holder.jeniskamar.text = item.jenis
         holder.empty.text ="Kosong :"+ item.kosong.toString()
         holder.terisi.text="Terisi "+item.terisi.toString()
+        
     }
 
     override fun getItemCount(): Int {

@@ -43,14 +43,20 @@ class login : AppCompatActivity() {
                     val storedPassword = snapshot.child("password").value.toString()
 
                     if (storedPassword == password) {
-                        val nama = snapshot.child("nama").value?.toString() ?: "Guest"
+                        val nama = snapshot.child("nama").value?.toString() ?: ""
+                        val email = snapshot.child("email").value?.toString() ?: ""
+                        val phone = snapshot.child("phone").value?.toString() ?: ""
+                        val gender = snapshot.child("gender").value?.toString() ?: ""
 
-                        // Simpan data user dan nama ke SharedPreferences
                         val editor = sharedPreferences.edit()
                         editor.putBoolean("isLoggedIn", true)
                         editor.putString("username", username)
-                        editor.putString("nama", nama)  // Simpan nama
+                        editor.putString("nama", nama)
+                        editor.putString("email", email)
+                        editor.putString("phone", phone)
+                        editor.putString("gender", gender)
                         editor.apply()
+
 
                         Toast.makeText(
                             this@login,

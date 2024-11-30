@@ -31,6 +31,8 @@ import java.io.IOException
 class profile : Fragment() {
     private lateinit var binding: FragmentProfileBinding
     private lateinit var databaseReference: DatabaseReference
+    private lateinit var ref: DatabaseReference
+
     private lateinit var sharedPreferences: SharedPreferences
     private lateinit var getContent: ActivityResultLauncher<Intent>
 
@@ -39,10 +41,7 @@ class profile : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentProfileBinding.inflate(inflater, container, false)
-        databaseReference = FirebaseDatabase.getInstance().getReference("users")
-
-
-        ref = FirebaseDatabase.getInstance().reference
+        databaseReference = FirebaseDatabase.getInstance().getReference("user")
 
         sharedPreferences = requireActivity().getSharedPreferences("UserSession", Context.MODE_PRIVATE)
 
@@ -50,7 +49,7 @@ class profile : Fragment() {
         getContent = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == Activity.RESULT_OK) {
                 val imageUri = result.data?.data
-                binding.imgProfile.setImageURI(imageUri)  // Set gambar ke ImageView
+                binding.imgProfile.setImageURI(imageUri)
             }
         }
 
@@ -78,56 +77,51 @@ class profile : Fragment() {
     private fun loadUserData() {
         // Ambil username dari SharedPreferences
         val username = sharedPreferences.getString("username", null)
+        val fullName = sharedPreferences.getString("nama", null)
+        val email = sharedPreferences.getString("email", null)
+        val phone = sharedPreferences.getString("phone", null)
+        val gender = sharedPreferences.getString("gender", null)
 
-        if (username != null) {
-            // Ambil data dari Firebase berdasarkan username
-            databaseReference.child(username).addListenerForSingleValueEvent(object : ValueEventListener {
-                override fun onDataChange(snapshot: DataSnapshot) {
-                    if (snapshot.exists()) {
-                        val fullName = snapshot.child("fullName").getValue(String::class.java) ?: "Jennie Nurlela"
-                        val email = snapshot.child("email").getValue(String::class.java) ?: "jennie@gmaul.com"
-                        val phone = snapshot.child("phone").getValue(String::class.java) ?: "08888887"
-                        val gender = snapshot.child("gender").getValue(String::class.java) ?: "Perempuan"
+        // Set data ke views
+        binding.txtGreeting.text = "Hi, $username!"  // Menampilkan username
+        binding.editTextUsername.setText(username)
+        binding.edtFullName.setText(fullName)
+        binding.edtEmail.setText(email)
+        binding.edtNoHP.setText(phone)
+        binding.edtJenisKelamin.setText(gender)
 
-                        // Set data ke views
-                        binding.txtGreeting.text = "Hi, $username!"  // Menampilkan username
-                        binding.editTextUsername.setText(username)
-                        binding.edtFullName.setText(fullName)
-                        binding.edtEmail.setText(email)
-                        binding.edtNoHP.setText(phone)
-                        binding.edtJenisKelamin.setText(gender)
-                    } else {
-                        Toast.makeText(requireContext(), "User not found!", Toast.LENGTH_SHORT).show()
-                    }
-                }
-
-                override fun onCancelled(error: DatabaseError) {
-                    Toast.makeText(requireContext(), "Failed to load data: ${error.message}", Toast.LENGTH_SHORT).show()
-                }
-            })
-        } else {
-            Toast.makeText(requireContext(), "No username in session!", Toast.LENGTH_SHORT).show()
-        }
     }
 
     private fun saveUserProfile() {
-        // Ambil username dari SharedPreferences
         val username = sharedPreferences.getString("username", null)
 
         if (username != null) {
-            // Data profil yang akan disimpan, termasuk data yang diubah oleh user
+            val updatedUsername = binding.editTextUsername.text.toString()
+            val updatedFullName = binding.edtFullName.text.toString()
+            val updatedEmail = binding.edtEmail.text.toString()
+            val updatedPhone = binding.edtNoHP.text.toString()
+            val updatedGender = binding.edtJenisKelamin.text.toString()
+
             val userProfile = mapOf(
-                "username" to binding.editTextUsername.text.toString(),
-                "fullName" to binding.edtFullName.text.toString(),
-                "email" to binding.edtEmail.text.toString(),
-                "phone" to binding.edtNoHP.text.toString(),
-                "gender" to binding.edtJenisKelamin.text.toString()
+                "username" to updatedUsername,
+                "fullName" to updatedFullName,
+                "email" to updatedEmail,
+                "phone" to updatedPhone,
+                "gender" to updatedGender
             )
 
-            // Simpan data ke Firebase Database
             databaseReference.child(username).setValue(userProfile)
                 .addOnCompleteListener { task ->
                     if (task.isSuccessful) {
+                        // Simpan data yang baru ke SharedPreferences
+                        val editor = sharedPreferences.edit()
+                        editor.putString("username", updatedUsername)
+                        editor.putString("nama", updatedFullName)
+                        editor.putString("email", updatedEmail)
+                        editor.putString("phone", updatedPhone)
+                        editor.putString("gender", updatedGender)
+                        editor.apply() // Simpan perubahan
+
                         Toast.makeText(requireContext(), "Profile saved successfully!", Toast.LENGTH_SHORT).show()
                     } else {
                         Toast.makeText(requireContext(), "Failed to save profile: ${task.exception?.message}", Toast.LENGTH_SHORT).show()
@@ -141,7 +135,7 @@ class profile : Fragment() {
     private fun openImagePicker() {
         val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
         intent.type = "image/*"
-        getContent.launch(intent)  // Gunakan launcher untuk memulai aktivitas
+        getContent.launch(intent)
     }
 
     private fun logoutUser() {
@@ -149,8 +143,6 @@ class profile : Fragment() {
         val editor = sharedPreferences.edit()
         editor.clear()
         editor.apply()
-
-        // Redirect ke MainActivity
         Toast.makeText(requireContext(), "Logged out successfully!", Toast.LENGTH_SHORT).show()
         val intent = Intent(activity, MainActivity::class.java)
         startActivity(intent)
