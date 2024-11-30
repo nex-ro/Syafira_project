@@ -1,17 +1,18 @@
-package com.example.project
+package com.example.project.kamarPage
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-
-class Statistik_Medis : Fragment() {
+import androidx.fragment.app.Fragment
+import com.example.project.R
+class AturKamar : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        return inflater.inflate(R.layout.fragment_statistik__medis, container, false)
+        return inflater.inflate(R.layout.fragment_atur_kamar, container, false)
     }
+
 }

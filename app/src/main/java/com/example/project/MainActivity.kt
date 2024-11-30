@@ -29,6 +29,7 @@ class MainActivity : AppCompatActivity() {
         val belum_login = belum_login()
         sharedPreferences = getSharedPreferences("UserSession", Context.MODE_PRIVATE)
         setCurrentFragment(Dashboard)
+        binding.bottomNavigationView.setItemBackgroundResource(R.color.colorAccent)
         binding.bottomNavigationView.setOnNavigationItemSelectedListener {
             when (it.itemId) {
                 R.id.Dashboard -> setCurrentFragment(Dashboard)

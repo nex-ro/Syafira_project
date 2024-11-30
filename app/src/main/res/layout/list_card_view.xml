@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_margin="20dp"
+    android:background="@color/colorPrimaryDark"
+    app:cardCornerRadius="10dp"
+    app:cardElevation="7dp">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="140dp"
+        android:layout_height="match_parent"
+        android:background="@color/colorPrimaryDark"
+        android:padding="5dp">
+
+        <ImageView
+            android:id="@+id/gambarCard"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            app:srcCompat="@drawable/kamar_rs"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <!-- Jenis kamar di bawah gambar -->
+        <TextView
+            android:id="@+id/jeniskamar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="ICU"
+            android:textAlignment="center"
+            android:textColor="@color/white"
+            android:textSize="17sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/gambarCard" />
+
+        <!-- Ketersediaan kamar -->
+        <TextView
+            android:id="@+id/emptyRoom"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
+            android:background="@drawable/rounded_ketersediaan_kamar"
+            android:paddingVertical="2dp"
+            android:text="Kosong : 3"
+            android:textAlignment="center"
+            android:textColor="@color/white"
+            android:textSize="13sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/jeniskamar" />
+
+        <!-- Tempat tidur -->
+        <TextView
+            android:id="@+id/tempatTidur"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
+            android:background="@drawable/rounded_kamar_terpakai"
+            android:paddingVertical="2dp"
+            android:text="Tempat Tidur : 6"
+            android:textAlignment="center"
+            android:textColor="@color/white"
+            android:textSize="13sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/emptyRoom" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.cardview.widget.CardView>

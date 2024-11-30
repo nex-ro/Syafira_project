@@ -39,11 +39,11 @@ class profile : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentProfileBinding.inflate(inflater, container, false)
-
-        // Inisialisasi Firebase Database Reference
         databaseReference = FirebaseDatabase.getInstance().getReference("users")
 
-        // SharedPreferences untuk session
+
+        ref = FirebaseDatabase.getInstance().reference
+
         sharedPreferences = requireActivity().getSharedPreferences("UserSession", Context.MODE_PRIVATE)
 
         // Inisialisasi ActivityResultLauncher untuk memilih gambar
