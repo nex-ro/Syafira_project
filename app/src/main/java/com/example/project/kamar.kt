@@ -11,6 +11,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.project.Data.Ruangan
 import com.example.project.Data.cardData
 import com.example.project.databinding.FragmentKamarBinding
+import com.example.project.kamarPage.AturKamar
+import com.example.project.kamarPage.TambahKamar
 import com.google.firebase.database.*
 
 class kamar : Fragment() {
@@ -70,6 +72,14 @@ class kamar : Fragment() {
                 Log.e("FirebaseError", "Error: ${error.message}")
             }
         })
+        binding.buttonTambahPasien.setOnClickListener {
+            val AturKamar = AturKamar()
+            setCurrentFragment(AturKamar)
+        }
+        binding.buttonTambahRuangan.setOnClickListener {
+            val tambahKamar = TambahKamar()
+            setCurrentFragment(tambahKamar)
+        }
 
         return binding.root
     }
