@@ -24,7 +24,6 @@ class profile : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentProfileBinding.inflate(inflater, container, false)
-
         ref = FirebaseDatabase.getInstance().reference
         sharedPreferences = requireActivity().getSharedPreferences("UserSession", Context.MODE_PRIVATE)
         binding.buttonLogout.setOnClickListener(){
