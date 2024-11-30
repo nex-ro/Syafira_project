@@ -21,12 +21,25 @@
 
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/imgProfile"
-                android:layout_width="100dp"
-                android:layout_height="100dp"
-                android:layout_marginBottom="16dp"
-                android:background="@drawable/circle_background"
-                android:scaleType="centerCrop"
-                android:src="@drawable/lc_profile" />
+                android:layout_width="150dp"
+                android:layout_height="150dp"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="100dp"
+                android:src="@drawable/lc_profile"
+                android:contentDescription="Profile Image"
+                android:layout_alignParentTop="true"
+                android:scaleType="centerCrop" />
+
+            <Button
+                android:id="@+id/btnChangePhoto"
+                android:layout_width="80dp"
+                android:layout_height="40dp"
+                android:layout_below="@id/imgProfile"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="16dp"
+                android:text="Change"
+                android:textSize="10dp"/>
+
             <TextView
                 android:id="@+id/txtGreeting"
                 android:layout_width="wrap_content"
@@ -54,14 +67,14 @@
                     android:textSize="18sp" />
 
                 <EditText
-                    android:id="@+id/edtUsername"
+                    android:id="@+id/editTextUsername"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="12dp"
                     android:background="@drawable/input_background"
                     android:enabled="true"
                     android:padding="12dp"
-                    android:text="jennie"
+                    android:text=""
                     android:textColor="@color/white" />
 
                 <TextView
@@ -81,7 +94,7 @@
                     android:background="@drawable/input_background"
                     android:enabled="true"
                     android:padding="12dp"
-                    android:text="jennie Nurlela"
+                    android:text=""
                     android:textColor="@color/white" />
 
                 <TextView
@@ -101,7 +114,7 @@
                     android:background="@drawable/input_background"
                     android:enabled="true"
                     android:padding="12dp"
-                    android:text="jennie@gmaul.com"
+                    android:text=""
                     android:textColor="@color/white" />
 
                 <TextView
@@ -121,7 +134,7 @@
                     android:background="@drawable/input_background"
                     android:enabled="true"
                     android:padding="12dp"
-                    android:text="08888887"
+                    android:text=""
                     android:textColor="@color/white" />
 
                 <TextView
@@ -141,7 +154,7 @@
                     android:background="@drawable/input_background"
                     android:enabled="true"
                     android:padding="12dp"
-                    android:text="Perempuan"
+                    android:text=""
                     android:textColor="@color/white" />
 
 

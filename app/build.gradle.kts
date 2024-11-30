@@ -46,6 +46,7 @@ android {
 dependencies {
     implementation(libs.firebase.database)
     implementation("com.google.firebase:firebase-database:20.1.0")
+
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.5.1")
     implementation("androidx.core:core-ktx:1.9.0")
     implementation("com.google.android.material:material:1.2.0")
@@ -55,6 +56,8 @@ dependencies {
     implementation("androidx.emoji2:emoji2:1.2.0")
     implementation("androidx.lifecycle:lifecycle-process:2.5.1")
     implementation ("de.hdodenhof:circleimageview:3.1.0")
+    implementation ("androidx.activity:activity-ktx:1.6.0")
+
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
