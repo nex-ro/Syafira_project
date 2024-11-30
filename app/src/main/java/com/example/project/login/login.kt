@@ -45,10 +45,11 @@ class login : AppCompatActivity() {
                     if (storedPassword == password) {
                         val nama = snapshot.child("nama").value?.toString() ?: "Guest"
 
+                        // Simpan data user dan nama ke SharedPreferences
                         val editor = sharedPreferences.edit()
                         editor.putBoolean("isLoggedIn", true)
                         editor.putString("username", username)
-                        editor.putString("nama", nama)
+                        editor.putString("nama", nama)  // Simpan nama
                         editor.apply()
 
                         Toast.makeText(
@@ -56,6 +57,7 @@ class login : AppCompatActivity() {
                             "Login successful! Welcome, $nama",
                             Toast.LENGTH_SHORT
                         ).show()
+
                         startActivity(Intent(this@login, MainActivity::class.java))
                         finish()
                     } else {
@@ -65,10 +67,12 @@ class login : AppCompatActivity() {
                     Toast.makeText(this@login, "User not found!", Toast.LENGTH_SHORT).show()
                 }
             }
+
             override fun onCancelled(error: DatabaseError) {
                 Log.e("FirebaseError", "Error: ${error.message}")
                 Toast.makeText(this@login, "Login failed. Try again later.", Toast.LENGTH_SHORT).show()
             }
         })
     }
+
 }

@@ -39,26 +39,26 @@ class MainActivity : AppCompatActivity() {
                     val isLoggedIn = sharedPreferences.getBoolean("isLoggedIn", false)
                     if (isLoggedIn) {
                         setCurrentFragment(Statistik_Medis)
-                    }else{
+                    } else {
                         setCurrentFragment(belum_login)
                     }
                 }
-                R.id.profil ->{
+                R.id.profil -> {
                     val isLoggedIn = sharedPreferences.getBoolean("isLoggedIn", false)
                     if (isLoggedIn) {
                         val username = sharedPreferences.getString("username", "Guest")
                         val nama = sharedPreferences.getString("nama", "Guest")
-                        Toast.makeText(this, "Welcome back, $nama!", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this, "Welcome back, $username!", Toast.LENGTH_SHORT).show()  // Menampilkan nama yang benar
                         setCurrentFragment(profile)
-                    }else{
+                    } else {
                         startActivity(Intent(this@MainActivity, login::class.java))
                         finish()
                     }
-
                 }
             }
             true
         }
+
 
     }
 
