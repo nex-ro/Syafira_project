@@ -32,10 +32,8 @@ class TambahKamar : Fragment() {
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         binding.spinnerJenis.adapter = adapter
 
-
-
         binding.buttonSimpan.setOnClickListener(){
-            if(binding.inputNamaRuangan.text.isEmpty() and binding.inputNamaRuangan.text.isEmpty()){
+            if(binding.inputNamaRuangan.text.isEmpty() and binding.inputNomorRuangan.text.isEmpty()){
                 Toast.makeText(
                     requireContext(),
                     "Mohon Input dengan benar",

@@ -7,11 +7,15 @@
         android:background="@drawable/bg"
     tools:context=".profile">
 
+
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="#883D79"
             android:alpha="0.7">
+
+
+
         </RelativeLayout>
 
         <LinearLayout

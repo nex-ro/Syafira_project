@@ -9,6 +9,7 @@ pluginManagement {
         }
         mavenCentral()
         gradlePluginPortal()
+        maven("https://jitpack.io") // Tambahkan JitPack
     }
 }
 dependencyResolutionManagement {
@@ -16,9 +17,8 @@ dependencyResolutionManagement {
     repositories {
         google()
         mavenCentral()
+        maven("https://jitpack.io") // Tambahkan JitPack
     }
 }
-
 rootProject.name = "project"
 include(":app")
- 

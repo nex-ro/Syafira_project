@@ -34,6 +34,10 @@ class login : AppCompatActivity() {
                 loginUser(username, password)
             }
         }
+        binding.buttonExit.setOnClickListener{
+            startActivity(Intent(this@login, MainActivity::class.java))
+            finish()
+        }
     }
 
     private fun loginUser(username: String, password: String) {

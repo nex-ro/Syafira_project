@@ -23,8 +23,7 @@ class kamar : Fragment() {
     private lateinit var recyclerView: RecyclerView
     private lateinit var adapter: ItemAdapter
 
-    private val items = mutableListOf<Ruangan>() // Mutable list untuk menyimpan data
-
+    private val items = mutableListOf<Ruangan>()
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -42,7 +41,6 @@ class kamar : Fragment() {
 
         ref = FirebaseDatabase.getInstance().reference.child("Ruangan")
 
-        // Mendapatkan data dari Firebase
         ref.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 if (snapshot.exists()) {

@@ -15,5 +15,4 @@ class Dashboard : Fragment() {
     ): View {
         return inflater.inflate(R.layout.fragment_dashboard, container, false)
     }
-
 }

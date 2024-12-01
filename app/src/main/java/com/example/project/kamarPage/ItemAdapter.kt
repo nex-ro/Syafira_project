@@ -10,7 +10,7 @@ import com.example.project.Data.cardData
 
 class ItemAdapter(
     private var mList: List<cardData>,
-    private val onItemClick: (String) -> Unit // Callback untuk klik item
+    private val onItemClick: (String) -> Unit
 ) : RecyclerView.Adapter<ItemAdapter.ViewHolder>() {
 
     fun updateData(newList: List<cardData>) {
@@ -29,7 +29,6 @@ class ItemAdapter(
         holder.empty.text = "Kosong: ${item.kosong}"
         holder.terisi.text = "Terisi: ${item.terisi}"
 
-        // Set klik listener
         holder.itemView.setOnClickListener {
             onItemClick(item.jenis ?: "")
         }

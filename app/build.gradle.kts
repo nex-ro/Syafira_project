@@ -11,7 +11,7 @@ android {
 
 
 
-    defaultConfig {
+        defaultConfig {
         applicationId = "com.example.project"
         minSdk = 24
         targetSdk = 34
@@ -45,6 +45,7 @@ android {
 
 dependencies {
     implementation(libs.firebase.database)
+    implementation("com.github.PhilJay:MPAndroidChart:3.1.0") // Benar
     implementation("com.google.firebase:firebase-database:20.1.0")
     implementation ("de.hdodenhof:circleimageview:3.1.0")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.5.1")

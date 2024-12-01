@@ -46,7 +46,6 @@ class kamarJenis : Fragment() {
                             )
                         }
                     }
-                    // Tampilkan hasil pada textViewJenis
                     if (hasil.isNotEmpty()) {
                         binding.textdeskripsiJenis.text = hasil.toString()
                     } else {
