@@ -13,6 +13,7 @@ import com.example.project.Data.cardData
 import com.example.project.databinding.FragmentKamarBinding
 import com.example.project.kamarPage.AturKamar
 import com.example.project.kamarPage.TambahKamar
+import com.example.project.kamarPage.kamarJenis
 import com.google.firebase.database.*
 
 class kamar : Fragment() {
@@ -33,7 +34,10 @@ class kamar : Fragment() {
         recyclerView = binding.recyclerView
         recyclerView.layoutManager = GridLayoutManager(requireContext(), 2)
 
-        adapter = ItemAdapter(listOf())
+        adapter = ItemAdapter(listOf()) { jenis ->
+            val detailFragment = kamarJenis.newInstance(jenis)
+            setCurrentFragment(detailFragment)
+        }
         recyclerView.adapter = adapter
 
         ref = FirebaseDatabase.getInstance().reference.child("Ruangan")
@@ -72,6 +76,7 @@ class kamar : Fragment() {
                 Log.e("FirebaseError", "Error: ${error.message}")
             }
         })
+
         binding.buttonTambahPasien.setOnClickListener {
             val AturKamar = AturKamar()
             setCurrentFragment(AturKamar)

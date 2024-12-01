@@ -9,13 +9,15 @@ import com.example.project.Data.Ruangan
 import com.example.project.Data.cardData
 
 class ItemAdapter(
-    private var mList: List<cardData>
+    private var mList: List<cardData>,
+    private val onItemClick: (String) -> Unit // Callback untuk klik item
 ) : RecyclerView.Adapter<ItemAdapter.ViewHolder>() {
 
     fun updateData(newList: List<cardData>) {
         mList = newList
         notifyDataSetChanged()
     }
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.list_card_view, parent, false)
         return ViewHolder(view)
@@ -24,9 +26,13 @@ class ItemAdapter(
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = mList[position]
         holder.jeniskamar.text = item.jenis
-        holder.empty.text ="Kosong :"+ item.kosong.toString()
-        holder.terisi.text="Terisi "+item.terisi.toString()
-        
+        holder.empty.text = "Kosong: ${item.kosong}"
+        holder.terisi.text = "Terisi: ${item.terisi}"
+
+        // Set klik listener
+        holder.itemView.setOnClickListener {
+            onItemClick(item.jenis ?: "")
+        }
     }
 
     override fun getItemCount(): Int {
@@ -37,6 +43,5 @@ class ItemAdapter(
         val jeniskamar: TextView = itemView.findViewById(R.id.jeniskamar)
         val empty: TextView = itemView.findViewById(R.id.emptyRoom)
         val terisi: TextView = itemView.findViewById(R.id.tempatTidur)
-
     }
 }
