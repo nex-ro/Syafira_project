@@ -4,15 +4,24 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.project.databinding.FragmentKamarJenisBinding
 import com.google.firebase.database.*
 import com.example.project.Data.Ruangan
+import com.example.project.ItemAdapter
+import com.example.project.R
+import android.util.Log
+import com.example.project.jenisAdapter
+import kotlin.math.log
 
 
 class kamarJenis : Fragment() {
 
     private lateinit var binding: FragmentKamarJenisBinding
     private lateinit var ref: DatabaseReference
+    private lateinit var recyclerView: RecyclerView
+    private lateinit var adapter: jenisAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -22,8 +31,18 @@ class kamarJenis : Fragment() {
         binding = FragmentKamarJenisBinding.inflate(inflater, container, false)
 
         ref = FirebaseDatabase.getInstance().getReference("Ruangan")
+        recyclerView = binding.recyclerView
+        recyclerView.layoutManager = GridLayoutManager(requireContext(), 2)
+        adapter = jenisAdapter(listOf()) { id ->
+            // Mengirimkan ID ke detailFragment
+            val detailFragment = KamarDetail.newInstance(id)
+            setCurrentFragment(detailFragment)
+        }
+        recyclerView.adapter = adapter
 
         val jenis = arguments?.getString(ARG_JENIS)
+        binding.textViewJenis.text = "List Kamar Jenis $jenis"
+
         if (jenis != null) {
             fetchRuanganByJenis(jenis)
         }
@@ -35,27 +54,18 @@ class kamarJenis : Fragment() {
         ref.orderByChild("jenis").equalTo(jenis)
             .addListenerForSingleValueEvent(object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
-                    val hasil = StringBuilder()
+                    val dataRuangan = mutableListOf<Ruangan>()
                     for (ruanganSnapshot in snapshot.children) {
                         val ruangan = ruanganSnapshot.getValue(Ruangan::class.java)
                         if (ruangan != null) {
-                            hasil.append(
-                                "Nama: ${ruangan.nama_Ruangan}\n" +
-                                        "Nomor: ${ruangan.nomor_Ruangan}\n" +
-                                        "Status: ${ruangan.status}\n\n"
-                            )
+                            dataRuangan.add(ruangan)
                         }
                     }
-                    if (hasil.isNotEmpty()) {
-                        binding.textdeskripsiJenis.text = hasil.toString()
-                    } else {
-                        binding.textdeskripsiJenis.text = "Tidak ada data ruangan untuk jenis ini."
-                    }
+                    adapter.updateData(dataRuangan)
                 }
 
                 override fun onCancelled(error: DatabaseError) {
-                    // Tangani error
-                    binding.textdeskripsiJenis.text = "Gagal memuat data: ${error.message}"
+                    Log.e("kamarJenis", "Error fetching data: ${error.message}")
                 }
             })
     }
@@ -71,5 +81,12 @@ class kamarJenis : Fragment() {
             fragment.arguments = args
             return fragment
         }
+    }
+
+    private fun setCurrentFragment(fragment: Fragment) {
+        parentFragmentManager.beginTransaction()
+            .replace(R.id.flFragment, fragment)
+            .addToBackStack(null)
+            .commit()
     }
 }
