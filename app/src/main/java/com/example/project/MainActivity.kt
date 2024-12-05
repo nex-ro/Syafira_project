@@ -26,23 +26,20 @@ class MainActivity : AppCompatActivity() {
         val kamar = kamar()
         val profile = profile()
         val Statistik_Medis = Statistik_Medis()
-        val belum_login = belum_login()
         sharedPreferences = getSharedPreferences("UserSession", Context.MODE_PRIVATE)
+        val isLoggedIn = sharedPreferences.getBoolean("isLoggedIn", false)
+        updateBottomNavigationMenu(isLoggedIn)
         setCurrentFragment(Dashboard)
+
+
+
         binding.bottomNavigationView.setItemBackgroundResource(R.color.colorAccent)
         binding.bottomNavigationView.setOnNavigationItemSelectedListener {
             when (it.itemId) {
                 R.id.Dashboard -> setCurrentFragment(Dashboard)
                 R.id.kamar -> setCurrentFragment(kamar)
+                R.id.medis -> setCurrentFragment(Statistik_Medis)
 
-                R.id.medis -> {
-                    val isLoggedIn = sharedPreferences.getBoolean("isLoggedIn", false)
-                    if (isLoggedIn) {
-                        setCurrentFragment(Statistik_Medis)
-                    } else {
-                        setCurrentFragment(belum_login)
-                    }
-                }
                 R.id.profil -> {
                     val isLoggedIn = sharedPreferences.getBoolean("isLoggedIn", false)
                     if (isLoggedIn) {
@@ -67,4 +64,18 @@ class MainActivity : AppCompatActivity() {
             replace(R.id.flFragment, fragment)
             commit()
         }
+    private fun updateBottomNavigationMenu(isLoggedIn: Boolean) {
+        val bottomNavigationView: BottomNavigationView = binding.bottomNavigationView
+        val menu = bottomNavigationView.menu
+
+        if (isLoggedIn) {
+
+            if (menu.findItem(R.id.medis) == null) {
+                menu.add(0, R.id.medis, 2, "Medis").setIcon(R.drawable.ic_medis) // Adjust icon
+            }
+        } else {
+            // Remove "Medis" menu item if not logged in
+            menu.removeItem(R.id.medis)
+        }
+    }
 }

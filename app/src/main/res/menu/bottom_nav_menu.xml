@@ -10,7 +10,7 @@
     <item
         android:id="@+id/medis"
         android:title="Statistik Medis"
-        android:icon="@drawable/ic_home"/>
+        android:icon="@drawable/ic_medis"/>
     <item
         android:id="@+id/profil"
         android:title="Profil"
