@@ -13,7 +13,6 @@ import com.google.firebase.database.*
 class KamarDetail : Fragment() {
     private lateinit var binding: FragmentKamarDetailBinding
     private lateinit var ref: DatabaseReference
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,

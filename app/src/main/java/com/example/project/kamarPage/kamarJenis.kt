@@ -33,6 +33,7 @@ class kamarJenis : Fragment() {
         ref = FirebaseDatabase.getInstance().getReference("Ruangan")
         recyclerView = binding.recyclerView
         recyclerView.layoutManager = GridLayoutManager(requireContext(), 2)
+        binding.shimmerLayout.stopShimmer()
         adapter = jenisAdapter(listOf()) { id ->
             // Mengirimkan ID ke detailFragment
             val detailFragment = KamarDetail.newInstance(id)
@@ -62,6 +63,11 @@ class kamarJenis : Fragment() {
                         }
                     }
                     adapter.updateData(dataRuangan)
+                    binding.shimmerLayout.apply {
+                        stopShimmer()
+                        visibility = View.GONE
+                    }
+                    binding.recyclerView.visibility = View.VISIBLE
                 }
 
                 override fun onCancelled(error: DatabaseError) {

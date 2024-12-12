@@ -11,6 +11,8 @@
     <color name="ungu2">#B2509B</color>
     <color name="hijau">#91C872</color>
     <color name="biru">#517597</color>
+    <color name="shimmer_base">#F2F2F2</color> <!-- Abu-abu terang -->
+    <color name="shimmer_highlight">#FFFFFF</color> <!-- Putih -->
 
 
 

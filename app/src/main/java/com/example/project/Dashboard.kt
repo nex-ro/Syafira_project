@@ -1,5 +1,7 @@
 package com.example.project
 
+import android.content.Context
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -7,6 +9,7 @@ import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.get
 import androidx.fragment.app.Fragment
 import com.example.project.databinding.FragmentDashboardBinding
 import com.github.mikephil.charting.charts.BarChart
@@ -19,6 +22,7 @@ class Dashboard : Fragment() {
     // Deklarasikan binding
     private var _binding: FragmentDashboardBinding? = null
     private val binding get() = _binding!!
+    private lateinit var sharedPreferences: SharedPreferences
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -26,6 +30,7 @@ class Dashboard : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         // Inisialisasi ViewBinding
+
         _binding = FragmentDashboardBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -34,11 +39,16 @@ class Dashboard : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         // Terapkan padding untuk sistem bar
+        sharedPreferences = requireContext().getSharedPreferences("UserSession", Context.MODE_PRIVATE)
+        val isLoggedIn = sharedPreferences.getBoolean("isLoggedIn", false)
+
+        binding.toolbar.menu.findItem(R.id.quit)?.isVisible = isLoggedIn
         ViewCompat.setOnApplyWindowInsetsListener(binding.main) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
+
 
         // Inisialisasi BarChart untuk Rumah Sakit dan Unit Perawatan
         val barChart1: BarChart = binding.barChart1

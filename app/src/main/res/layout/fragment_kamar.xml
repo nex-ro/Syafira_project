@@ -7,19 +7,6 @@
     android:layout_height="match_parent"
     tools:context=".kamar">
 
-    <!--    <TextView-->
-    <!--        android:id="@+id/firstFragment"-->
-    <!--        android:layout_width="wrap_content"-->
-    <!--        android:layout_height="wrap_content"-->
-    <!--        android:text="Kamar"-->
-    <!--        android:textColor="#43a047"-->
-    <!--        android:textSize="40sp"-->
-    <!--        android:textStyle="italic|bold"-->
-    <!--        app:layout_constraintTop_toTopOf="parent"-->
-    <!--        app:layout_constraintStart_toStartOf="parent"-->
-    <!--        app:layout_constraintEnd_toEndOf="parent"-->
-    <!--        app:layout_constraintHorizontal_bias="0.5" />-->
-
     <Button
         android:id="@+id/buttonTambahPasien"
         android:layout_width="wrap_content"
@@ -47,6 +34,22 @@
         app:layout_constraintHorizontal_bias="0.9"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/cardView" />
+
+    <Button
+        android:id="@+id/JengukKamar"
+        android:layout_width="320dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:backgroundTint="@color/biru"
+        android:gravity="center"
+        android:text="Jenguk Kamar"
+        android:textColor="#FFFFFF"
+        android:textSize="13.5sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/buttonTambahPasien"
+        app:layout_constraintTop_toBottomOf="@+id/cardView"
+        app:layout_goneMarginRight="3dp" />
 
 
     <!--    <TextView-->
@@ -107,11 +110,59 @@
             android:textSize="12dp" />
 
     </androidx.cardview.widget.CardView>
+    <com.facebook.shimmer.ShimmerFrameLayout
+        android:id="@+id/shimmer_layout"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="5dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/JengukKamar"
+        app:layout_constraintVertical_bias="0.0"
+        tools:visibility="visible">
+
+        <GridLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:columnCount="2"
+            android:orientation="horizontal"
+            android:rowCount="6">
+
+            <include
+                layout="@layout/shimmer_card_view"
+                android:layout_margin="15dp"
+                android:layout_marginRight="20dp"/>
+            <include
+                layout="@layout/shimmer_card_view"
+                android:layout_margin="15dp" />
+            <include
+                layout="@layout/shimmer_card_view"
+                android:layout_margin="15dp" />
+            <include
+                layout="@layout/shimmer_card_view"
+                android:layout_margin="17dp" />
+
+            <include
+                layout="@layout/shimmer_card_view"
+                android:layout_margin="9dp" />
+
+            <include
+                layout="@layout/shimmer_card_view"
+                android:layout_margin="9dp" />
+
+        </GridLayout>
+
+    </com.facebook.shimmer.ShimmerFrameLayout>
+
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
@@ -119,7 +170,4 @@
         app:layout_constraintTop_toBottomOf="@id/buttonTambahRuangan"
         app:layout_constraintVertical_bias="0.0"
         tools:listitem="@layout/list_card_view" />
-
-
-
 </androidx.constraintlayout.widget.ConstraintLayout>

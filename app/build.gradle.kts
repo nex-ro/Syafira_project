@@ -45,7 +45,8 @@ android {
 
 dependencies {
     implementation(libs.firebase.database)
-    implementation("com.github.PhilJay:MPAndroidChart:3.1.0") // Benar
+    implementation ("com.facebook.shimmer:shimmer:0.5.0")
+    implementation("com.github.PhilJay:MPAndroidChart:3.1.0")
     implementation("com.google.firebase:firebase-database:20.1.0")
     implementation ("de.hdodenhof:circleimageview:3.1.0")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.5.1")

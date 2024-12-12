@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.facebook.shimmer.ShimmerFrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_margin="20dp"
+    android:background="@color/black"
+    app:shimmer_auto_start="true"
+    app:shimmer_base_color="#F2F2F2"
+    app:shimmer_highlight_color="#FFFFFF"
+    app:shimmer_intensity="0.7"
+    app:shimmer_dropoff="0.5">
+
+<androidx.constraintlayout.widget.ConstraintLayout
+android:layout_width="140dp"
+android:layout_height="match_parent"
+android:padding="5dp">
+
+<ImageView
+    android:id="@+id/gambarCard"
+    android:layout_width="match_parent"
+    android:layout_height="100dp"
+    android:background="@color/shimmer_base"
+    app:layout_constraintTop_toTopOf="parent" />
+
+<TextView
+    android:id="@+id/jeniskamar"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="2dp"
+    android:background="@color/shimmer_base"
+    android:textAlignment="center"
+    android:textSize="17sp"
+    android:textStyle="bold"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toBottomOf="@id/gambarCard" />
+
+<!-- Ketersediaan kamar -->
+<TextView
+    android:id="@+id/emptyRoom"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="2dp"
+    android:background="@color/shimmer_base"
+    android:paddingVertical="2dp"
+    android:textAlignment="center"
+    android:textColor="@color/black"
+    android:textSize="13sp"
+    android:textStyle="bold"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toBottomOf="@id/jeniskamar" />
+
+<!-- Tempat tidur -->
+<TextView
+    android:id="@+id/tempatTidur"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="2dp"
+    android:background="@color/shimmer_base"
+    android:paddingVertical="2dp"
+    android:textAlignment="center"
+    android:textColor="@color/black"
+    android:textSize="13sp"
+    android:textStyle="bold"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toBottomOf="@id/emptyRoom" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+    </com.facebook.shimmer.ShimmerFrameLayout>

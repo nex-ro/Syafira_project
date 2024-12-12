@@ -30,16 +30,12 @@ class MainActivity : AppCompatActivity() {
         val isLoggedIn = sharedPreferences.getBoolean("isLoggedIn", false)
         updateBottomNavigationMenu(isLoggedIn)
         setCurrentFragment(Dashboard)
-
-
-
         binding.bottomNavigationView.setItemBackgroundResource(R.color.colorAccent)
         binding.bottomNavigationView.setOnNavigationItemSelectedListener {
             when (it.itemId) {
                 R.id.Dashboard -> setCurrentFragment(Dashboard)
                 R.id.kamar -> setCurrentFragment(kamar)
                 R.id.medis -> setCurrentFragment(Statistik_Medis)
-
                 R.id.profil -> {
                     val isLoggedIn = sharedPreferences.getBoolean("isLoggedIn", false)
                     if (isLoggedIn) {
@@ -55,8 +51,6 @@ class MainActivity : AppCompatActivity() {
             }
             true
         }
-
-
     }
 
     private fun setCurrentFragment(fragment: Fragment) =
