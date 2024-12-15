@@ -88,7 +88,7 @@ class kamar_adm : Fragment() {
 
     private fun setupRecyclerView() {
         recyclerView = binding.recyclerViewKamar
-        recyclerView.layoutManager = GridLayoutManager(requireContext(), 3)
+        recyclerView.layoutManager = GridLayoutManager(requireContext(), 3, GridLayoutManager.HORIZONTAL, false)
         adapter = Card_kamar_adm(listOf(), this)
         recyclerView.adapter = adapter
     }
