@@ -16,6 +16,8 @@ import com.github.mikephil.charting.charts.BarChart
 import com.github.mikephil.charting.data.BarData
 import com.github.mikephil.charting.data.BarDataSet
 import com.github.mikephil.charting.data.BarEntry
+import android.widget.Toast
+import android.content.Intent
 
 class Dashboard : Fragment() {
 
@@ -48,9 +50,16 @@ class Dashboard : Fragment() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
+        binding.toolbar.setOnMenuItemClickListener { menuItem ->
+            when (menuItem.itemId) {
+                R.id.quit -> {
+                    logoutUser()
+                    true
+                }
+                else -> false
+            }
+        }
 
-
-        // Inisialisasi BarChart untuk Rumah Sakit dan Unit Perawatan
         val barChart1: BarChart = binding.barChart1
         val barChart2: BarChart = binding.barChart2
 
@@ -63,6 +72,16 @@ class Dashboard : Fragment() {
         setupBarChart(barChart2, data2)
     }
 
+    private fun logoutUser() {
+        // Clear SharedPreferences
+        val editor = sharedPreferences.edit()
+        editor.clear()
+        editor.apply()
+        Toast.makeText(requireContext(), "Logged out successfully!", Toast.LENGTH_SHORT).show()
+        val intent = Intent(activity, login::class.java)
+        startActivity(intent)
+        requireActivity().finish()
+    }
     // Data dummy untuk Rumah Sakit
     private fun data(): List<Pair<String, Int>> {
         return listOf(
@@ -100,26 +119,22 @@ class Dashboard : Fragment() {
         // Buat DataSet untuk grafik
         val dataSet = BarDataSet(entries, "")
         dataSet.color = ContextCompat.getColor(requireContext(), R.color.biru) // Warna batang
-        dataSet.setDrawValues(false) // Sembunyikan nilai di atas batang
-        dataSet.valueTextSize = 0f // Hapus nilai di atas batang
-
-        // Siapkan BarData dan atur ke BarChart
+        dataSet.setDrawValues(false)
+        dataSet.valueTextSize = 0f
         val barData = BarData(dataSet)
         barChart.data = barData
 
         // Konfigurasi sumbu X
         barChart.xAxis.apply {
-            setDrawLabels(false)  // Sembunyikan label pada sumbu X
-            setDrawGridLines(false)  // Sembunyikan garis grid pada sumbu X
-            setDrawAxisLine(false)  // Sembunyikan garis sumbu X
+            setDrawLabels(false)
+            setDrawGridLines(false)
+            setDrawAxisLine(false)
         }
-
-        // Konfigurasi sumbu Y
         barChart.axisRight.isEnabled = false // Sembunyikan garis sumbu Y sebelah kanan
         barChart.axisLeft.apply {
-            setDrawLabels(false)  // Sembunyikan label pada sumbu Y
-            setDrawGridLines(false)  // Sembunyikan garis grid pada sumbu Y
-            setDrawAxisLine(false)  // Sembunyikan garis sumbu Y
+            setDrawLabels(false)
+            setDrawGridLines(false)
+            setDrawAxisLine(false)
         }
 
         // Nonaktifkan deskripsi
@@ -128,8 +143,6 @@ class Dashboard : Fragment() {
         // Nonaktifkan interaksi
         barChart.setScaleEnabled(false) // Nonaktifkan zoom
         barChart.setTouchEnabled(false) // Nonaktifkan interaksi sentuh
-
-        // Refresh tampilan grafik
         barChart.invalidate()
     }
 

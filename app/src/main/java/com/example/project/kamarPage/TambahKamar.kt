@@ -14,6 +14,7 @@ import android.widget.ArrayAdapter
 import android.widget.Toast
 import com.example.project.Data.Ruangan
 import com.example.project.kamar
+import com.example.project.kamar_adm
 
 
 class TambahKamar : Fragment() {
@@ -27,7 +28,7 @@ class TambahKamar : Fragment() {
     ): View {
         binding = FragmentTambahKamarBinding.inflate(inflater, container, false)
         ref = FirebaseDatabase.getInstance().reference.child("Ruangan")
-        val jenisList = listOf("VVIP", "VIP", "Kelas I", "Kelas II", "Kelas III", "Laboratorium")
+        val jenisList = listOf("VVIP", "VIP", "Kelas I", "Kelas II", "Kelas III", "Laboratorium","ICU","HCU")
         val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, jenisList)
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         binding.spinnerJenis.adapter = adapter
@@ -53,7 +54,7 @@ class TambahKamar : Fragment() {
                             "Data berhasil ditambahkan",
                             Toast.LENGTH_SHORT
                         ).show()
-                        setCurrentFragment(kamar())
+                        setCurrentFragment(kamar_adm())
                     } else {
                         Toast.makeText(
                             requireContext(),

@@ -33,9 +33,8 @@ class kamarJenis : Fragment() {
         ref = FirebaseDatabase.getInstance().getReference("Ruangan")
         recyclerView = binding.recyclerView
         recyclerView.layoutManager = GridLayoutManager(requireContext(), 2)
-        binding.shimmerLayout.stopShimmer()
+        binding.shimmerLayout.startShimmer()
         adapter = jenisAdapter(listOf()) { id ->
-            // Mengirimkan ID ke detailFragment
             val detailFragment = KamarDetail.newInstance(id)
             setCurrentFragment(detailFragment)
         }

@@ -144,7 +144,7 @@ class profile : Fragment() {
         editor.clear()
         editor.apply()
         Toast.makeText(requireContext(), "Logged out successfully!", Toast.LENGTH_SHORT).show()
-        val intent = Intent(activity, MainActivity::class.java)
+        val intent = Intent(activity, login::class.java)
         startActivity(intent)
         requireActivity().finish()
     }

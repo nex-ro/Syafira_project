@@ -25,6 +25,7 @@ class MainActivity : AppCompatActivity() {
         val Dashboard = Dashboard()
         val kamar = kamar()
         val profile = profile()
+        val kamar_adm=kamar_adm()
         val Statistik_Medis = Statistik_Medis()
         sharedPreferences = getSharedPreferences("UserSession", Context.MODE_PRIVATE)
         val isLoggedIn = sharedPreferences.getBoolean("isLoggedIn", false)
@@ -34,7 +35,14 @@ class MainActivity : AppCompatActivity() {
         binding.bottomNavigationView.setOnNavigationItemSelectedListener {
             when (it.itemId) {
                 R.id.Dashboard -> setCurrentFragment(Dashboard)
-                R.id.kamar -> setCurrentFragment(kamar)
+                R.id.kamar -> {
+                    val isLoggedIn = sharedPreferences.getBoolean("isLoggedIn", false)
+                    if (isLoggedIn) {
+                        setCurrentFragment(kamar_adm)
+                    } else {
+                        setCurrentFragment(kamar)
+                    }
+                }
                 R.id.medis -> setCurrentFragment(Statistik_Medis)
                 R.id.profil -> {
                     val isLoggedIn = sharedPreferences.getBoolean("isLoggedIn", false)

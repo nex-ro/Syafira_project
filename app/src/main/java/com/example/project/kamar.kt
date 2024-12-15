@@ -24,7 +24,6 @@ import androidx.constraintlayout.widget.ConstraintSet
 class kamar : Fragment() {
     private lateinit var ref: DatabaseReference
     private lateinit var binding: FragmentKamarBinding
-
     private lateinit var recyclerView: RecyclerView
     private lateinit var adapter: ItemAdapter
     private lateinit var sharedPreferences: SharedPreferences
@@ -48,30 +47,6 @@ class kamar : Fragment() {
         recyclerView.adapter = adapter
         binding.buttonTambahPasien.isVisible = isLoggedIn
         binding.buttonTambahRuangan.isVisible = isLoggedIn
-        binding.JengukKamar.isVisible=!isLoggedIn
-
-        val constraintLayout = binding.root as ConstraintLayout
-        val constraintSet = ConstraintSet()
-        constraintSet.clone(constraintLayout)
-
-        if (isLoggedIn) {
-            constraintSet.connect(
-                R.id.recyclerView,
-                ConstraintSet.TOP,
-                R.id.buttonTambahRuangan,
-                ConstraintSet.BOTTOM,
-                16 // Margin atas (opsional)
-            )
-        } else {
-            constraintSet.connect(
-                R.id.recyclerView,
-                ConstraintSet.TOP,
-                R.id.JengukKamar,
-                ConstraintSet.BOTTOM,
-                16 // Margin atas (opsional)
-            )
-        }
-        constraintSet.applyTo(constraintLayout)
 
         ref = FirebaseDatabase.getInstance().reference.child("Ruangan")
         binding.shimmerLayout.startShimmer()
@@ -115,14 +90,6 @@ class kamar : Fragment() {
             }
         })
 
-        binding.buttonTambahPasien.setOnClickListener {
-            val AturKamar = AturKamar()
-            setCurrentFragment(AturKamar)
-        }
-        binding.buttonTambahRuangan.setOnClickListener {
-            val tambahKamar = TambahKamar()
-            setCurrentFragment(tambahKamar)
-        }
 
         return binding.root
     }
