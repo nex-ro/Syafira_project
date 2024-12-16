@@ -45,8 +45,6 @@ class kamar : Fragment() {
             setCurrentFragment(detailFragment)
         }
         recyclerView.adapter = adapter
-        binding.buttonTambahPasien.isVisible = isLoggedIn
-        binding.buttonTambahRuangan.isVisible = isLoggedIn
 
         ref = FirebaseDatabase.getInstance().reference.child("Ruangan")
         binding.shimmerLayout.startShimmer()

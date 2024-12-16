@@ -112,7 +112,7 @@ class AturKamar : Fragment() {
 
         // Reconnect the EditText below Spinner Kamar to Spinner JenisPasien directly
         constraintSet.connect(
-            R.id.editTextIdRuangan,
+            R.id.buttonSubmitt,
             ConstraintSet.TOP,
             R.id.JenisPasien,
             ConstraintSet.BOTTOM,
@@ -128,7 +128,7 @@ class AturKamar : Fragment() {
 
         // Reconnect the EditText below Spinner Kamar to Spinner Kamar
         constraintSet.connect(
-            R.id.editTextIdRuangan,
+            R.id.buttonSubmitt,
             ConstraintSet.TOP,
             R.id.SpinnerKamar,
             ConstraintSet.BOTTOM,
