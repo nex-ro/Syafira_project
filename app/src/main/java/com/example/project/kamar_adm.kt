@@ -132,10 +132,14 @@ class kamar_adm : Fragment() {
     private fun updatePieChart(filteredData: List<Ruangan>) {
         val counts = filteredData.groupingBy { it.status }.eachCount()
         val total = counts.values.sum().toFloat()
-        val entries = counts.map { PieEntry((it.value / total) * 100, "${it.key} (${(it.value / total * 100).toInt()}%)") }
+
+        val entries = counts.map {
+            val percentage = (it.value / total) * 100
+            PieEntry(percentage, "${it.key} (${it.value} kamar)")
+        }
 
         val dataSet = PieDataSet(entries, "Status").apply {
-            colors = listOf(Color.GREEN, Color.RED, Color.YELLOW) // Example: available, occupied, maintenance
+            colors = listOf(Color.GREEN, Color.RED, Color.YELLOW) // Contoh: available, occupied, maintenance
             sliceSpace = 3f
             valueTextColor = Color.WHITE
             valueTextSize = 12f
