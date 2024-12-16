@@ -15,6 +15,9 @@ import android.widget.Toast
 import com.example.project.Data.Ruangan
 import com.example.project.kamar
 import com.example.project.kamar_adm
+import com.google.firebase.database.ValueEventListener
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
 
 
 class TambahKamar : Fragment() {
@@ -28,49 +31,83 @@ class TambahKamar : Fragment() {
     ): View {
         binding = FragmentTambahKamarBinding.inflate(inflater, container, false)
         ref = FirebaseDatabase.getInstance().reference.child("Ruangan")
-        val jenisList = listOf("VVIP", "VIP", "Kelas I", "Kelas II", "Kelas III", "Laboratorium","ICU","HCU")
+
+        val jenisList = listOf("VVIP", "VIP", "Kelas I", "Kelas II", "Kelas III", "Laboratorium", "ICU", "HCU")
         val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, jenisList)
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         binding.spinnerJenis.adapter = adapter
 
-        binding.buttonSimpan.setOnClickListener(){
-            if(binding.inputNamaRuangan.text.isEmpty() and binding.inputNomorRuangan.text.isEmpty()){
+        binding.buttonSimpan.setOnClickListener {
+            val nama = binding.inputNamaRuangan.text.toString().trim()
+            val nomor = binding.inputNomorRuangan.text.toString().toIntOrNull()
+            val jenis = binding.spinnerJenis.selectedItem.toString()
+
+            if (nama.isEmpty() || nomor == null) {
                 Toast.makeText(
                     requireContext(),
-                    "Mohon Input dengan benar",
+                    "Mohon input dengan benar",
                     Toast.LENGTH_SHORT
                 ).show()
-            }else{
-                val nama=binding.inputNamaRuangan.text.toString()
-                val nomor=binding.inputNomorRuangan.text.toString().toIntOrNull()
-                val jenis=binding.spinnerJenis.selectedItem.toString()
-                val status="kosong"
-                val id_ruangan = ref.push().key ?: return@setOnClickListener
-                val ruangan=Ruangan(id_ruangan,nomor,jenis,nama,status)
-                ref.child(id_ruangan).setValue(ruangan).addOnCompleteListener{task ->
-                    if (task.isSuccessful) {
+            } else {
+                // Cek apakah nama ruangan sudah ada di Firebase
+                ref.addListenerForSingleValueEvent(object : ValueEventListener {
+                    override fun onDataChange(snapshot: DataSnapshot) {
+                        var isDuplicate = false
+                        for (ruanganSnapshot in snapshot.children) {
+                            val existingNama = ruanganSnapshot.child("nama_Ruangan").getValue(String::class.java)
+                            if (existingNama != null && existingNama.equals(nama, ignoreCase = true)) {
+                                isDuplicate = true
+                                break
+                            }
+                        }
+
+                        if (isDuplicate) {
+                            Toast.makeText(
+                                requireContext(),
+                                "Nama ruangan sudah ada, silakan gunakan nama lain",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        } else {
+                            // Jika nama ruangan unik, tambahkan ke Firebase
+                            val status = "kosong"
+                            val idRuangan = ref.push().key ?: return
+                            val ruangan = Ruangan(idRuangan, nomor, jenis, nama, status)
+                            ref.child(idRuangan).setValue(ruangan).addOnCompleteListener { task ->
+                                if (task.isSuccessful) {
+                                    Toast.makeText(
+                                        requireContext(),
+                                        "Data berhasil ditambahkan",
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+                                    setCurrentFragment(kamar_adm())
+                                } else {
+                                    Toast.makeText(
+                                        requireContext(),
+                                        "Gagal menambahkan data",
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+                                }
+                            }
+                        }
+                    }
+
+                    override fun onCancelled(error: DatabaseError) {
                         Toast.makeText(
                             requireContext(),
-                            "Data berhasil ditambahkan",
-                            Toast.LENGTH_SHORT
-                        ).show()
-                        setCurrentFragment(kamar_adm())
-                    } else {
-                        Toast.makeText(
-                            requireContext(),
-                            "Gagal menambahkan data",
+                            "Gagal memeriksa data: ${error.message}",
                             Toast.LENGTH_SHORT
                         ).show()
                     }
-                }
+                })
             }
         }
         return binding.root
     }
+
     private fun setCurrentFragment(fragment: Fragment) =
         parentFragmentManager.beginTransaction().apply {
             replace(R.id.flFragment, fragment)
+            addToBackStack(null)
             commit()
         }
-
 }
