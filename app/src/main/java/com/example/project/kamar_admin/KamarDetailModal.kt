@@ -8,9 +8,11 @@ import android.widget.TextView
 import androidx.fragment.app.DialogFragment
 import com.example.project.Data.Ruangan
 import com.example.project.R
+import com.example.project.databinding.FragmentKamarBinding
+import com.example.project.databinding.FragmentKamarDetailModalBinding
 
 class KamarDetailModal : DialogFragment() {
-
+    private lateinit var binding: FragmentKamarDetailModalBinding
     private lateinit var idRuangan: String
     private var nomorRuangan: Int = 0
     private lateinit var jenis: String
@@ -33,16 +35,14 @@ class KamarDetailModal : DialogFragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
-        val view = inflater.inflate(R.layout.fragment_kamar_detail_modal, container, false)
+            binding = FragmentKamarDetailModalBinding.inflate(inflater, container, false)
 
         // Menampilkan data yang diterima
-        val jenisKamar = view.findViewById<TextView>(R.id.jenisKamarModal)
-        val nomorKamar = view.findViewById<TextView>(R.id.nomorKamarModal)
 
-        jenisKamar.text = jenis
-        nomorKamar.text = nomorRuangan.toString()
+        binding.jenisKamarModal.text = jenis
+        binding.nomorKamarModal.text = nomorRuangan.toString()
 
-        return view
+        return binding.root
     }
 
     companion object {
