@@ -37,7 +37,6 @@ class KamarDetailModal : DialogFragment() {
     ): View? {
             binding = FragmentKamarDetailModalBinding.inflate(inflater, container, false)
 
-        // Menampilkan data yang diterima
 
         binding.jenisKamarModal.text = jenis
         binding.nomorKamarModal.text = nomorRuangan.toString()

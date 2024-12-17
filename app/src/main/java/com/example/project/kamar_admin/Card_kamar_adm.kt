@@ -34,12 +34,19 @@ class Card_kamar_adm(
     override fun getItemCount(): Int = mList.size
 
     class ViewHolder(ItemView: View) : RecyclerView.ViewHolder(ItemView) {
-        private val jeniskamar: TextView = itemView.findViewById(R.id.jenisKamar)
+        private val jenisKamar: TextView = itemView.findViewById(R.id.jenisKamar)
         private val nomorKamar: TextView = itemView.findViewById(R.id.nomorKamar)
+        private val container: androidx.constraintlayout.widget.ConstraintLayout =
+            itemView.findViewById(R.id.cardMain) // ID dari layout constraint
 
         fun bind(item: Ruangan) {
-            jeniskamar.text = item.jenis
+            jenisKamar.text = item.jenis
             nomorKamar.text = item.nomor_Ruangan.toString()
+
+            when (item.status) {
+                "terisi" -> container.setBackgroundColor(itemView.context.getColor(R.color.green))
+                else -> container.setBackgroundColor(itemView.context.getColor(R.color.gray))
+            }
         }
     }
 }

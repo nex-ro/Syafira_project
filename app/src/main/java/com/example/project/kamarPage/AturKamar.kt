@@ -11,6 +11,7 @@ import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.ConstraintSet
 import androidx.fragment.app.Fragment
+import com.example.project.Data.History
 import com.example.project.Data.Pasien
 import com.example.project.Data.Ruangan
 import com.example.project.R
@@ -20,8 +21,6 @@ import com.google.firebase.database.*
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
-
-
 class AturKamar : Fragment() {
 
     private lateinit var jenisPasienSpinner: Spinner
@@ -29,6 +28,7 @@ class AturKamar : Fragment() {
     private lateinit var database: DatabaseReference
     private lateinit var binding: FragmentAturKamarBinding
     private lateinit var ref_pasien: DatabaseReference
+    private lateinit var ref_History: DatabaseReference
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -38,6 +38,7 @@ class AturKamar : Fragment() {
         binding = FragmentAturKamarBinding.inflate(inflater, container, false)
         database = FirebaseDatabase.getInstance().reference.child("Ruangan")
         ref_pasien=FirebaseDatabase.getInstance().reference.child("pasien")
+        ref_History=FirebaseDatabase.getInstance().reference.child("history")
         // Initialize Spinners
         jenisPasienSpinner = binding.JenisPasien
         kamarSpinner = binding.SpinnerKamar
@@ -47,13 +48,31 @@ class AturKamar : Fragment() {
             val nama=binding.editTextNamaPasien.text.toString()
             val jenis=binding.JenisPasien.selectedItem.toString()
             val penyakit=binding.editTextPenyakit.text.toString()
-            val kamar=binding.SpinnerKamar.selectedItem.toString()
             val waktu =System.currentTimeMillis().toString()
 
             if(jenis=="Rawat Jalan"){
+                val idHistory=ref_History.push().key ?: ""
+                val historyy=History(nama,penyakit,waktu,waktu)
+                ref_History.child(idHistory).setValue(historyy).addOnCompleteListener { task ->
+                    if (task.isSuccessful) {
+                        Toast.makeText(
+                            requireContext(),
+                            "Data berhasil ditambahkan",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                        setCurrentFragment(kamar_adm())
+                    } else {
+                        Toast.makeText(
+                            requireContext(),
+                            "Gagal menambahkan data",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                }
 
-            }else{
+                }else{
                 val idPasien = ref_pasien.push().key ?: ""
+                val kamar=binding.SpinnerKamar.selectedItem.toString()
                 val pasienn = Pasien(nama,penyakit,kamar,waktu,jenis)
                 ref_pasien.child(idPasien).setValue(pasienn).addOnCompleteListener { task ->
                     if (task.isSuccessful) {

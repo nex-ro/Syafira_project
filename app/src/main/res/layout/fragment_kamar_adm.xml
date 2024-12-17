@@ -133,6 +133,9 @@
                         <include layout="@layout/shimmer_card_kamar_adm" />
 
                         <include layout="@layout/shimmer_card_kamar_adm" />
+                        <include layout="@layout/shimmer_card_kamar_adm" />
+                        <include layout="@layout/shimmer_card_kamar_adm" />
+                        <include layout="@layout/shimmer_card_kamar_adm" />
 
                         <include layout="@layout/shimmer_card_kamar_adm" />
 
@@ -154,47 +157,30 @@
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
-            <!-- Section 2: Pasien Kritis -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
-                android:text="Pasien Kritis"
+                android:id="@+id/cariPasien"
+                android:text="Cari Data Pasien"
                 android:textSize="16sp"
                 android:textStyle="bold" />
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recyclerViewPasienKritis"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingStart="8dp"
-                android:paddingEnd="8dp"
-                android:clipToPadding="false"
-                android:orientation="horizontal"
-                android:scrollbars="horizontal"
-                tools:listitem="@layout/card_kamar_adm" />
-
-            <!-- Section 3: Pasien Rawat Jalan -->
-            <TextView
+            <Button
+                android:id="@+id/buttonCari"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="16dp"
-                android:text="Pasien Rawat Jalan"
-                android:textSize="16sp"
-                android:textStyle="bold" />
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recyclerViewPasienRawatJalan"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingStart="8dp"
-                android:paddingEnd="8dp"
-                android:clipToPadding="false"
-                android:orientation="horizontal"
-                android:scrollbars="horizontal"
-                tools:listitem="@layout/card_kamar_adm" />
+                android:layout_marginTop="12dp"
+                android:layout_marginLeft="12dp"
+                android:layout_marginBottom="12dp"
+                android:backgroundTint="@color/biru"
+                android:text="Tambah Ruangan"
+                android:textColor="#FFFFFF"
+                android:textSize="13.5sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.9"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/cariPasien" />
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
 

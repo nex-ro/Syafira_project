@@ -52,6 +52,10 @@ class kamar_adm : Fragment() {
             val tambahKamar = TambahKamar()
             setCurrentFragment(tambahKamar)
         }
+        binding.buttonCari.setOnClickListener{
+            val cariPasien=CariPasien()
+            setCurrentFragment(cariPasien)
+        }
         return binding.root
     }
 
@@ -166,6 +170,7 @@ class kamar_adm : Fragment() {
     private fun setCurrentFragment(fragment: Fragment) =
         parentFragmentManager.beginTransaction().apply {
             replace(R.id.flFragment, fragment)
+            addToBackStack(null)
             commit()
         }
 }
