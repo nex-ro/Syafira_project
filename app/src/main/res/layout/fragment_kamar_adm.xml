@@ -163,7 +163,7 @@
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
                 android:id="@+id/cariPasien"
-                android:text="Cari Data Pasien"
+                android:text="Cari Pasien"
                 android:textSize="16sp"
                 android:textStyle="bold" />
             <Button
