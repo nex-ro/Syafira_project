@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp"
+    android:background="@drawable/fade_background">
+
+    <!-- Header -->
+    <TextView
+        android:id="@+id/tvHeader"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Laporan"
+        android:textColor="@android:color/white"
+
+        android:textSize="20sp"
+        android:gravity="center"
+        android:padding="16dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <!-- Search Bar -->
+    <EditText
+        android:id="@+id/etSearch"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:hint="Cari laporan"
+        android:padding="12dp"
+
+
+        app:layout_constraintTop_toBottomOf="@id/tvHeader"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+/>
+
+    <!-- Tab Menu -->
+    <LinearLayout
+        android:id="@+id/tabMenu"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center"
+        app:layout_constraintTop_toBottomOf="@id/etSearch"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+>
+
+        <TextView
+            android:id="@+id/tabSemua"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:text="Semua"
+            android:textSize="14sp"
+            android:textColor="@color/black"
+
+            android:padding="8dp" />
+
+        <TextView
+            android:id="@+id/tabHarian"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:text="Harian"
+            android:textSize="14sp"
+            android:textColor="@color/gray"
+            android:padding="8dp" />
+
+        <TextView
+            android:id="@+id/tabMinggu"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:text="Minggu"
+            android:textSize="14sp"
+            android:textColor="@color/gray"
+            android:padding="8dp" />
+
+        <TextView
+            android:id="@+id/tabBulan"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Bulan"
+            android:textSize="14sp"
+            android:textColor="@color/gray"
+            android:padding="8dp" />
+    </LinearLayout>
+
+    <!-- Harian Chart -->
+    <LinearLayout
+        android:id="@+id/chartHarian"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+
+        android:padding="16dp"
+        app:layout_constraintTop_toBottomOf="@id/tabMenu"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+  >
+
+        <TextView
+            android:id="@+id/tvHarian"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Harian"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:textColor="@color/black" />
+        <com.github.mikephil.charting.charts.BarChart
+            android:id="@+id/barChart1"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:layout_marginTop="8dp" />
+
+    </LinearLayout>
+
+    <!-- Bulan Chart -->
+    <LinearLayout
+        android:id="@+id/chartBulan"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+
+        android:padding="16dp"
+        app:layout_constraintTop_toBottomOf="@id/chartHarian"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+   >
+
+        <TextView
+            android:id="@+id/tvBulan"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Bulan"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:textColor="@color/black" />
+        <com.github.mikephil.charting.charts.BarChart
+            android:id="@+id/barChart2"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:layout_marginTop="8dp" />
+
+    </LinearLayout>
+
+    <!-- Tahun Chart -->
+    <LinearLayout
+        android:id="@+id/chartTahun"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+
+        android:padding="16dp"
+        app:layout_constraintTop_toBottomOf="@id/chartBulan"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        >
+
+        <TextView
+            android:id="@+id/tvTahun"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Tahun"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:textColor="@color/black" />
+
+        <com.github.mikephil.charting.charts.BarChart
+            android:id="@+id/barChart3"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:layout_marginTop="8dp" />
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

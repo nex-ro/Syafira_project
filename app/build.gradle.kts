@@ -59,6 +59,7 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-process:2.5.1")
     implementation ("de.hdodenhof:circleimageview:3.1.0")
     implementation ("androidx.activity:activity-ktx:1.6.0")
+    implementation ("com.squareup.picasso:picasso:2.8")
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)

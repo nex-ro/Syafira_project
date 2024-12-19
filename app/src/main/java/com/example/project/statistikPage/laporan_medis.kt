@@ -26,7 +26,7 @@ class laporan_medis : Fragment() {
         val view = inflater.inflate(R.layout.fragment_laporan_medis, container, false)
 
         // Initialize ListView and Firebase database reference
-        listView = view.findViewById(R.id.listViewLaporanMedis)
+
         database = FirebaseDatabase.getInstance().reference.child("Laporan_Penanganan")
         laporanList = ArrayList()
 
@@ -34,7 +34,7 @@ class laporan_medis : Fragment() {
         adapter = ArrayAdapter(requireContext(), android.R.layout.simple_list_item_1, ArrayList())
         listView.adapter = adapter
 
-        fetchLaporanData()
+
 
         return view
     }
