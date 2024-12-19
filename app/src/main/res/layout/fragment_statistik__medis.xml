@@ -40,7 +40,6 @@
             android:layout_height="149dp"
             android:background="@drawable/bar_chart_background"
             android:orientation="vertical"
-
             android:padding="16dp">
 
             <TextView
@@ -52,10 +51,14 @@
                 android:textStyle="bold" />
 
             <LinearLayout
+                android:id="@+id/statusRadiologi"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:clickable="true"
+                android:focusable="true"
+                android:background="?attr/selectableItemBackground">
 
                 <TextView
                     android:layout_width="0dp"
@@ -74,10 +77,14 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/statusLaboratorium"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:clickable="true"
+                android:focusable="true"
+                android:background="?attr/selectableItemBackground">
 
                 <TextView
                     android:layout_width="0dp"
@@ -96,10 +103,14 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/statusFarmasi"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:clickable="true"
+                android:focusable="true"
+                android:background="?attr/selectableItemBackground">
 
                 <TextView
                     android:layout_width="0dp"
