@@ -15,6 +15,8 @@ import com.google.firebase.database.DatabaseReference
 import androidx.fragment.app.Fragment
 import android.widget.Toast
 import android.content.SharedPreferences
+import com.example.project.statistikPage.Statistik_Medis
+
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private lateinit var sharedPreferences: SharedPreferences
