@@ -163,7 +163,7 @@
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
                 android:id="@+id/cariPasien"
-                android:text="Cari Pasien"
+                android:text="Cari Data Pasien"
                 android:textSize="16sp"
                 android:textStyle="bold" />
             <Button
@@ -174,7 +174,7 @@
                 android:layout_marginLeft="12dp"
                 android:layout_marginBottom="12dp"
                 android:backgroundTint="@color/biru"
-                android:text="Tambah Ruangan"
+                android:text="cari Pasien"
                 android:textColor="#FFFFFF"
                 android:textSize="13.5sp"
                 app:layout_constraintEnd_toEndOf="parent"
