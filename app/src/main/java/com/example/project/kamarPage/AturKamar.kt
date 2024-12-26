@@ -48,7 +48,7 @@ class AturKamar : Fragment() {
             val nama=binding.editTextNamaPasien.text.toString()
             val jenis=binding.JenisPasien.selectedItem.toString()
             val penyakit=binding.editTextPenyakit.text.toString()
-            val waktu =System.currentTimeMillis().toString()
+            val waktu =System.currentTimeMillis().toLong()
 
             if(jenis=="Rawat Jalan"){
                 val idHistory=ref_History.push().key ?: ""
@@ -135,7 +135,7 @@ class AturKamar : Fragment() {
                     val jenisRuangan = roomSnapshot.child("jenis").value.toString()
                     val statusRuangan = roomSnapshot.child("status").value.toString()
 
-                    if (statusRuangan == "kosong") {
+                    if (statusRuangan != "penuh") {
                         if (excludeIcuHcu) {
                             if (jenisRuangan != "ICU" && jenisRuangan != "HCU") {
                                 kamarList.add(namaRuangan)
@@ -147,7 +147,6 @@ class AturKamar : Fragment() {
                         }
                     }
                 }
-
                 setupKamarSpinner(kamarList)
             }
 
@@ -168,7 +167,6 @@ class AturKamar : Fragment() {
         val constraintSet = ConstraintSet()
         constraintSet.clone(constraintLayout)
 
-        // Reconnect the EditText below Spinner Kamar to Spinner JenisPasien directly
         constraintSet.connect(
             R.id.buttonSubmitt,
             ConstraintSet.TOP,
@@ -184,7 +182,6 @@ class AturKamar : Fragment() {
         val constraintSet = ConstraintSet()
         constraintSet.clone(constraintLayout)
 
-        // Reconnect the EditText below Spinner Kamar to Spinner Kamar
         constraintSet.connect(
             R.id.buttonSubmitt,
             ConstraintSet.TOP,
@@ -205,10 +202,16 @@ class AturKamar : Fragment() {
         database.orderByChild("nama_Ruangan").equalTo(namaRuangan).addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 for (roomSnapshot in snapshot.children) {
-                    roomSnapshot.ref.child("status").setValue("terisi")
+                    val currentIsi = roomSnapshot.child("isi").getValue(Int::class.java) ?: 0
+                    val kapasitas = roomSnapshot.child("kapasitas").getValue(Int::class.java) ?: 0
+
+                    val updatedIsi = currentIsi + 1
+                    val updatedStatus = if (updatedIsi >= kapasitas) "penuh" else "terisi"
+
+                    roomSnapshot.ref.child("isi").setValue(updatedIsi)
+                    roomSnapshot.ref.child("status").setValue(updatedStatus)
                 }
             }
-
             override fun onCancelled(error: DatabaseError) {
                 Toast.makeText(requireContext(), "Gagal memperbarui status ruangan: ${error.message}", Toast.LENGTH_SHORT).show()
             }

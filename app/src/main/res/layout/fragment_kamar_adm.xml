@@ -83,6 +83,30 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:id="@+id/cariPasien"
+                android:text="Cari Data Pasien"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+            <Button
+                android:id="@+id/buttonCari"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:layout_marginLeft="12dp"
+                android:layout_marginBottom="12dp"
+                android:backgroundTint="@color/biru"
+                android:text="cari Pasien"
+                android:textColor="#FFFFFF"
+                android:textSize="13.5sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.9"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/cariPasien" />
             <!-- Section 1: Kamar -->
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
@@ -157,30 +181,6 @@
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="16dp"
-                android:id="@+id/cariPasien"
-                android:text="Cari Data Pasien"
-                android:textSize="16sp"
-                android:textStyle="bold" />
-            <Button
-                android:id="@+id/buttonCari"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
-                android:layout_marginLeft="12dp"
-                android:layout_marginBottom="12dp"
-                android:backgroundTint="@color/biru"
-                android:text="cari Pasien"
-                android:textColor="#FFFFFF"
-                android:textSize="13.5sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.9"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/cariPasien" />
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
 

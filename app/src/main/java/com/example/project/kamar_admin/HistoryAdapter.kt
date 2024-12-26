@@ -63,15 +63,11 @@ class HistoryAdapter(private var historyList: List<History>) :
         notifyDataSetChanged()
     }
 
-    private fun formatTimestamp(timestamp: String?): String {
+    private fun formatTimestamp(timestamp: Long): String {
         return try {
-            if (!timestamp.isNullOrEmpty()) {
-                val date = Date(timestamp.toLong())
-                val format = SimpleDateFormat("dd-MM-yyyy", Locale.getDefault())
-                format.format(date)
-            } else {
-                "Tidak tersedia"
-            }
+            val date = Date(timestamp) // Tanggal yang diterima adalah Long, bukan String
+            val format = SimpleDateFormat("dd-MM-yyyy", Locale.getDefault())
+            format.format(date)
         } catch (e: Exception) {
             "Format tidak valid"
         }

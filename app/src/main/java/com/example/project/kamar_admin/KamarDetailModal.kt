@@ -1,17 +1,19 @@
 package com.example.project.kamar_admin
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
-import androidx.fragment.app.DialogFragment
+import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.project.Data.Ruangan
-import com.example.project.R
-import com.example.project.databinding.FragmentKamarBinding
+import com.example.project.Data.Pasien
 import com.example.project.databinding.FragmentKamarDetailModalBinding
+import com.example.project.kamar_admin.detail.PasienAdapter
+import com.google.firebase.database.*
 
-class KamarDetailModal : DialogFragment() {
+class KamarDetailModal : Fragment() {
     private lateinit var binding: FragmentKamarDetailModalBinding
     private lateinit var idRuangan: String
     private var nomorRuangan: Int = 0
@@ -19,6 +21,7 @@ class KamarDetailModal : DialogFragment() {
     private lateinit var namaRuangan: String
     private lateinit var status: String
     private var lantai: Int = 0
+    private lateinit var ref_pasien: DatabaseReference
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,14 +37,55 @@ class KamarDetailModal : DialogFragment() {
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
-    ): View? {
-            binding = FragmentKamarDetailModalBinding.inflate(inflater, container, false)
-
-
+    ): View {
+        binding = FragmentKamarDetailModalBinding.inflate(inflater, container, false)
         binding.jenisKamarModal.text = jenis
         binding.nomorKamarModal.text = nomorRuangan.toString()
 
+        ref_pasien = FirebaseDatabase.getInstance().reference.child("pasien")
+
+        Log.d("KamarDetailModal", "Nama Ruangan: $namaRuangan")
+        fetchDataPasien()
         return binding.root
+    }
+
+    private fun fetchDataPasien() {
+        ref_pasien.orderByChild("nama_Ruangan").equalTo(namaRuangan)
+            .addListenerForSingleValueEvent(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    if (snapshot.exists()) {
+                        val pasienList = mutableListOf<Pasien>()
+                        for (data in snapshot.children) {
+                            val pasien = data.getValue(Pasien::class.java)
+                            if (pasien != null) {
+                                pasienList.add(pasien)
+                            }
+                        }
+                        setupRecyclerView(pasienList)
+                        Log.d("KamarDetailModal", "Data Pasien: $pasienList")
+                    } else {
+                        Log.d("KamarDetailModal", "No data found for ruangan: $namaRuangan")
+                    }
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+                    Log.e("KamarDetailModal", "Firebase error: ${error.message}")
+                }
+            })
+    }
+
+    private fun setupRecyclerView(pasienList: List<Pasien>) {
+        binding.recyclerViewPasien.layoutManager = LinearLayoutManager(context)
+        val adapter = PasienAdapter(
+            pasienList,
+            onPindahRuanganClick = { pasien ->
+                Log.d("PasienAdapter", "Pindah Ruangan clicked for: ${pasien.nama_Pasien}")
+            },
+            onSudahSehatClick = { pasien ->
+                Log.d("PasienAdapter", "Sudah Sehat clicked for: ${pasien.nama_Pasien}")
+            }
+        )
+        binding.recyclerViewPasien.adapter = adapter
     }
 
     companion object {
@@ -54,10 +98,10 @@ class KamarDetailModal : DialogFragment() {
                 putString("nama_Ruangan", ruangan.nama_Ruangan)
                 putString("status", ruangan.status)
                 putInt("lantai", ruangan.lantai ?: 0)
+                putInt("kapasitas", ruangan.kapasitas ?: 1)
             }
             fragment.arguments = args
             return fragment
         }
     }
-
 }

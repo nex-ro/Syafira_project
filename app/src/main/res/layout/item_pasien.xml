@@ -1,0 +1,44 @@
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="8dp">
+
+    <TextView
+        android:id="@+id/tvNamaPasien"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Nama Pasien"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/tvPenyakit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Penyakit" />
+
+    <TextView
+        android:id="@+id/tvStatus"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Status" />
+
+    <TextView
+        android:id="@+id/tvTanggalMasuk"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Tanggal Masuk" />
+
+    <Button
+        android:id="@+id/btnPindahRuangan"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Pindah Ruangan" />
+
+    <Button
+        android:id="@+id/btnSudahSehat"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Sudah Sehat" />
+</LinearLayout>

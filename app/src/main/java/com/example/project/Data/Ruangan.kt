@@ -6,5 +6,7 @@ data class Ruangan(
     val jenis: String? = null,
     val nama_Ruangan: String? = null,
     val status: String? = null,
+    val kapasitas:Int?=1,
+    val isi:Int?=0,
     val lantai: Int?=null,
 )

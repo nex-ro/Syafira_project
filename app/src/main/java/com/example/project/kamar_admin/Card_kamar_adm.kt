@@ -1,11 +1,11 @@
 package com.example.project.kamar_admin
+
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.project.Data.Ruangan
-import com.example.project.Data.cardData
 import com.example.project.R
 
 class Card_kamar_adm(
@@ -27,7 +27,11 @@ class Card_kamar_adm(
         val item = mList[position]
         holder.bind(item)
         holder.itemView.setOnClickListener {
-            KamarDetailModal.newInstance(item).show(fragment.parentFragmentManager, "KamarDetailModal")
+            val detailFragment = KamarDetailModal.newInstance(item)
+            fragment.parentFragmentManager.beginTransaction()
+                .replace(R.id.flFragment, detailFragment)
+                .addToBackStack(null)
+                .commit()
         }
     }
 
@@ -41,9 +45,9 @@ class Card_kamar_adm(
 
         fun bind(item: Ruangan) {
             jenisKamar.text = item.jenis
-            nomorKamar.text = item.nomor_Ruangan.toString()
-
+            nomorKamar.text = item.nama_Ruangan
             when (item.status) {
+                "penuh" -> container.setBackgroundColor(itemView.context.getColor(R.color.red))
                 "terisi" -> container.setBackgroundColor(itemView.context.getColor(R.color.green))
                 else -> container.setBackgroundColor(itemView.context.getColor(R.color.gray))
             }

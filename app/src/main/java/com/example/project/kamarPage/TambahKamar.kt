@@ -40,16 +40,15 @@ class TambahKamar : Fragment() {
         binding.buttonSimpan.setOnClickListener {
             val nama = binding.inputNamaRuangan.text.toString().trim()
             val nomor = binding.inputNomorRuangan.text.toString().toIntOrNull()
+            val kapasitas=binding.inputkapasitas.text.toString().toIntOrNull()
             val jenis = binding.spinnerJenis.selectedItem.toString()
-
-            if (nama.isEmpty() || nomor == null) {
+            if (nama.isEmpty() || nomor == null || kapasitas==null) {
                 Toast.makeText(
                     requireContext(),
                     "Mohon input dengan benar",
                     Toast.LENGTH_SHORT
                 ).show()
             } else {
-                // Cek apakah nama ruangan sudah ada di Firebase
                 ref.addListenerForSingleValueEvent(object : ValueEventListener {
                     override fun onDataChange(snapshot: DataSnapshot) {
                         var isDuplicate = false
@@ -68,10 +67,9 @@ class TambahKamar : Fragment() {
                                 Toast.LENGTH_SHORT
                             ).show()
                         } else {
-                            // Jika nama ruangan unik, tambahkan ke Firebase
                             val status = "kosong"
                             val idRuangan = ref.push().key ?: return
-                            val ruangan = Ruangan(idRuangan, nomor, jenis, nama, status)
+                            val ruangan = Ruangan(idRuangan, nomor, jenis, nama, status,kapasitas)
                             ref.child(idRuangan).setValue(ruangan).addOnCompleteListener { task ->
                                 if (task.isSuccessful) {
                                     Toast.makeText(

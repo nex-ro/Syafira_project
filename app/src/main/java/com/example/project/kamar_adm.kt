@@ -7,20 +7,19 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.project.Data.Ruangan
 import com.example.project.databinding.FragmentKamarAdmBinding
+import com.example.project.kamarPage.AturKamar
+import com.example.project.kamarPage.TambahKamar
 import com.example.project.kamar_admin.Card_kamar_adm
 import com.github.mikephil.charting.data.PieData
 import com.github.mikephil.charting.data.PieDataSet
 import com.github.mikephil.charting.data.PieEntry
 import com.google.firebase.database.*
-
-import android.widget.AdapterView
-import android.widget.ArrayAdapter
-import com.example.project.kamarPage.AturKamar
-import com.example.project.kamarPage.TambahKamar
 
 class kamar_adm : Fragment() {
     private lateinit var ref_ruangan: DatabaseReference
@@ -30,6 +29,7 @@ class kamar_adm : Fragment() {
     private lateinit var adapter: Card_kamar_adm
     private val kategoriList = listOf("All", "VVIP", "VIP", "Kelas I", "Kelas II", "Kelas III", "Laboratorium", "ICU", "HCU")
     private var dataRuangan = mutableListOf<Ruangan>()
+    private lateinit var valueEventListener: ValueEventListener
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -43,17 +43,17 @@ class kamar_adm : Fragment() {
         setupRecyclerView()
 
         ref_ruangan = FirebaseDatabase.getInstance().reference.child("Ruangan")
-        fetchData()
+        fetchRealtimeData()
         binding.buttonTambahPasien.setOnClickListener {
-            val AturKamar = AturKamar()
-            setCurrentFragment(AturKamar)
+            val aturKamar = AturKamar()
+            setCurrentFragment(aturKamar)
         }
         binding.buttonTambahRuangan.setOnClickListener {
             val tambahKamar = TambahKamar()
             setCurrentFragment(tambahKamar)
         }
-        binding.buttonCari.setOnClickListener{
-            val cariPasien=CariPasien()
+        binding.buttonCari.setOnClickListener {
+            val cariPasien = CariPasien()
             setCurrentFragment(cariPasien)
         }
         return binding.root
@@ -75,7 +75,6 @@ class kamar_adm : Fragment() {
         spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         binding.spinnerFilter.adapter = spinnerAdapter
 
-        // Set default selection to "All"
         binding.spinnerFilter.setSelection(0)
 
         binding.spinnerFilter.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
@@ -84,9 +83,7 @@ class kamar_adm : Fragment() {
                 filterData(selectedCategory)
             }
 
-            override fun onNothingSelected(parent: AdapterView<*>?) {
-                // Do nothing
-            }
+            override fun onNothingSelected(parent: AdapterView<*>?) {}
         }
     }
 
@@ -97,9 +94,8 @@ class kamar_adm : Fragment() {
         recyclerView.adapter = adapter
     }
 
-
-    private fun fetchData() {
-        ref_ruangan.addListenerForSingleValueEvent(object : ValueEventListener {
+    private fun fetchRealtimeData() {
+        valueEventListener = object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 dataRuangan.clear()
                 for (ruanganSnapshot in snapshot.children) {
@@ -108,7 +104,6 @@ class kamar_adm : Fragment() {
                         dataRuangan.add(ruangan)
                     }
                 }
-                // Default filter to "All" category
                 filterData(kategoriList.first())
                 binding.shimmerLayout.apply {
                     stopShimmer()
@@ -120,15 +115,12 @@ class kamar_adm : Fragment() {
             override fun onCancelled(error: DatabaseError) {
                 Log.e("kamarJenis", "Error fetching data: ${error.message}")
             }
-        })
+        }
+        ref_ruangan.addValueEventListener(valueEventListener)
     }
 
     private fun filterData(category: String) {
-        val filteredData = if (category == "All") {
-            dataRuangan
-        } else {
-            dataRuangan.filter { it.jenis == category }
-        }
+        val filteredData = if (category == "All") dataRuangan else dataRuangan.filter { it.jenis == category }
         adapter.updateData(filteredData)
         updatePieChart(filteredData)
     }
@@ -143,7 +135,7 @@ class kamar_adm : Fragment() {
         }
 
         val dataSet = PieDataSet(entries, "Status").apply {
-            colors = listOf(Color.GREEN, Color.RED, Color.YELLOW) // Contoh: available, occupied, maintenance
+            colors = listOf(Color.GREEN, Color.RED, Color.YELLOW)
             sliceSpace = 3f
             valueTextColor = Color.WHITE
             valueTextSize = 12f
@@ -156,17 +148,10 @@ class kamar_adm : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
+        ref_ruangan.removeEventListener(valueEventListener)
         _binding = null
     }
 
-    companion object {
-        fun newInstance(): kamar_adm {
-            val fragment = kamar_adm()
-            val args = Bundle()
-            fragment.arguments = args
-            return fragment
-        }
-    }
     private fun setCurrentFragment(fragment: Fragment) =
         parentFragmentManager.beginTransaction().apply {
             replace(R.id.flFragment, fragment)

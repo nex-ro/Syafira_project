@@ -1,9 +1,9 @@
 package com.example.project.Data
 
 data class Pasien(
-    val Nama_Pasien: String? = null,
-    val Penyakit: String? = null,
-    val Nama_Ruangan: String? = null,
-    val Tanggal_Masuk: String? = null,
-    val Status: String? = null,
+    val nama_Pasien: String? = null,
+    val penyakit: String? = null,
+    val nama_Ruangan: String? = null,
+    val tanggal_Masuk: Long? = null,
+    val status: String? = null,
 )

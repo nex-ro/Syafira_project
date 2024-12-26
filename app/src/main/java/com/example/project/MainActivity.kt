@@ -16,7 +16,6 @@ import androidx.fragment.app.Fragment
 import android.widget.Toast
 import android.content.SharedPreferences
 import com.example.project.statistikPage.Statistik_Medis
-
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private lateinit var sharedPreferences: SharedPreferences
@@ -62,10 +61,11 @@ class MainActivity : AppCompatActivity() {
             true
         }
     }
-
     private fun setCurrentFragment(fragment: Fragment) =
         supportFragmentManager.beginTransaction().apply {
             replace(R.id.flFragment, fragment)
+                .addToBackStack(null)
+
             commit()
         }
     private fun updateBottomNavigationMenu(isLoggedIn: Boolean) {
@@ -78,7 +78,6 @@ class MainActivity : AppCompatActivity() {
                 menu.add(0, R.id.medis, 2, "Medis").setIcon(R.drawable.ic_medis) // Adjust icon
             }
         } else {
-            // Remove "Medis" menu item if not logged in
             menu.removeItem(R.id.medis)
         }
     }
