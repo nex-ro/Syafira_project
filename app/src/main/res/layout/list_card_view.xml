@@ -5,10 +5,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:layout_margin="20dp"
-    android:background="@color/colorPrimaryDark"
+    android:padding="2dp"
+    android:layout_margin="4dp"
+    android:background="@color/lavender"
     app:cardCornerRadius="10dp"
-    app:cardElevation="7dp">
+    app:cardElevation="2dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="140dp"
@@ -30,7 +31,7 @@
             android:layout_height="wrap_content"
             android:text="ICU"
             android:textAlignment="center"
-            android:textColor="@color/white"
+            android:textColor="@color/black"
             android:textSize="17sp"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"

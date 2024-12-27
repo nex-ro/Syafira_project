@@ -16,6 +16,8 @@ import androidx.fragment.app.Fragment
 import android.widget.Toast
 import android.content.SharedPreferences
 import com.example.project.statistikPage.Statistik_Medis
+import com.example.project.user.user_home
+
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private lateinit var sharedPreferences: SharedPreferences
@@ -23,6 +25,8 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        supportActionBar?.hide()
+
         val Dashboard = Dashboard()
         val kamar = kamar()
         val profile = profile()
@@ -31,13 +35,23 @@ class MainActivity : AppCompatActivity() {
         sharedPreferences = getSharedPreferences("UserSession", Context.MODE_PRIVATE)
         val isLoggedIn = sharedPreferences.getBoolean("isLoggedIn", false)
         updateBottomNavigationMenu(isLoggedIn)
-        setCurrentFragment(Dashboard)
+        if (isLoggedIn) {
+            setCurrentFragment(Dashboard)
+        } else {
+            setCurrentFragment(user_home())
+        }
+        setCurrentFragment(user_home())
         binding.bottomNavigationView.setItemBackgroundResource(R.color.colorAccent)
         binding.bottomNavigationView.setOnNavigationItemSelectedListener {
             when (it.itemId) {
-                R.id.Dashboard -> setCurrentFragment(Dashboard)
+                R.id.Dashboard -> {
+                    if (isLoggedIn) {
+                        setCurrentFragment(Dashboard)
+                    } else {
+                        setCurrentFragment(user_home())
+                    }
+                }
                 R.id.kamar -> {
-                    val isLoggedIn = sharedPreferences.getBoolean("isLoggedIn", false)
                     if (isLoggedIn) {
                         setCurrentFragment(kamar_adm)
                     } else {

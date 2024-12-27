@@ -2,18 +2,28 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
-    <color name="colorPrimaryDark">#DC89CB</color>
-    <color name="colorPrimary">#DC89CB</color>
-    <color name="colorAccent">#DC89CB</color>
+    <color name="colorPrimaryDark">#FFFFFFFF</color>
+    <color name="colorPrimary">#FFFFFFFF</color>
+<!--    <color name="bg">#F7F6FB</color>-->
+    <!--    <color name="bg">#D9D9D9</color>-->
+    <color name="bg">#eee</color>
+
+    <color name="uncheck">#2B2B2B</color>
+
+    <color name="colorAccent">#FFFFFFFF</color>
     <color name="pink">#DC89CB</color>
+    <color name="lavender">#A592FF</color>
+
+
     <color name="green">#28a745</color>
     <color name="red">#E91E2F</color>
+    <color name="ungu">#6B2997</color>
 
-    <color name="ungu">#D988C7</color>
+    <color name="check">#6B2997</color>
     <color name="ungu2">#B2509B</color>
     <color name="hijau">#91C872</color>
     <color name="biru">#517597</color>
-    <color name="shimmer_base">#F2F2F2</color> <!-- Abu-abu terang -->
+    <color name="shimmer_base">#F2F2F2</color>
     <color name="shimmer_highlight">#FFFFFF</color> <!-- Putih -->
     <color name="gray">#999696</color> <!-- Putih -->
 

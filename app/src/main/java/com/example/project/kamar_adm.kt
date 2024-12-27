@@ -37,7 +37,6 @@ class kamar_adm : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentKamarAdmBinding.inflate(inflater, container, false)
-
         setupPieChart()
         setupSpinner()
         setupRecyclerView()
