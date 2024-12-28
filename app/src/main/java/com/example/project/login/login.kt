@@ -47,7 +47,7 @@ class login : AppCompatActivity() {
                     val storedPassword = snapshot.child("password").value.toString()
 
                     if (storedPassword == password) {
-                        val nama = snapshot.child("nama").value?.toString() ?: ""
+                        val fullName = snapshot.child("fullName").value?.toString() ?: ""
                         val email = snapshot.child("email").value?.toString() ?: ""
                         val phone = snapshot.child("phone").value?.toString() ?: ""
                         val gender = snapshot.child("gender").value?.toString() ?: ""
@@ -55,7 +55,7 @@ class login : AppCompatActivity() {
                         val editor = sharedPreferences.edit()
                         editor.putBoolean("isLoggedIn", true)
                         editor.putString("username", username)
-                        editor.putString("nama", nama)
+                        editor.putString("nama", fullName)
                         editor.putString("email", email)
                         editor.putString("phone", phone)
                         editor.putString("gender", gender)
@@ -63,7 +63,7 @@ class login : AppCompatActivity() {
 
                         Toast.makeText(
                             this@login,
-                            "Login successful! Welcome, $nama",
+                            "Login successful! Welcome, $fullName",
                             Toast.LENGTH_SHORT
                         ).show()
 
