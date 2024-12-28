@@ -61,7 +61,6 @@ class login : AppCompatActivity() {
                         editor.putString("gender", gender)
                         editor.apply()
 
-
                         Toast.makeText(
                             this@login,
                             "Login successful! Welcome, $nama",
