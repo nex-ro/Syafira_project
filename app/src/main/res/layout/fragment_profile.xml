@@ -1,182 +1,231 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/pink"
-    android:padding="16dp"
-    tools:context=".profile">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/bg"
+    android:orientation="vertical"
+    android:padding="0dp"
+    android:clipToPadding="false">
 
-    <RelativeLayout
+    <!-- Toolbar -->
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/toolbar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:background="@android:color/transparent"
+        app:menu="@menu/top_bar_menu_message">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:gravity="center"
-            android:orientation="vertical">
+        <ImageView
+            android:id="@+id/logoImageView"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:layout_gravity="center_vertical"
+            android:layout_marginStart="16dp"
+            android:contentDescription="Logo"
+            android:src="@drawable/logosyafira" />
 
-            <de.hdodenhof.circleimageview.CircleImageView
-                android:id="@+id/imgProfile"
-                android:layout_width="150dp"
-                android:layout_height="150dp"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="100dp"
-                android:src="@drawable/lc_profile"
-                android:contentDescription="Profile Image"
-                android:layout_alignParentTop="true"
-                android:scaleType="centerCrop" />
-
-            <Button
-                android:id="@+id/btnChangePhoto"
-                android:layout_width="80dp"
-                android:layout_height="40dp"
-                android:layout_below="@id/imgProfile"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="16dp"
-                android:text="Change"
-                android:textSize="10dp"/>
-
-            <TextView
-                android:id="@+id/txtGreeting"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Hi, User!"
-                android:textColor="@color/white"
-                android:textSize="18sp"
-                android:layout_marginBottom="12dp"
-                android:gravity="center"
-                android:textStyle="bold" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:padding="8dp">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="10dp"
-                    android:text="Username"
-                    android:textColor="@color/white"
-                    android:textStyle="bold"
-                    android:textSize="18sp" />
-
-                <EditText
-                    android:id="@+id/editTextUsername"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="12dp"
-                    android:background="@drawable/input_background"
-                    android:enabled="true"
-                    android:padding="12dp"
-                    android:text=""
-                    android:textColor="@color/white" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="10dp"
-                    android:text="Nama Lengkap"
-                    android:textColor="@color/white"
-                    android:textStyle="bold"
-                    android:textSize="18sp" />
-
-                <EditText
-                    android:id="@+id/edtFullName"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="12dp"
-                    android:background="@drawable/input_background"
-                    android:enabled="true"
-                    android:padding="12dp"
-                    android:text=""
-                    android:textColor="@color/white" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="10dp"
-                    android:text="Email"
-                    android:textColor="@color/white"
-                    android:textStyle="bold"
-                    android:textSize="18sp" />
-
-                <EditText
-                    android:id="@+id/edtEmail"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="12dp"
-                    android:background="@drawable/input_background"
-                    android:enabled="true"
-                    android:padding="12dp"
-                    android:text=""
-                    android:textColor="@color/white" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="10dp"
-                    android:text="No HP"
-                    android:textColor="@color/white"
-                    android:textStyle="bold"
-                    android:textSize="18sp" />
-
-                <EditText
-                    android:id="@+id/edtNoHP"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="12dp"
-                    android:background="@drawable/input_background"
-                    android:enabled="true"
-                    android:padding="12dp"
-                    android:text=""
-                    android:textColor="@color/white" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Jenis Kelamin"
-                    android:layout_marginBottom="10dp"
-                    android:textStyle="bold"
-                    android:textColor="@color/white"
-                    android:textSize="18sp" />
-
-                <EditText
-                    android:id="@+id/edtJenisKelamin"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="12dp"
-                    android:background="@drawable/input_background"
-                    android:enabled="true"
-                    android:padding="12dp"
-                    android:text=""
-                    android:textColor="@color/white" />
-
-
-            </LinearLayout>
-
-            <Button
-                android:id="@+id/btnSave"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@color/green"
-                android:text="Simpan" />
-        </LinearLayout>
-
-        <ImageButton
-            android:id="@+id/buttonLogout"
+        <TextView
+            android:id="@+id/toolbarTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentTop="true"
-            android:background="@null"
-            android:src="@drawable/ic_logout"
-        android:contentDescription="logout" />
+            android:layout_gravity="center_vertical"
+            android:layout_marginStart="8dp"
+            android:text="Hi, User"
+            android:textColor="@color/ungu"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+    </com.google.android.material.appbar.MaterialToolbar>
 
-    </RelativeLayout>
-</ScrollView>
+    <!-- Profile Header -->
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:padding="5dp"
+        android:layout_margin="10dp"
+        app:cardBackgroundColor="@color/white"
+        app:cardCornerRadius="8dp"
+        app:strokeColor="@color/ungu">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/batik_grad">
+
+            <ImageView
+                android:id="@+id/profileImage"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_alignParentStart="true"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="16dp"
+                android:background="@drawable/circle_shape"
+                android:backgroundTint="@color/bg"
+                android:scaleType="centerCrop"
+                android:src="@drawable/ic_person" />
+
+            <TextView
+                android:id="@+id/username"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="26dp"
+                android:layout_toEndOf="@id/profileImage"
+                android:text="Admin"
+                android:textColor="@color/white"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/email"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/username"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="6dp"
+                android:layout_toEndOf="@id/profileImage"
+                android:text="Admin@gmail.com"
+                android:textColor="@color/white"
+                android:textSize="14sp" />
+        </RelativeLayout>
+    </androidx.cardview.widget.CardView>
+
+    <!-- Action Section for Profile Details -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_margin="10dp">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:text="Bantuan :"
+            android:textColor="@color/blackLite"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+        <LinearLayout
+            android:id="@+id/item_detail_profile"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="10dp"
+            android:padding="10dp"
+            android:background="?android:attr/selectableItemBackground"
+            android:clickable="true"
+            android:focusable="true">
+
+            <ImageView
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:layout_gravity="center_vertical"
+                android:layout_marginStart="16dp"
+                android:contentDescription="Edit Icon"
+                android:src="@drawable/ic_detail" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginStart="8dp"
+                android:text="Detil Profil"
+                android:textColor="@color/blackLite"
+                android:textSize="14sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+        <!-- Edit Profile Item -->
+        <LinearLayout
+            android:id="@+id/item_edit_profile"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="10dp"
+            android:padding="10dp"
+            android:background="?android:attr/selectableItemBackground"
+            android:clickable="true"
+            android:focusable="true">
+
+            <ImageView
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:layout_gravity="center_vertical"
+                android:layout_marginStart="16dp"
+                android:contentDescription="Edit Icon"
+                android:src="@drawable/ic_edit" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginStart="8dp"
+                android:text="Edit Profil"
+                android:textColor="@color/blackLite"
+                android:textSize="14sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <!-- Change Password Item -->
+        <LinearLayout
+            android:id="@+id/item_change_password"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="10dp"
+            android:padding="10dp"
+            android:background="?android:attr/selectableItemBackground"
+            android:clickable="true"
+            android:focusable="true">
+
+            <ImageView
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:layout_gravity="center_vertical"
+                android:layout_marginStart="16dp"
+                android:contentDescription="Lock Icon"
+                android:src="@drawable/ic_lock" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginStart="8dp"
+                android:text="Ubah Password"
+                android:textColor="@color/blackLite"
+                android:textSize="14sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <!-- Add Account Item -->
+        <LinearLayout
+            android:id="@+id/item_add_account"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="10dp"
+            android:padding="10dp"
+            android:background="?android:attr/selectableItemBackground"
+            android:clickable="true"
+            android:focusable="true">
+
+            <ImageView
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:layout_gravity="center_vertical"
+                android:layout_marginStart="16dp"
+                android:contentDescription="Add Icon"
+                android:src="@drawable/ic_add" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginStart="8dp"
+                android:text="Tambah Akun"
+                android:textColor="@color/blackLite"
+                android:textSize="14sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+    </LinearLayout>
+
+</LinearLayout>
