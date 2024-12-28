@@ -99,16 +99,7 @@ class Login : AppCompatActivity() {
                         editor.putString("gender", gender)
                         editor.apply()
 
-                        Toast.makeText(
-<<<<<<< HEAD:app/src/main/java/com/example/project/login/Login.kt
-                            this@Login,
-                            "Login successful! Welcome, $nama",
-=======
-                            this@login,
-                            "Login successful! Welcome, $fullName",
->>>>>>> f861ae1b275756983e336cde0a3cfb8822596817:app/src/main/java/com/example/project/login/login.kt
-                            Toast.LENGTH_SHORT
-                        ).show()
+
 
                         startActivity(Intent(this@Login, MainActivity::class.java))
                         finish()

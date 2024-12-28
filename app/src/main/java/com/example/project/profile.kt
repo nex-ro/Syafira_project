@@ -1,23 +1,5 @@
     package com.example.project
 
-<<<<<<< HEAD
-import android.app.Activity
-import android.content.Context
-import android.content.Intent
-import android.content.SharedPreferences
-import android.os.Bundle
-import android.provider.MediaStore
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import android.widget.Toast
-import androidx.activity.result.ActivityResultLauncher
-import androidx.activity.result.contract.ActivityResultContracts
-import androidx.fragment.app.Fragment
-import com.example.project.databinding.FragmentProfileBinding
-import com.google.firebase.database.DatabaseReference
-import com.google.firebase.database.FirebaseDatabase
-=======
     import android.content.Context
     import android.content.Intent
     import android.content.SharedPreferences
@@ -34,7 +16,6 @@ import com.google.firebase.database.FirebaseDatabase
     import com.example.project.Profil.TambahProfile
     import com.example.project.Profil.UbahPassword
     import com.example.project.databinding.FragmentProfileBinding
->>>>>>> f861ae1b275756983e336cde0a3cfb8822596817
 
     class profile : Fragment() {
         private var _binding: FragmentProfileBinding? = null
@@ -46,7 +27,8 @@ import com.google.firebase.database.FirebaseDatabase
             savedInstanceState: Bundle?
         ): View? {
             _binding = FragmentProfileBinding.inflate(inflater, container, false)
-            sharedPreferences = requireActivity().getSharedPreferences("UserSession", Context.MODE_PRIVATE)
+            sharedPreferences =
+                requireActivity().getSharedPreferences("UserSession", Context.MODE_PRIVATE)
 
             // Retrieve user session data from SharedPreferences
             val username = sharedPreferences.getString("username", "")
@@ -91,6 +73,7 @@ import com.google.firebase.database.FirebaseDatabase
                         logoutUser()
                         true
                     }
+
                     else -> false
                 }
             }
@@ -113,29 +96,15 @@ import com.google.firebase.database.FirebaseDatabase
             editor.clear()
             editor.apply()
             Toast.makeText(requireContext(), "Logged out successfully!", Toast.LENGTH_SHORT).show()
-            val intent = Intent(activity, login::class.java)
+            val intent = Intent(activity, Login::class.java)
             startActivity(intent)
             requireActivity().finish()
         }
-
-
 
 
         override fun onDestroyView() {
             super.onDestroyView()
             _binding = null
         }
-
-<<<<<<< HEAD
-    private fun logoutUser() {
-        // Clear SharedPreferences
-        val editor = sharedPreferences.edit()
-        editor.clear()
-        editor.apply()
-        Toast.makeText(requireContext(), "Logged out successfully!", Toast.LENGTH_SHORT).show()
-        val intent = Intent(activity, Login::class.java)
-        startActivity(intent)
-        requireActivity().finish()
-=======
->>>>>>> f861ae1b275756983e336cde0a3cfb8822596817
     }
+

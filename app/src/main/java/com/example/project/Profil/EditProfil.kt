@@ -18,7 +18,7 @@ import com.example.project.databinding.FragmentEditProfileBinding
 import com.example.project.databinding.FragmentKamarAdmBinding
 import com.example.project.databinding.FragmentProfileBinding
 import com.example.project.kamar_adm
-import com.example.project.login
+import com.example.project.Login
 import com.example.project.profile
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
@@ -185,7 +185,7 @@ class EditProfil : Fragment() {
         editor.clear()
         editor.apply()
 
-        val intent = Intent(requireActivity(), login::class.java)
+        val intent = Intent(requireActivity(), Login::class.java)
         startActivity(intent)
         requireActivity().finish()
     }
