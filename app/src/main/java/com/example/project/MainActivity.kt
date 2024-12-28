@@ -11,12 +11,12 @@ import com.google.firebase.database.FirebaseDatabase
 import android.util.Log
 import com.example.project.databinding.ActivityMainBinding
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.firebase.database.DatabaseReference
 import androidx.fragment.app.Fragment
 import android.widget.Toast
 import android.content.SharedPreferences
 import com.example.project.statistikPage.Statistik_Medis
 import com.example.project.user.user_home
+import com.example.project.user.user_profil
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
@@ -40,7 +40,6 @@ class MainActivity : AppCompatActivity() {
         } else {
             setCurrentFragment(user_home())
         }
-        setCurrentFragment(user_home())
         binding.bottomNavigationView.setItemBackgroundResource(R.color.colorAccent)
         binding.bottomNavigationView.setOnNavigationItemSelectedListener {
             when (it.itemId) {
@@ -67,8 +66,7 @@ class MainActivity : AppCompatActivity() {
                         Toast.makeText(this, "Welcome back, $username!", Toast.LENGTH_SHORT).show()  // Menampilkan nama yang benar
                         setCurrentFragment(profile)
                     } else {
-                        startActivity(Intent(this@MainActivity, login::class.java))
-                        finish()
+                        setCurrentFragment(user_profil())
                     }
                 }
             }

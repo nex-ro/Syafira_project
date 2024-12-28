@@ -33,11 +33,14 @@ class user_home : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+
         requireActivity().window.statusBarColor = ContextCompat.getColor(requireContext(), R.color.bg)
         binding = FragmentUserHomeBinding.inflate(inflater, container, false)
         sharedPreferences = requireContext().getSharedPreferences("UserSession", Context.MODE_PRIVATE)
         val isLoggedIn = sharedPreferences.getBoolean("isLoggedIn", false)
-
+        if(!isLoggedIn){
+            binding.toolbar.menu.findItem(R.id.quit)?.isVisible = isLoggedIn
+        }
         recyclerView = binding.recyclerView
         recyclerView.layoutManager = GridLayoutManager(requireContext(), 2)
         adapter = ItemAdapter(listOf()) { jenis ->
@@ -45,7 +48,6 @@ class user_home : Fragment() {
             setCurrentFragment(detailFragment)
         }
         recyclerView.adapter = adapter
-
         ref = FirebaseDatabase.getInstance().reference.child("Ruangan")
         binding.shimmerLayout.startShimmer()
         ref.addValueEventListener(object : ValueEventListener {

@@ -1,0 +1,15 @@
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Gambar sebagai latar belakang -->
+    <item>
+        <bitmap
+            android:src="@drawable/batik"
+            android:gravity="fill" />
+    </item>
+
+    <!-- Lapisan warna solid di atas gambar -->
+    <item>
+        <shape android:shape="rectangle">
+            <solid android:color="#996E30A2" />
+        </shape>
+    </item>
+</layer-list>
