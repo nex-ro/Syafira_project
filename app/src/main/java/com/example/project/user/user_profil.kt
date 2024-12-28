@@ -7,7 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import com.example.project.databinding.FragmentUserProfilBinding
 import android.content.Intent
-import com.example.project.login
+import com.example.project.Login
 
 class user_profil : Fragment() {
     private lateinit var binding: FragmentUserProfilBinding
@@ -18,7 +18,7 @@ class user_profil : Fragment() {
     ): View {
         binding = FragmentUserProfilBinding.inflate(inflater, container, false)
         binding.loginbg.setOnClickListener {
-            val intent = Intent(requireContext(), login::class.java)
+            val intent = Intent(requireContext(), Login::class.java)
             startActivity(intent)
         }
         return binding.root

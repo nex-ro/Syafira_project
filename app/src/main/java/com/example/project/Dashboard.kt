@@ -9,7 +9,6 @@ import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import androidx.core.view.get
 import androidx.fragment.app.Fragment
 import com.example.project.databinding.FragmentDashboardBinding
 import com.github.mikephil.charting.charts.BarChart
@@ -78,7 +77,7 @@ class Dashboard : Fragment() {
         editor.clear()
         editor.apply()
         Toast.makeText(requireContext(), "Logged out successfully!", Toast.LENGTH_SHORT).show()
-        val intent = Intent(activity, login::class.java)
+        val intent = Intent(activity, Login::class.java)
         startActivity(intent)
         requireActivity().finish()
     }

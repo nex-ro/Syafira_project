@@ -1,13 +1,9 @@
 package com.example.project
 
 import android.app.Activity
-import android.app.Activity.RESULT_OK
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
-import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
 import android.view.LayoutInflater
@@ -15,18 +11,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
-import androidx.activity.result.contract.ActivityResultContract
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import com.example.project.databinding.FragmentProfileBinding
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.ValueEventListener
-import java.io.File
-import java.io.FileOutputStream
-import java.io.IOException
 
 class profile : Fragment() {
     private lateinit var binding: FragmentProfileBinding
@@ -144,7 +133,7 @@ class profile : Fragment() {
         editor.clear()
         editor.apply()
         Toast.makeText(requireContext(), "Logged out successfully!", Toast.LENGTH_SHORT).show()
-        val intent = Intent(activity, login::class.java)
+        val intent = Intent(activity, Login::class.java)
         startActivity(intent)
         requireActivity().finish()
     }

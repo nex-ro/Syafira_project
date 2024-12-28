@@ -13,7 +13,13 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import android.content.Intent
 import android.content.SharedPreferences
-class login : AppCompatActivity() {
+import com.example.project.login.Register
+import android.text.method.HideReturnsTransformationMethod
+import android.text.method.PasswordTransformationMethod
+import android.view.MotionEvent
+import androidx.core.content.ContextCompat
+
+class Login : AppCompatActivity() {
     private lateinit var binding: ActivityLoginBinding
     private lateinit var ref: DatabaseReference
     private lateinit var sharedPreferences: SharedPreferences
@@ -35,9 +41,41 @@ class login : AppCompatActivity() {
             }
         }
         binding.buttonExit.setOnClickListener{
-            startActivity(Intent(this@login, MainActivity::class.java))
+            startActivity(Intent(this@Login, MainActivity::class.java))
             finish()
         }
+        binding.buttonRegister.setOnClickListener(){
+            startActivity(Intent(this@Login, Register::class.java))
+            finish()
+        }
+        binding.editTextPassword.transformationMethod = PasswordTransformationMethod.getInstance()
+        binding.editTextPassword.setCompoundDrawablesWithIntrinsicBounds(
+            null, null, ContextCompat.getDrawable(this, R.drawable.ic_visibility_off), null
+        )
+
+        binding.editTextPassword.setOnTouchListener { _, event ->
+            if (event.action == MotionEvent.ACTION_UP) {
+                val drawableEnd = binding.editTextPassword.compoundDrawables[2]
+                if (event.rawX >= (binding.editTextPassword.right - drawableEnd.bounds.width())) {
+                    val isVisible = binding.editTextPassword.transformationMethod is HideReturnsTransformationMethod
+                    if (isVisible) {
+                        binding.editTextPassword.transformationMethod = PasswordTransformationMethod.getInstance()
+                        binding.editTextPassword.setCompoundDrawablesWithIntrinsicBounds(
+                            null, null, ContextCompat.getDrawable(this, R.drawable.ic_visibility_off), null
+                        )
+                    } else {
+                        binding.editTextPassword.transformationMethod = HideReturnsTransformationMethod.getInstance()
+                        binding.editTextPassword.setCompoundDrawablesWithIntrinsicBounds(
+                            null, null, ContextCompat.getDrawable(this, R.drawable.ic_visibility), null
+                        )
+                    }
+                    binding.editTextPassword.setSelection(binding.editTextPassword.text?.length ?: 0)
+                    return@setOnTouchListener true
+                }
+            }
+            false
+        }
+
     }
 
     private fun loginUser(username: String, password: String) {
@@ -62,24 +100,24 @@ class login : AppCompatActivity() {
                         editor.apply()
 
                         Toast.makeText(
-                            this@login,
+                            this@Login,
                             "Login successful! Welcome, $nama",
                             Toast.LENGTH_SHORT
                         ).show()
 
-                        startActivity(Intent(this@login, MainActivity::class.java))
+                        startActivity(Intent(this@Login, MainActivity::class.java))
                         finish()
                     } else {
-                        Toast.makeText(this@login, "Invalid password!", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this@Login, "Invalid password!", Toast.LENGTH_SHORT).show()
                     }
                 } else {
-                    Toast.makeText(this@login, "User not found!", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this@Login, "User not found!", Toast.LENGTH_SHORT).show()
                 }
             }
 
             override fun onCancelled(error: DatabaseError) {
                 Log.e("FirebaseError", "Error: ${error.message}")
-                Toast.makeText(this@login, "Login failed. Try again later.", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this@Login, "Login failed. Try again later.", Toast.LENGTH_SHORT).show()
             }
         })
     }
