@@ -45,7 +45,7 @@
         android:padding="5dp"
         android:layout_margin="10dp"
         app:cardBackgroundColor="@color/white"
-        app:cardCornerRadius="8dp"
+        app:cardCornerRadius="16dp"
         app:strokeColor="@color/ungu">
 
         <RelativeLayout
@@ -136,9 +136,8 @@
         android:layout_margin="10dp"
         android:layout_marginTop="7dp"
         android:padding="5dp"
-
         app:cardBackgroundColor="@color/white"
-        app:cardCornerRadius="8dp"
+        app:cardCornerRadius="16dp"
         app:contentPadding="10dp"
         app:strokeColor="@color/ungu">
 

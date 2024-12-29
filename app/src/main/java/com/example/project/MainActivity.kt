@@ -91,8 +91,14 @@ class MainActivity : AppCompatActivity() {
             if (menu.findItem(R.id.medis) == null) {
                 menu.add(0, R.id.medis, 2, "Medis").setIcon(R.drawable.ic_medis) // Adjust icon
             }
+            menu.findItem(R.id.kamar)
         } else {
             menu.removeItem(R.id.medis)
+            val kamarMenuItem = menu.findItem(R.id.kamar)
+            if (kamarMenuItem != null) {
+                kamarMenuItem.title = "Kunjungan"
+                kamarMenuItem.setIcon(R.drawable.ic_jenguk) 
+            }
         }
     }
 }

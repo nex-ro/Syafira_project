@@ -1,10 +1,42 @@
-<LinearLayout
+<ScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true"
+    android:overScrollMode="never"
+    android:scrollbars="none">
+<LinearLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="16dp"
+    android:padding="10dp"
     android:background="@color/bg">
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <ImageView
+            android:id="@+id/backButton"
+            android:layout_width="48dp"
+            android:layout_height="24dp"
+            android:layout_gravity="center_vertical"
+            android:contentDescription="Logo"
+            android:src="@drawable/ic_left_arrow" />
+
+        <!-- TextView for Title -->
+        <TextView
+            android:id="@+id/toolbarTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginStart="8dp"
+            android:text="History Kunjungan"
+            android:textColor="@color/ungu"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+    </com.google.android.material.appbar.MaterialToolbar>
 
     <!-- Search Bar Container -->
     <RelativeLayout
@@ -69,6 +101,7 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerViewPasien"
         android:layout_width="match_parent"
+        tools:listitem="@layout/card_histoy_kunjungan"
         android:layout_height="match_parent" />
     <TextView
         android:id="@+id/noDataText"
@@ -81,3 +114,4 @@
         android:textColor="@android:color/darker_gray"/>
 
 </LinearLayout>
+</ScrollView>

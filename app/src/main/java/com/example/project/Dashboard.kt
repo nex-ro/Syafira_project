@@ -17,6 +17,8 @@ import com.github.mikephil.charting.data.BarDataSet
 import com.github.mikephil.charting.data.BarEntry
 import android.widget.Toast
 import android.content.Intent
+import com.example.project.admin.admin_history_kunjungan
+import com.example.project.admin.admin_kelolah_kunjungan
 
 class Dashboard : Fragment() {
 
@@ -58,7 +60,12 @@ class Dashboard : Fragment() {
                 else -> false
             }
         }
-
+        binding.historyKunjungan.setOnClickListener(){
+            setCurrentFragment(admin_history_kunjungan())
+        }
+        binding.kelolahKunjungan.setOnClickListener(){
+            setCurrentFragment(admin_kelolah_kunjungan())
+        }
         val barChart1: BarChart = binding.barChart1
         val barChart2: BarChart = binding.barChart2
 
@@ -149,4 +156,10 @@ class Dashboard : Fragment() {
         super.onDestroyView()
         _binding = null
     }
+    private fun setCurrentFragment(fragment: Fragment) =
+        parentFragmentManager.beginTransaction().apply {
+            replace(R.id.flFragment, fragment)
+            addToBackStack(null)
+            commit()
+        }
 }

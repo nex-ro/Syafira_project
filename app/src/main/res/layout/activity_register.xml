@@ -98,6 +98,8 @@
                     android:layout_height="wrap_content"
                     android:background="@drawable/input"
                     android:hint="Email"
+                    android:singleLine="true"
+                    android:imeOptions="actionDone"
                     android:inputType="text"
                     android:minHeight="48dp"
                     android:padding="16dp" />
@@ -120,6 +122,8 @@
                     android:layout_height="wrap_content"
                     android:background="@drawable/input"
                     android:hint="Fullname"
+                    android:singleLine="true"
+                    android:imeOptions="actionDone"
                     android:inputType="text"
                     android:minHeight="48dp"
                     android:padding="16dp" />
@@ -142,6 +146,8 @@
                     android:layout_height="wrap_content"
                     android:hint="Username"
                     android:inputType="text"
+                    android:singleLine="true"
+                    android:imeOptions="actionDone"
                     android:padding="16dp"
                     android:minHeight="48dp"
                     android:background="@drawable/input" />
@@ -199,6 +205,8 @@
                     android:hint="No HP"
                     android:inputType="number"
                     android:padding="16dp"
+                    android:singleLine="true"
+                    android:imeOptions="actionDone"
                     android:minHeight="48dp"
                     android:background="@drawable/input" />
 
@@ -227,6 +235,8 @@
                         android:layout_height="wrap_content"
                         android:inputType="textPassword"
                         android:padding="16dp"
+                        android:singleLine="true"
+                        android:imeOptions="actionDone"
                         android:minHeight="48dp"
                         android:background="@drawable/input" />
                 </com.google.android.material.textfield.TextInputLayout>

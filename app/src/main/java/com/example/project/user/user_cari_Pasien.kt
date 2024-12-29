@@ -1,5 +1,7 @@
 package com.example.project.user
 
+import android.content.Context
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -10,6 +12,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.project.Data.Pasien
+import com.example.project.Pop_up
 import com.example.project.R
 import com.example.project.databinding.FragmentUserCariPasienBinding
 import com.example.project.user.adapter.PatientAdapter
@@ -17,6 +20,7 @@ import com.google.firebase.database.*
 
 class user_cari_Pasien : Fragment() {
     private var _binding: FragmentUserCariPasienBinding? = null
+    private lateinit var sharedPreferences: SharedPreferences
     private val binding get() = _binding!!
     private lateinit var patientAdapter: PatientAdapter
     private lateinit var database: DatabaseReference
@@ -27,17 +31,16 @@ class user_cari_Pasien : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        sharedPreferences = requireContext().getSharedPreferences("UserSession", Context.MODE_PRIVATE)
         _binding = FragmentUserCariPasienBinding.inflate(inflater, container, false)
         return binding.root
     }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupViews()
         setupSearch()
         setupDatabase()
     }
-
     private fun setupViews() {
         // Initialize RecyclerView and Adapter
         patientAdapter = PatientAdapter(patientList) { patient ->
@@ -160,20 +163,27 @@ class user_cari_Pasien : Fragment() {
 
     private fun navigateToDetail(patient: Pasien) {
         try {
-            Log.d("Navigation", "Navigating to detail for patient: ${patient.nama_Pasien}")
+            val isLoggedIn = sharedPreferences.getBoolean("isLoggedIn", false)
+            if(isLoggedIn){
+                Log.d("Navigation", "Navigating to detail for patient: ${patient.nama_Pasien}")
 
-            val formFragment = user_form_Kunjungan().apply {
-                arguments = Bundle().apply {
-                    putString("nama_pasien", patient.nama_Pasien)
-                    putString("nama_ruangan", patient.nama_Ruangan)
+                val formFragment = user_form_Kunjungan().apply {
+                    arguments = Bundle().apply {
+                        putString("nama_pasien", patient.nama_Pasien)
+                        putString("nama_ruangan", patient.nama_Ruangan)
+                    }
                 }
-            }
 
-            parentFragmentManager.beginTransaction().apply {
+                parentFragmentManager.beginTransaction().apply {
                     replace(R.id.flFragment, formFragment)
                     addToBackStack(null)
                     commit()
                 }
+
+            }else{
+                val customDialog = Pop_up(requireContext())
+                customDialog.show()
+            }
 
         } catch (e: Exception) {
             Log.e("Navigation", "Error navigating to detail", e)

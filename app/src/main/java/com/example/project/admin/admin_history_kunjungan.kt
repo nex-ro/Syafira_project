@@ -1,52 +1,58 @@
-package com.example.project
+package com.example.project.admin
 
 import android.os.Bundle
-import android.text.Editable
-import android.text.TextWatcher
+import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.example.project.databinding.FragmentAdminHistoryKunjunganBinding
+import android.text.Editable
+import android.text.TextWatcher
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
-import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.project.Data.History
-import com.example.project.databinding.FragmentCariPasienBinding
-import com.example.project.kamar_admin.HistoryAdapter
+import com.example.project.Dashboard
+import com.example.project.Data.Kunjungan
+import com.example.project.R
+import com.example.project.admin.adapter.history_kj_Adapter
 import com.google.firebase.database.*
 import java.util.*
 
-class CariPasien : Fragment() {
-    private lateinit var binding: FragmentCariPasienBinding
-    private lateinit var historyAdapter: HistoryAdapter
+class admin_history_kunjungan : Fragment() {
+
+    private lateinit var binding: FragmentAdminHistoryKunjunganBinding
+    private lateinit var historyAdapter: history_kj_Adapter
     private lateinit var database: DatabaseReference
-    private var historyList: MutableList<History> = mutableListOf()
-    private var fullHistoryList: MutableList<History> = mutableListOf()
+    private var KunjunganList: MutableList<Kunjungan> = mutableListOf()
+    private var fullKunjunganList: MutableList<Kunjungan> = mutableListOf()
     private var isSearching = false
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentCariPasienBinding.inflate(inflater, container, false)
+        binding = FragmentAdminHistoryKunjunganBinding.inflate(inflater, container, false)
         setupRecyclerView()
         setupDatabase()
         setupSearchView()
         setupSpinner()
+        binding.backButton.setOnClickListener(){
+            setCurrentFragment(Dashboard())
+        }
         return binding.root
     }
 
     private fun setupRecyclerView() {
         binding.recyclerViewPasien.apply {
             layoutManager = LinearLayoutManager(context)
-            historyAdapter = HistoryAdapter(historyList)
+            historyAdapter = history_kj_Adapter(KunjunganList)
             adapter = historyAdapter
         }
     }
 
     private fun setupDatabase() {
-        database = FirebaseDatabase.getInstance().getReference("history")
-        fetchHistoryData()
+        database = FirebaseDatabase.getInstance().getReference("Kunjungan")
+        fetchKunjunganData()
     }
 
     private fun setupSearchView() {
@@ -56,11 +62,9 @@ class CariPasien : Fragment() {
                 val searchText = s.toString().trim()
                 isSearching = searchText.isNotEmpty()
 
-                // Automatically set spinner to "All time" when searching
                 if (isSearching) {
                     binding.spinnerBulan.setSelection(0)
                 } else if (binding.spinnerBulan.selectedItemPosition == 0) {
-                    // If search is empty and spinner is on "All time", set it back to "Today"
                     binding.spinnerBulan.setSelection(1)
                 }
 
@@ -74,7 +78,6 @@ class CariPasien : Fragment() {
         binding.clearIcon.setOnClickListener {
             binding.searchInput.text.clear()
             isSearching = false
-            // When clearing search, set back to "Today"
             binding.spinnerBulan.setSelection(1)
             filterData("")
         }
@@ -95,7 +98,6 @@ class CariPasien : Fragment() {
             binding.spinnerBulan.adapter = adapter
         }
 
-        // Set default selection to "Today"
         binding.spinnerBulan.setSelection(1)
 
         binding.spinnerBulan.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
@@ -105,7 +107,6 @@ class CariPasien : Fragment() {
                 position: Int,
                 id: Long
             ) {
-                // If user is searching, force "All time" selection
                 if (isSearching && position != 0) {
                     binding.spinnerBulan.setSelection(0)
                     return
@@ -116,17 +117,20 @@ class CariPasien : Fragment() {
             override fun onNothingSelected(parent: AdapterView<*>?) {}
         }
     }
-
-    private fun fetchHistoryData() {
+    private fun setCurrentFragment(fragment: Fragment) =
+        parentFragmentManager.beginTransaction().apply {
+            replace(R.id.flFragment, fragment)
+            addToBackStack(null)
+            commit()
+        }
+    private fun fetchKunjunganData() {
         historyAdapter.setLoading(true)
         database.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
-                fullHistoryList.clear()
+                fullKunjunganList.clear()
                 snapshot.children.forEach { data ->
-                    data.getValue(History::class.java)?.let { history ->
-                        if (history.tanggal_Masuk != 0L) {
-                            fullHistoryList.add(history)
-                        }
+                    data.getValue(Kunjungan::class.java)?.let { kunjungan ->
+                        fullKunjunganList.add(kunjungan)
                     }
                 }
                 historyAdapter.setLoading(false)
@@ -143,29 +147,27 @@ class CariPasien : Fragment() {
     private fun filterData(query: String) {
         val selectedPosition = binding.spinnerBulan.selectedItemPosition
 
-        val filteredList = fullHistoryList.filter { history ->
-            val matchesSearch = history.nama?.contains(query, ignoreCase = true) == true
+        val filteredList = fullKunjunganList.filter { kunjungan ->
+            val matchesSearch = kunjungan.nama?.contains(query, ignoreCase = true) == true
             val matchesDate = when {
-                selectedPosition == 0 -> true // All time
-                selectedPosition == 1 -> isToday(history.tanggal_Masuk) // Today
-                else -> isInMonth(history.tanggal_Masuk, selectedPosition - 1) // Months (adjusted for new spinner positions)
+                selectedPosition == 0 -> true
+                selectedPosition == 1 -> isToday(kunjungan.tanggal_kunjungan ?: 0L)
+                else -> isInMonth(kunjungan.tanggal_kunjungan ?: 0L, selectedPosition - 1)
             }
             matchesSearch && matchesDate
         }
 
-        historyList.clear()
-        historyList.addAll(filteredList)
+        KunjunganList.clear()
+        KunjunganList.addAll(filteredList)
         historyAdapter.notifyDataSetChanged()
 
-        // Tampilkan atau sembunyikan pesan "Data not found"
-        showNoDataMessage(historyList.isEmpty())
+        showNoDataMessage(KunjunganList.isEmpty())
     }
 
     private fun showNoDataMessage(show: Boolean) {
         binding.noDataText.visibility = if (show) View.VISIBLE else View.GONE
         binding.recyclerViewPasien.visibility = if (show) View.GONE else View.VISIBLE
     }
-
 
     private fun isToday(timestamp: Long): Boolean {
         val calendar = Calendar.getInstance()
@@ -179,6 +181,6 @@ class CariPasien : Fragment() {
     private fun isInMonth(timestamp: Long, month: Int): Boolean {
         val calendar = Calendar.getInstance()
         calendar.timeInMillis = timestamp
-        return calendar.get(Calendar.MONTH) + 1 == month
+        return calendar.get(Calendar.MONTH) == month
     }
 }

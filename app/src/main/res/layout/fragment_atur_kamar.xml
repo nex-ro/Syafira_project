@@ -8,8 +8,6 @@
     tools:context=".kamarPage.AturKamar">
 
 
-
-    <!-- Nama Pasien -->
     <EditText
         android:id="@+id/editTextNamaPasien"
         android:layout_width="0dp"

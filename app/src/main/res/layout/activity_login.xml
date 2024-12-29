@@ -90,6 +90,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Username"
+                android:singleLine="true"
+                android:imeOptions="actionDone"
                 android:inputType="text"
                 android:padding="16dp"
                 android:minHeight="48dp"
@@ -110,6 +112,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="textPassword"
+                    android:singleLine="true"
+                    android:imeOptions="actionDone"
                     android:padding="16dp"
                     android:minHeight="48dp"
                     android:background="@drawable/input" />
