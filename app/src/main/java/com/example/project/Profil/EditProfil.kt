@@ -20,6 +20,7 @@ import com.example.project.databinding.FragmentProfileBinding
 import com.example.project.kamar_adm
 import com.example.project.Login
 import com.example.project.profile
+import com.example.project.user.user_profil
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 
@@ -56,18 +57,17 @@ class EditProfil : Fragment() {
             openImagePicker()
         }
 
-        // Listener untuk tombol logout
-
         // Listener untuk tombol simpan profil
         binding.btnSave.setOnClickListener {
             saveUserProfile()
         }
         binding.buttonBack.setOnClickListener {
-            // Gunakan FragmentManager untuk mengganti fragment
-            parentFragmentManager.beginTransaction()
-                .replace(R.id.flFragment, profile()) // Pastikan ID ini sesuai dengan container di layout
-                .addToBackStack(null) // Opsional, tambahkan ke backstack agar bisa kembali
-                .commit()
+            val role = sharedPreferences.getString("role", "")
+            if(role=="admin"){
+                setCurrentFragment(profile())
+            }else{
+                setCurrentFragment(user_profil())
+            }
         }
 
         // Load data user saat fragment dimuat
@@ -189,4 +189,10 @@ class EditProfil : Fragment() {
         startActivity(intent)
         requireActivity().finish()
     }
+    private fun setCurrentFragment(fragment: Fragment) =
+        parentFragmentManager.beginTransaction().apply {
+            replace(R.id.flFragment, fragment)
+            addToBackStack(null)
+            commit()
+        }
 }

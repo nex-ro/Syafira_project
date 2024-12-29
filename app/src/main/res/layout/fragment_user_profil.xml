@@ -73,7 +73,7 @@
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
                 android:layout_toEndOf="@id/profileImage"
-                android:text="Deri"
+                android:text="Anonymus"
                 android:textColor="@color/white"
                 android:textSize="18sp"
                 android:textStyle="bold" />
@@ -85,7 +85,7 @@
                 android:layout_below="@id/userName"
                 android:layout_marginStart="16dp"
                 android:layout_toEndOf="@id/profileImage"
-                android:text="Admin"
+                android:text="user"
                 android:textColor="@color/white"
                 android:textSize="14sp" />
 
@@ -109,7 +109,7 @@
                     android:backgroundTint="@color/white"
                     android:paddingLeft="10dp"
                     android:paddingRight="10dp"
-                    android:text="Edit"
+                    android:text="Register"
                     android:textColor="@color/ungu"
                     android:textSize="14sp" />
 

@@ -8,148 +8,154 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
-import android.widget.EditText
-import android.widget.Spinner
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.example.project.Data.History
 import com.example.project.databinding.FragmentCariPasienBinding
 import com.example.project.kamar_admin.HistoryAdapter
 import com.google.firebase.database.*
-import java.text.SimpleDateFormat
 import java.util.*
 
 class CariPasien : Fragment() {
     private lateinit var binding: FragmentCariPasienBinding
-    private lateinit var recyclerView: RecyclerView
-    private lateinit var searchBar: EditText
     private lateinit var historyAdapter: HistoryAdapter
-    private lateinit var spinnerBulan: Spinner
     private lateinit var database: DatabaseReference
     private var historyList: MutableList<History> = mutableListOf()
     private var fullHistoryList: MutableList<History> = mutableListOf()
+    private var isSearching = false
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding = FragmentCariPasienBinding.inflate(inflater, container, false)
-
-        recyclerView = binding.recyclerViewPasien
-        searchBar = binding.searchBar
-        spinnerBulan = binding.spinnerBulan
-
-        recyclerView.layoutManager = LinearLayoutManager(context)
-        historyAdapter = HistoryAdapter(historyList)
-        recyclerView.adapter = historyAdapter
-
-        database = FirebaseDatabase.getInstance().getReference("history")
-
-        // Set default bulan saat ini
-        setupSpinnerBulan()
-        fetchHistoryData(getCurrentMonth())
-
-        // Tambahkan TextWatcher untuk Search Bar
-        searchBar.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                filterData(s.toString().trim(), getSelectedMonth())
-            }
-
-            override fun afterTextChanged(s: Editable?) {}
-        })
-
+        setupRecyclerView()
+        setupDatabase()
+        setupSearchView()
+        setupSpinner()
         return binding.root
     }
 
-    private fun setupSpinnerBulan() {
-        val bulanList = resources.getStringArray(R.array.bulan_array)
-        val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, bulanList)
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-        spinnerBulan.adapter = adapter
-
-        spinnerBulan.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                if (position == 0) { // "Today" filter
-                    filterData(searchBar.text.toString().trim(), -1) // Use -1 to denote Today filter
-                } else {
-                    val selectedMonth = position // Filter by month
-                    filterData(searchBar.text.toString().trim(), selectedMonth)
-                }
-            }
-
-            override fun onNothingSelected(parent: AdapterView<*>?) {}
+    private fun setupRecyclerView() {
+        binding.recyclerViewPasien.apply {
+            layoutManager = LinearLayoutManager(context)
+            historyAdapter = HistoryAdapter(historyList)
+            adapter = historyAdapter
         }
-
-        // Set default to "Today" filter
-        spinnerBulan.setSelection(0)
     }
 
-    private fun fetchHistoryData(filterMonth: Int) {
-        // Set loading state to true to show shimmer
-        historyAdapter.setLoading(true)
+    private fun setupDatabase() {
+        database = FirebaseDatabase.getInstance().getReference("history")
+        fetchHistoryData()
+    }
 
+    private fun setupSearchView() {
+        binding.searchInput.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                val searchText = s.toString().trim()
+                isSearching = searchText.isNotEmpty()
+
+                // Automatically set spinner to "All time" when searching
+                if (isSearching) {
+                    binding.spinnerBulan.setSelection(0)
+                } else if (binding.spinnerBulan.selectedItemPosition == 0) {
+                    // If search is empty and spinner is on "All time", set it back to "Today"
+                    binding.spinnerBulan.setSelection(1)
+                }
+
+                filterData(searchText)
+                binding.clearIcon.visibility = if (isSearching) View.VISIBLE else View.GONE
+            }
+            override fun afterTextChanged(s: Editable?) {}
+        })
+
+        binding.clearIcon.setOnClickListener {
+            binding.searchInput.text.clear()
+            isSearching = false
+            // When clearing search, set back to "Today"
+            binding.spinnerBulan.setSelection(1)
+            filterData("")
+        }
+    }
+
+    private fun setupSpinner() {
+        val bulanList = arrayOf("All time", "Today", "January", "February", "March", "April", "May",
+            "June", "July", "August", "September", "October", "November", "December")
+
+        ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, bulanList).also { adapter ->
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+            binding.spinnerBulan.adapter = adapter
+        }
+
+        // Set default selection to "Today"
+        binding.spinnerBulan.setSelection(1)
+
+        binding.spinnerBulan.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                // If user is searching, force "All time" selection
+                if (isSearching && position != 0) {
+                    binding.spinnerBulan.setSelection(0)
+                    return
+                }
+                filterData(binding.searchInput.text.toString().trim())
+            }
+            override fun onNothingSelected(parent: AdapterView<*>?) {}
+        }
+    }
+
+    private fun fetchHistoryData() {
+        historyAdapter.setLoading(true)
         database.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 fullHistoryList.clear()
-
-                for (data in snapshot.children) {
-                    val history = data.getValue(History::class.java)
-                    if (history != null && history.tanggal_Masuk != 0L && isInMonth(history, filterMonth)) {
-                        fullHistoryList.add(history)
+                snapshot.children.forEach { data ->
+                    data.getValue(History::class.java)?.let { history ->
+                        if (history.tanggal_Masuk != 0L) {
+                            fullHistoryList.add(history)
+                        }
                     }
                 }
-
-                // Once the data is loaded, set loading to false
                 historyAdapter.setLoading(false)
-
-                filterData(searchBar.text.toString().trim(), filterMonth)
+                filterData(binding.searchInput.text.toString().trim())
             }
 
-            override fun onCancelled(error: DatabaseError) {}
+            override fun onCancelled(error: DatabaseError) {
+                historyAdapter.setLoading(false)
+            }
         })
     }
 
-    private fun filterData(query: String, filterMonth: Int) {
-        historyList.clear()
+    private fun filterData(query: String) {
+        val selectedPosition = binding.spinnerBulan.selectedItemPosition
 
-        // Check if the filter is for "Today"
-        val filteredHistory = if (filterMonth == -1) {
-            // Filter by "Today"
-            fullHistoryList.filter { history -> isToday(history) && history.nama?.contains(query, ignoreCase = true) == true }
-        } else {
-            // Filter by selected month
-            fullHistoryList.filter { history -> history.nama?.contains(query, ignoreCase = true) == true && isInMonth(history, filterMonth) }
+        val filteredList = fullHistoryList.filter { history ->
+            val matchesSearch = history.nama?.contains(query, ignoreCase = true) == true
+            val matchesDate = when {
+                selectedPosition == 0 -> true // All time
+                selectedPosition == 1 -> isToday(history.tanggal_Masuk) // Today
+                else -> isInMonth(history.tanggal_Masuk, selectedPosition - 1) // Months (adjusted for new spinner positions)
+            }
+            matchesSearch && matchesDate
         }
 
-        historyList.addAll(filteredHistory)
+        historyList.clear()
+        historyList.addAll(filteredList)
         historyAdapter.notifyDataSetChanged()
     }
-    private fun isToday(history: History): Boolean {
+
+    private fun isToday(timestamp: Long): Boolean {
         val calendar = Calendar.getInstance()
         val today = Calendar.getInstance()
+        calendar.timeInMillis = timestamp
 
-        calendar.timeInMillis = history.tanggal_Masuk
-        return today.get(Calendar.YEAR) == calendar.get(Calendar.YEAR) &&
-                today.get(Calendar.DAY_OF_YEAR) == calendar.get(Calendar.DAY_OF_YEAR)
+        return calendar.get(Calendar.YEAR) == today.get(Calendar.YEAR) &&
+                calendar.get(Calendar.DAY_OF_YEAR) == today.get(Calendar.DAY_OF_YEAR)
     }
 
-
-    private fun isInMonth(history: History, filterMonth: Int): Boolean {
+    private fun isInMonth(timestamp: Long, month: Int): Boolean {
         val calendar = Calendar.getInstance()
-        calendar.timeInMillis = history.tanggal_Masuk  // Gunakan tanggal_Masuk dalam format Long
-
-        val month = calendar.get(Calendar.MONTH) + 1  // Mengambil bulan dari calendar (1-12)
-        return month == filterMonth
-    }
-
-    private fun getCurrentMonth(): Int {
-        return Calendar.getInstance().get(Calendar.MONTH) + 1
-    }
-
-    private fun getSelectedMonth(): Int {
-        return spinnerBulan.selectedItemPosition + 1
+        calendar.timeInMillis = timestamp
+        return calendar.get(Calendar.MONTH) + 1 == month
     }
 }

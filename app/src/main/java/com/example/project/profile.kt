@@ -51,8 +51,6 @@
                 // Set default image if no profile picture is available
                 binding.profileImage.setImageResource(R.drawable.ic_person)
             }
-
-            // Add click listeners for each item
             binding.itemDetailProfile.setOnClickListener {
                 navigateToFragment(Detail_Profile())
             }
@@ -85,7 +83,7 @@
         private fun navigateToFragment(fragment: Fragment) {
             requireActivity().supportFragmentManager.beginTransaction()
                 .replace(R.id.flFragment, fragment)
-                .addToBackStack(null) // Add to backstack for easy navigation back
+                .addToBackStack(null)
                 .commit()
         }
 

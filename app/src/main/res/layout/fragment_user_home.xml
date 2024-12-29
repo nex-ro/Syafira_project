@@ -83,8 +83,9 @@
                         android:layout_marginRight="4dp"
                         android:layout_height="48dp"
                         android:layout_weight="1"
+                        android:elevation="8dp"
                         app:cardCornerRadius="8dp"
-                        app:cardElevation="0dp"
+                        app:cardElevation="8dp"
                         app:strokeWidth="3dp"
                         app:strokeColor="@color/ungu">
 
@@ -127,10 +128,10 @@
                         android:layout_height="48dp"
                         android:layout_weight="1"
                         app:cardCornerRadius="8dp"
-                        app:cardElevation="0dp"
+                        app:cardElevation="3dp"
                         android:layout_marginLeft="4dp"
                         app:strokeWidth="3dp"
-                        app:strokeColor="@color/ungu">
+                        app:strokeColor="@color/black">
 
                         <RelativeLayout
                             android:layout_width="match_parent"

@@ -89,6 +89,7 @@ class Login : AppCompatActivity() {
                         val email = snapshot.child("email").value?.toString() ?: ""
                         val phone = snapshot.child("phone").value?.toString() ?: ""
                         val gender = snapshot.child("gender").value?.toString() ?: ""
+                        val role = snapshot.child("role").value?.toString() ?: ""
 
                         val editor = sharedPreferences.edit()
                         editor.putBoolean("isLoggedIn", true)
@@ -97,9 +98,8 @@ class Login : AppCompatActivity() {
                         editor.putString("email", email)
                         editor.putString("phone", phone)
                         editor.putString("gender", gender)
+                        editor.putString("role", role)
                         editor.apply()
-
-
 
                         startActivity(Intent(this@Login, MainActivity::class.java))
                         finish()

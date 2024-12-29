@@ -1,27 +1,27 @@
 package com.example.project.user
 
+import android.content.Context
+import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
-import androidx.fragment.app.Fragment
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.util.Log
-import com.example.project.R
+import android.widget.Toast
 import androidx.core.content.ContextCompat
-import android.content.Context
-import android.content.SharedPreferences
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.project.Data.Ruangan
 import com.example.project.Data.cardData
-import com.example.project.kamarPage.AturKamar
-import com.example.project.kamarPage.TambahKamar
+import com.example.project.ItemAdapter
+import com.example.project.Login
+import com.example.project.Pop_up
+import com.example.project.R
+import com.example.project.databinding.FragmentUserHomeBinding
 import com.example.project.kamarPage.kamarJenis
 import com.google.firebase.database.*
-import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.constraintlayout.widget.ConstraintSet
-import com.example.project.ItemAdapter
-import com.example.project.databinding.FragmentUserHomeBinding
 
 class user_home : Fragment() {
     private lateinit var ref: DatabaseReference
@@ -38,8 +38,38 @@ class user_home : Fragment() {
         binding = FragmentUserHomeBinding.inflate(inflater, container, false)
         sharedPreferences = requireContext().getSharedPreferences("UserSession", Context.MODE_PRIVATE)
         val isLoggedIn = sharedPreferences.getBoolean("isLoggedIn", false)
+        val username = sharedPreferences.getString("username", "")
         if(!isLoggedIn){
             binding.toolbar.menu.findItem(R.id.quit)?.isVisible = isLoggedIn
+
+        }else{
+            binding.toolbarTitle.text=("HI , "+username)
+        }
+        binding.toolbar.setOnMenuItemClickListener { menuItem ->
+            when (menuItem.itemId) {
+                R.id.quit -> {
+                    logoutUser()
+                    true
+                }
+                else -> false
+            }
+        }
+        binding.cariPasien.setOnClickListener(){
+            setCurrentFragment(user_cari_Pasien())
+        }
+        binding.kunjunganCard.setOnClickListener(){
+            if(isLoggedIn){
+                setCurrentFragment(user_cari_Pasien())
+            }else{
+                try {
+                    val customDialog = Pop_up(requireContext())
+                    customDialog.show()
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                    Toast.makeText(context, "Terjadi kesalahan", Toast.LENGTH_SHORT).show()
+                }
+
+            }
         }
         recyclerView = binding.recyclerView
         recyclerView.layoutManager = GridLayoutManager(requireContext(), 2)
@@ -98,4 +128,14 @@ class user_home : Fragment() {
             addToBackStack(null)
             commit()
         }
+    private fun logoutUser() {
+        // Clear SharedPreferences
+        val editor = sharedPreferences.edit()
+        editor.clear()
+        editor.apply()
+        Toast.makeText(requireContext(), "Logged out successfully!", Toast.LENGTH_SHORT).show()
+        val intent = Intent(activity, Login::class.java)
+        startActivity(intent)
+        requireActivity().finish()
+    }
 }

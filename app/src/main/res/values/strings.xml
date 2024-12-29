@@ -3,6 +3,7 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="greeting_message">Hi, %1$s!</string>
     <string-array name="bulan_array">
+        <item>All time</item>
         <item>Today</item>
         <item>January</item>
         <item>February</item>

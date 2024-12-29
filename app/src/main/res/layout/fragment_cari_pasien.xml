@@ -1,21 +1,56 @@
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:padding="16dp"
-    tools:context=".CariPasien">
+    android:background="@android:color/white">
 
-
-
-    <!-- Search Bar -->
-    <EditText
-        android:id="@+id/searchBar"
+    <!-- Search Bar Container -->
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Search by name"
-        android:layout_marginBottom="8dp" />
+        android:background="@drawable/search_background"
+        android:layout_marginBottom="8dp">
+
+        <!-- Icon Search -->
+        <ImageView
+            android:id="@+id/searchIcon"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="8dp"
+            android:src="@drawable/baseline_search_24"
+            android:backgroundTint="@color/blackLite"
+            android:contentDescription="Search Icon" />
+        <EditText
+            android:id="@+id/searchInput"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_toStartOf="@+id/clearIcon"
+            android:layout_toEndOf="@+id/searchIcon"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:hint="Search by name"
+            android:singleLine="true"
+            android:imeOptions="actionDone"
+            android:background="@android:color/transparent"
+            android:textColor="@android:color/black"
+            android:textSize="16sp"
+            android:padding="10dp" />
+
+        <!-- Icon Clear -->
+        <ImageView
+            android:id="@+id/clearIcon"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="8dp"
+            android:src="@android:drawable/ic_menu_close_clear_cancel"
+            android:contentDescription="Clear Icon"
+            android:visibility="gone" />
+    </RelativeLayout>
 
     <!-- Spinner Bulan -->
     <Spinner
@@ -23,6 +58,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp" />
+
     <!-- RecyclerView -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerViewPasien"
