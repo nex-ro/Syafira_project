@@ -162,16 +162,15 @@ class user_cari_Pasien : Fragment() {
         try {
             Log.d("Navigation", "Navigating to detail for patient: ${patient.nama_Pasien}")
 
-            val testFragment = TestPage().apply {
+            val formFragment = user_form_Kunjungan().apply {
                 arguments = Bundle().apply {
                     putString("nama_pasien", patient.nama_Pasien)
                     putString("nama_ruangan", patient.nama_Ruangan)
                 }
             }
 
-
-                parentFragmentManager.beginTransaction().apply {
-                    replace(R.id.flFragment, testFragment)
+            parentFragmentManager.beginTransaction().apply {
+                    replace(R.id.flFragment, formFragment)
                     addToBackStack(null)
                     commit()
                 }

@@ -5,8 +5,9 @@ data class Kunjungan(
     val nama: String? = null,
     val kamar_pasien: String? = null,
     val nama_pasien: String? = null,
-    val tanggal_kunjungan: Int? = null,
-    val jam_kunjungan: Int? = null,
+    val tanggal_kunjungan: Long?= 0L,
+    val jam_kunjungan: String? = null,
     val hubungan: String? = null,
     val status: String?="menunggu",
+    val keterangan: String?="-",
 )

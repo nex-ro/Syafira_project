@@ -170,27 +170,28 @@ class user_form_Kunjungan : Fragment() {
     }
 
     private fun showDatePickerDialog() {
-        val datePickerDialog = DatePickerDialog(
-            requireContext(),
-            R.style.CustomDatePickerDialogTheme,
-            { _, year, month, dayOfMonth ->
-                calendar.set(Calendar.YEAR, year)
-                calendar.set(Calendar.MONTH, month)
-                calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth)
-                selectedDate = calendar.timeInMillis
-                binding.inputTanggalKunjungan.setText(dateFormatter.format(calendar.time))
-            },
-            calendar.get(Calendar.YEAR),
-            calendar.get(Calendar.MONTH),
-            calendar.get(Calendar.DAY_OF_MONTH)
-        )
-
-        datePickerDialog.apply {
-            datePicker.minDate = System.currentTimeMillis() - 1000
-            val maxDate = Calendar.getInstance()
-            maxDate.add(Calendar.DAY_OF_MONTH, 30)
-            datePicker.maxDate = maxDate.timeInMillis
-            show()
+        context?.let { ctx ->
+            val datePickerDialog = DatePickerDialog(
+                ctx,
+                R.style.CustomDatePickerDialogTheme,
+                { _, year, month, dayOfMonth ->
+                    calendar.set(Calendar.YEAR, year)
+                    calendar.set(Calendar.MONTH, month)
+                    calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth)
+                    selectedDate = calendar.timeInMillis
+                    binding.inputTanggalKunjungan.setText(dateFormatter.format(calendar.time))
+                },
+                calendar.get(Calendar.YEAR),
+                calendar.get(Calendar.MONTH),
+                calendar.get(Calendar.DAY_OF_MONTH)
+            )
+            datePickerDialog.apply {
+                datePicker.minDate = System.currentTimeMillis() - 1000
+                val maxDate = Calendar.getInstance()
+                maxDate.add(Calendar.DAY_OF_MONTH, 30)
+                datePicker.maxDate = maxDate.timeInMillis
+                show()
+            }
         }
     }
 
@@ -209,8 +210,8 @@ class user_form_Kunjungan : Fragment() {
                     nama = nama,
                     kamar_pasien = kamarPasien,
                     nama_pasien = namaPasien,
-                    tanggal_kunjungan = selectedDate.toInt(),
-                    jam_kunjungan = convertJamKunjunganToInt(jamKunjungan ?: ""),
+                    tanggal_kunjungan = selectedDate.toLong(),
+                    jam_kunjungan = (jamKunjungan ?: ""),
                     hubungan = hubungan
                 )
 
@@ -256,22 +257,13 @@ class user_form_Kunjungan : Fragment() {
         return true
     }
 
-    private fun convertJamKunjunganToInt(jamKunjungan: String): Int {
-        return when (jamKunjungan) {
-            "11:00 - 12:00" -> 1100
-            "17:00 - 18:00" -> 1700
-            "10:00 - 14:00" -> 1000
-            "19:00 - 21:00" -> 1900
-            else -> 0
-        }
-    }
+
 
     private fun submitKunjungan(kunjungan: Kunjungan) {
         val newKunjunganRef = kunjunganRef.push()
         newKunjunganRef.setValue(kunjungan)
             .addOnSuccessListener {
                 Toast.makeText(context, "Kunjungan berhasil disubmit", Toast.LENGTH_SHORT).show()
-                clearForm()
                 setCurrentFragment(user_home())
             }
             .addOnFailureListener { e ->

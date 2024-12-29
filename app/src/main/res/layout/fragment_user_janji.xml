@@ -46,9 +46,8 @@
         </com.google.android.material.appbar.MaterialToolbar>
 
         <androidx.cardview.widget.CardView
-            android:id="@+id/empty"
             android:layout_width="match_parent"
-            android:layout_height="540dp"
+            android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:padding="5dp"
             app:cardBackgroundColor="@color/white"
@@ -61,6 +60,7 @@
                 android:layout_height="match_parent">
 
                 <TextView
+                    android:id="@+id/textKunjungan"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="5dp"
@@ -68,7 +68,12 @@
                     android:textColor="@color/blackLite"
                     android:textSize="18sp"
                     android:textStyle="bold" />
-
+<RelativeLayout
+    android:id="@+id/empty"
+    android:layout_width="match_parent"
+    android:layout_height="520dp"
+    android:layout_centerInParent="true"
+    >
                 <ImageView
                     android:id="@+id/gambarCalender"
                     android:layout_width="300dp"
@@ -99,7 +104,13 @@
                     android:text="buat janji jadwal kunjungan terlebih dahulu agar dapat melakukan kunjungan"
                     android:textColor="@color/ungu2"
                     android:textSize="14sp" />
-
+</RelativeLayout>
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recyclerView"
+                    android:layout_width="match_parent"
+                    android:layout_below="@+id/textKunjungan"
+                    android:layout_height="match_parent"
+                    tools:listitem="@layout/card_kunjungan"/>
             </RelativeLayout>
         </androidx.cardview.widget.CardView>
 
