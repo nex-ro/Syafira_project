@@ -43,7 +43,7 @@ class user_home : Fragment() {
             binding.toolbar.menu.findItem(R.id.quit)?.isVisible = isLoggedIn
 
         }else{
-            binding.toolbarTitle.text=("HI , "+username)
+            binding.toolbarTitle.text=("Hi , "+username)
         }
         binding.toolbar.setOnMenuItemClickListener { menuItem ->
             when (menuItem.itemId) {
@@ -59,7 +59,7 @@ class user_home : Fragment() {
         }
         binding.kunjunganCard.setOnClickListener(){
             if(isLoggedIn){
-                setCurrentFragment(user_cari_Pasien())
+                setCurrentFragment(user_form_Kunjungan())
             }else{
                 try {
                     val customDialog = Pop_up(requireContext())

@@ -11,55 +11,44 @@
         android:layout_height="match_parent"
         android:background="@drawable/bgonly">
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:alpha="0.7">
-
-            <ImageView
-                android:id="@+id/buttonExit"
-                android:layout_width="42dp"
-                android:layout_height="42dp"
-                android:layout_marginLeft="20dp"
-                android:layout_marginTop="10dp"
-                android:src="@drawable/exit" />
-        </RelativeLayout>
-
-        <ImageView
-            android:id="@+id/logoSyafira"
-            android:layout_width="wrap_content"
-            android:layout_height="167dp"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="40dp"
-            android:src="@drawable/logosyafira" />
-
-        <LinearLayout
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/logoSyafira"
-            android:gravity="center"
-            android:orientation="vertical"
-            android:padding="28dp">
+            android:layout_margin="0dp"
+            android:layout_marginTop="0dp"
+            android:layout_marginBottom="0dp"
+            android:background="@android:color/transparent"
+            android:padding="0dp">
+
+            <ImageView
+                android:id="@+id/backButton"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_gravity="left"
+                android:contentDescription="Logo"
+                android:src="@drawable/ic_left_arrow_white" />
 
             <TextView
+                android:id="@+id/toolbarTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:fontFamily="sans-serif-medium"
-                android:text="Login"
-                android:textColor="@color/blackLite"
-                android:textSize="32sp"
+                android:layout_gravity="center"
+                android:layout_marginStart="8dp"
+                android:text="Form Kunjungan Pasien"
+                android:textColor="@color/white"
+                android:textSize="18sp"
                 android:textStyle="bold" />
-        </LinearLayout>
+        </com.google.android.material.appbar.MaterialToolbar>
 
         <androidx.cardview.widget.CardView
             android:id="@+id/card_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/logoSyafira"
-            android:layout_marginBottom="20dp"
-            android:layout_marginTop="16dp"
+            android:layout_below="@id/toolbar"
             android:layout_marginStart="10dp"
             android:layout_marginEnd="10dp"
+            android:layout_marginBottom="20dp"
             app:cardCornerRadius="28dp">
 
             <LinearLayout
@@ -71,7 +60,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Register"
+                    android:text="Form Kunjungan"
                     android:textColor="@color/ungu"
                     android:textSize="32sp"
                     android:textStyle="bold" />
@@ -81,23 +70,23 @@
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="10dp"
                     android:alpha="0.7"
-                    android:text="Register with correct information"
+                    android:text="isi informasi dibawah dengan benar"
                     android:textColor="@color/ungu" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:alpha="0.7"
-                    android:text="Email"
+                    android:text="Nama"
                     android:textColor="@color/blackLite"
                     android:textStyle="bold" />
 
                 <EditText
-                    android:id="@+id/editTxtEmail"
+                    android:id="@+id/inputNama"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@drawable/input"
-                    android:hint="Email"
+                    android:hint="Nama"
                     android:inputType="text"
                     android:minHeight="48dp"
                     android:padding="16dp" />
@@ -110,18 +99,15 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:alpha="0.7"
-                    android:text="Fullname"
+                    android:text="Kamar Pasien"
                     android:textColor="@color/blackLite"
                     android:textStyle="bold" />
 
-                <EditText
-                    android:id="@+id/editTxtFullname"
+                <Spinner
+                    android:id="@+id/dropdownKamarPasien"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@drawable/input"
-                    android:hint="Fullname"
-                    android:inputType="text"
-                    android:minHeight="48dp"
                     android:padding="16dp" />
 
                 <View
@@ -131,105 +117,81 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/blackLite"
                     android:alpha="0.7"
-                    android:text="Username"
+                    android:text="Nama Pasien"
+                    android:textColor="@color/blackLite"
+                    android:textStyle="bold" />
+
+                <Spinner
+                    android:id="@+id/dropdownNamaPasien"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/input"
+                    android:padding="16dp" />
+
+                <View
+                    android:layout_width="wrap_content"
+                    android:layout_height="20dp" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:alpha="0.7"
+                    android:text="Tanggal Kunjungan"
+                    android:textColor="@color/blackLite"
                     android:textStyle="bold" />
 
                 <EditText
-                    android:id="@+id/editTxtUsername"
+                    android:id="@+id/inputTanggalKunjungan"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Username"
+                    android:hint="Pilih Tanggal Kunjungan"
+                    android:inputType="none"
+                    android:focusable="false"
+                    android:clickable="true"
+                    android:drawableEnd="@drawable/ic_calendar"
+                    android:padding="16dp"
+                    android:background="@drawable/input" />
+
+                <View
+                    android:layout_width="wrap_content"
+                    android:layout_height="20dp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/blackLite"
+                    android:alpha="0.7"
+                    android:text="Jam Kunjungan"
+                    android:textStyle="bold" />
+
+                <Spinner
+                    android:id="@+id/dropdownJamKunjungan"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/input"
+                    android:padding="16dp" />
+
+                <View
+                    android:layout_width="wrap_content"
+                    android:layout_height="20dp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:alpha="0.7"
+                    android:text="Hubungan dengan pasien"
+                    android:textColor="@color/blackLite"
+                    android:textStyle="bold" />
+
+                <EditText
+                    android:id="@+id/inputHubungan"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Hubungan dengan pasien"
                     android:inputType="text"
                     android:padding="16dp"
                     android:minHeight="48dp"
                     android:background="@drawable/input" />
-
-                <View
-                    android:layout_width="wrap_content"
-                    android:layout_height="20dp" />
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/blackLite"
-                    android:alpha="0.7"
-                    android:text="Gender"
-                    android:textStyle="bold" />
-
-                <RadioGroup
-                    android:id="@+id/radioGroupGender"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-
-                    <RadioButton
-                        android:id="@+id/radioMale"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Laki-laki"
-                        android:layout_marginEnd="16dp"
-                        android:buttonTint="@color/radio_button_selector" />
-
-                    <RadioButton
-                        android:id="@+id/radioFemale"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Perempuan"
-                        android:buttonTint="@color/radio_button_selector" />
-                </RadioGroup>
-
-
-                <View
-                    android:layout_width="wrap_content"
-                    android:layout_height="20dp" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/blackLite"
-                    android:alpha="0.7"
-                    android:text="No HP"
-                    android:textStyle="bold" />
-
-                <EditText
-                    android:id="@+id/editTxtnoHP"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="No HP"
-                    android:inputType="number"
-                    android:padding="16dp"
-                    android:minHeight="48dp"
-                    android:background="@drawable/input" />
-
-                <View
-                    android:layout_width="wrap_content"
-                    android:layout_height="20dp" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/blackLite"
-                    android:alpha="0.7"
-                    android:text="Password"
-                    android:textStyle="bold" />
-
-                <com.google.android.material.textfield.TextInputLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    app:endIconMode="password_toggle"
-                    app:boxBackgroundMode="none"
-                    android:hint="Password">
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/editTextPassword"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:inputType="textPassword"
-                        android:padding="16dp"
-                        android:minHeight="48dp"
-                        android:background="@drawable/input" />
-                </com.google.android.material.textfield.TextInputLayout>
 
                 <RelativeLayout
                     android:layout_width="match_parent"
@@ -237,23 +199,13 @@
                     android:layout_height="wrap_content">
 
                     <TextView
-                        android:id="@+id/txtregister"
+                        android:id="@+id/prosesInfo"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_alignParentEnd="true"
+                        android:gravity="start"
                         android:layout_centerVertical="true"
-                        android:layout_marginRight="40dp"
-                        android:text="Sudah memiliki akun ?" />
+                        android:text="Semua permohonan akan di proses 1x24 jam" />
 
-                    <TextView
-                        android:id="@+id/buttonRegister"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignEnd="@+id/txtregister"
-                        android:layout_alignParentEnd="true"
-                        android:layout_centerVertical="true"
-                        android:text="Login"
-                        android:textColor="@color/ungu" />
                 </RelativeLayout>
 
                 <View
@@ -262,13 +214,13 @@
                     android:layout_marginBottom="10dp" />
 
                 <com.google.android.material.button.MaterialButton
-                    android:id="@+id/buttonLogin"
+                    android:id="@+id/buttonSubmit"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
                     android:backgroundTint="@color/ungu"
                     android:minHeight="48dp"
-                    android:text="Login" />
+                    android:text="Kirim" />
 
                 <LinearLayout
                     android:layout_width="match_parent"

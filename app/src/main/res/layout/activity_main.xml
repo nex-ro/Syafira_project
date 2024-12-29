@@ -31,7 +31,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:itemIconSize="32dp"
-        android:backgroundTint="@color/bg"
         app:itemIconTint="@color/bottom_nav_icon_color"
         app:itemTextColor="@color/bottom_nav_icon_color"
         app:menu="@menu/bottom_nav_menu" />

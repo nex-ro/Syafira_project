@@ -85,6 +85,7 @@ class Login : AppCompatActivity() {
                     val storedPassword = snapshot.child("password").value.toString()
 
                     if (storedPassword == password) {
+                        val userId = snapshot.key ?: ""
                         val fullName = snapshot.child("fullName").value?.toString() ?: ""
                         val email = snapshot.child("email").value?.toString() ?: ""
                         val phone = snapshot.child("phone").value?.toString() ?: ""
@@ -93,6 +94,7 @@ class Login : AppCompatActivity() {
 
                         val editor = sharedPreferences.edit()
                         editor.putBoolean("isLoggedIn", true)
+                        editor.putString("id", userId)
                         editor.putString("username", username)
                         editor.putString("nama", fullName)
                         editor.putString("email", email)
