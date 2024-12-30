@@ -8,35 +8,44 @@ import android.widget.ArrayAdapter
 import android.widget.ListView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import com.example.project.Dashboard
 import com.example.project.Data.Laporan_Penanganan
 import com.example.project.R
+import com.example.project.databinding.FragmentAdminKelolahKunjunganBinding
+import com.example.project.databinding.FragmentLaporanMedisBinding
+import com.example.project.databinding.FragmentStatistikMedisBinding
 import com.google.firebase.database.*
 
 class laporan_medis : Fragment() {
-
+    private lateinit var binding: FragmentLaporanMedisBinding
     private lateinit var database: DatabaseReference
     private lateinit var laporanList: ArrayList<Laporan_Penanganan>
     private lateinit var listView: ListView
     private lateinit var adapter: ArrayAdapter<String>
+    private lateinit var dataList: ArrayList<String>
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val view = inflater.inflate(R.layout.fragment_laporan_medis, container, false)
+        val view = inflater.inflate(R.layout.fragment_statistik__medis, container, false)
+        binding = FragmentLaporanMedisBinding.inflate(inflater, container, false)
+        database = FirebaseDatabase.getInstance().reference
+        dataList = ArrayList()
 
-        // Initialize ListView and Firebase database reference
+        // Initialize adapter
+        adapter = ArrayAdapter(requireContext(), android.R.layout.simple_list_item_1, dataList)
+        setupViews()
+        return binding.root
+    }
+    private fun setupBackButton() {
+        binding.backButton.setOnClickListener {
+            setCurrentFragment(Statistik_Medis())
+        }
+    }
+    private fun setupViews() {
+        setupBackButton()
 
-        database = FirebaseDatabase.getInstance().reference.child("Laporan_Penanganan")
-        laporanList = ArrayList()
-
-        // Initialize ArrayAdapter for ListView
-        adapter = ArrayAdapter(requireContext(), android.R.layout.simple_list_item_1, ArrayList())
-        listView.adapter = adapter
-
-
-
-        return view
     }
 
     private fun fetchLaporanData() {
@@ -67,4 +76,10 @@ class laporan_medis : Fragment() {
             }
         })
     }
+    private fun setCurrentFragment(fragment: Fragment) =
+        parentFragmentManager.beginTransaction().apply {
+            replace(R.id.flFragment, fragment)
+            addToBackStack(null)
+            commit()
+        }
 }
