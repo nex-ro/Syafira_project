@@ -30,7 +30,8 @@
     <color name="gray">#999696</color> <!-- Putih -->
 
 
-
+    <color name="Aktif">#00B319</color>
+    <color name="Sibuk">#AF0000</color>
 
 
 </resources>
