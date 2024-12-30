@@ -9,6 +9,7 @@
     import android.view.View
     import android.view.ViewGroup
     import android.widget.Toast
+    import androidx.core.content.ContextCompat
     import androidx.fragment.app.Fragment
     import com.bumptech.glide.Glide
     import com.example.project.Profil.Detail_Profile
@@ -26,6 +27,7 @@
             inflater: LayoutInflater, container: ViewGroup?,
             savedInstanceState: Bundle?
         ): View? {
+            requireActivity().window.statusBarColor = ContextCompat.getColor(requireContext(), R.color.bg)
             _binding = FragmentProfileBinding.inflate(inflater, container, false)
             sharedPreferences =
                 requireActivity().getSharedPreferences("UserSession", Context.MODE_PRIVATE)

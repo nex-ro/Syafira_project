@@ -5,6 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/bg"
     tools:context=".kamar">
 
     <FrameLayout
@@ -123,14 +124,27 @@
                     android:text="Kamar"
                     android:textSize="16sp"
                     android:textStyle="bold" />
-                <Spinner
-                    android:id="@+id/spinnerFilter"
+                <RelativeLayout
                     android:layout_width="match_parent"
+                    android:id="@+id/spinerLayout"
                     android:layout_height="wrap_content"
-                    android:layout_margin="16dp"
+                    android:paddingStart="16dp"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/textKamar" />
+                    app:layout_constraintTop_toBottomOf="@id/textKamar"
+                    android:layout_marginBottom="8dp"
+                    android:layout_marginTop="5dp"
+                    android:padding="10dp"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginRight="16dp"
+                    android:background="@drawable/search_background">
+
+                    <Spinner
+                        android:id="@+id/spinnerFilter"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+                </RelativeLayout>
+
 
                 <com.facebook.shimmer.ShimmerFrameLayout
                     android:id="@+id/shimmer_layout"
@@ -140,7 +154,7 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.0"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/spinnerFilter">
+                    app:layout_constraintTop_toBottomOf="@id/spinerLayout">
 
                     <GridLayout
                         android:layout_width="wrap_content"
@@ -171,7 +185,7 @@
                     android:id="@+id/recyclerViewKamar"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:layout_constraintTop_toBottomOf="@id/spinnerFilter"
+                    app:layout_constraintTop_toBottomOf="@id/spinerLayout"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     android:clipToPadding="false"
@@ -183,5 +197,4 @@
 
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
-
 </androidx.constraintlayout.widget.ConstraintLayout>

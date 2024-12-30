@@ -10,6 +10,7 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.project.Dashboard
 import com.example.project.Data.Kunjungan
@@ -31,6 +32,7 @@ class admin_history_kunjungan : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        requireActivity().window.statusBarColor = ContextCompat.getColor(requireContext(), R.color.bg)
         binding = FragmentAdminHistoryKunjunganBinding.inflate(inflater, container, false)
         setupRecyclerView()
         setupDatabase()

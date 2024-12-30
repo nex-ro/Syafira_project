@@ -52,7 +52,7 @@ class history_kj_Adapter(private var kunjungan: List<Kunjungan>) :
                 pasien.text = "Pasien dikunjungi: ${kunjunganItem.nama_pasien ?: "Tidak tersedia"}"
                 kamar.text = "Kamar: ${kunjunganItem.kamar_pasien ?: "Tidak tersedia"}"
                 tgl.text = "Tanggal Kunjungan: ${formatDate(kunjunganItem.tanggal_kunjungan)}"
-                jam.text = "Jam Kunjungan: ${formatTime(kunjunganItem.tanggal_kunjungan)}"
+                jam.text = "Jam Kunjungan: ${kunjunganItem.jam_kunjungan}"
                 status.text = "Status: ${kunjunganItem.status ?: "Tidak tersedia"}"
                 ket.text = "Keterangan: ${kunjunganItem.keterangan ?: "Tidak tersedia"}"
             }
@@ -77,7 +77,6 @@ class history_kj_Adapter(private var kunjungan: List<Kunjungan>) :
             "Format tidak valid"
         }
     }
-
     private fun formatTime(timestamp: Long?): String {
         if (timestamp == null) return "Tidak tersedia"
         return try {

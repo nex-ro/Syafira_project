@@ -33,7 +33,7 @@ class Dashboard : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         // Inisialisasi ViewBinding
-
+        requireActivity().window.statusBarColor = ContextCompat.getColor(requireContext(), R.color.bg)
         _binding = FragmentDashboardBinding.inflate(inflater, container, false)
         return binding.root
     }

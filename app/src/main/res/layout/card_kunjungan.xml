@@ -85,7 +85,6 @@
                     android:id="@+id/pasien"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:paddingBottom="4dp"
                     android:text="Pasien dikunjungi : Deri"
                     android:textColor="@android:color/black"
                     android:textSize="12sp" />
@@ -94,15 +93,14 @@
                     android:id="@+id/ruangan"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:paddingBottom="4dp"
                     android:text="Ruangan : Mawar 2"
                     android:textColor="@android:color/black"
                     android:textSize="12sp" />
+
                 <TextView
                     android:id="@+id/waktukedatangan"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:paddingBottom="4dp"
                     android:text="Jam Kunjungan: (10.00-12.00)"
                     android:textColor="@android:color/black"
                     android:textSize="12sp" />
@@ -135,7 +133,6 @@
                     android:id="@+id/keterangan"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:paddingBottom="4dp"
                     android:text="Keterangan : -"
                     android:textColor="@android:color/black"
                     android:textSize="12sp" />

@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.project.Data.Ruangan
@@ -36,6 +37,8 @@ class kamar_adm : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        requireActivity().window.statusBarColor = ContextCompat.getColor(requireContext(), R.color.bg)
+
         _binding = FragmentKamarAdmBinding.inflate(inflater, container, false)
         setupPieChart()
         setupSpinner()

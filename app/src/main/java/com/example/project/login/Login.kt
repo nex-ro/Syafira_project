@@ -27,7 +27,7 @@ class Login : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
+        window.statusBarColor = ContextCompat.getColor(this, R.color.ungu2)
         ref = FirebaseDatabase.getInstance().reference.child("user")
         sharedPreferences = getSharedPreferences("UserSession", Context.MODE_PRIVATE)
         binding.buttonLogin.setOnClickListener {

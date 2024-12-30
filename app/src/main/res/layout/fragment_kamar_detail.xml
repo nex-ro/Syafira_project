@@ -5,9 +5,38 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/bg"
     tools:context=".kamarPage.KamarDetail">
 
     <!-- Judul Kamar -->
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/bg"
+        android:padding="0dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+        <ImageView
+            android:id="@+id/backButton"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:contentDescription="Back Button"
+            android:src="@drawable/ic_left_arrow" />
+
+        <TextView
+            android:id="@+id/toolbarTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Form Kunjungan Pasien"
+            android:textColor="@color/ungu"
+            android:textSize="18sp"
+            android:gravity="center_vertical"
+            android:textStyle="bold" />
+    </com.google.android.material.appbar.MaterialToolbar>
+
     <TextView
         android:id="@+id/textViewJudulKamar"
         android:layout_width="wrap_content"
@@ -15,7 +44,7 @@
         android:text="Detail Kamar"
         android:textSize="20sp"
         android:layout_marginTop="16dp"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/toolbar"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
@@ -26,7 +55,7 @@
         android:layout_height="wrap_content"
         android:text="Nama Ruangan: "
         android:textSize="16sp"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="16dp"
         app:layout_constraintTop_toBottomOf="@id/textViewJudulKamar"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />

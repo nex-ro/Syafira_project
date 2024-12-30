@@ -13,6 +13,7 @@ import com.example.project.ItemAdapter
 import com.example.project.R
 import android.util.Log
 import com.example.project.jenisAdapter
+import com.example.project.user.user_home
 import kotlin.math.log
 
 
@@ -39,7 +40,9 @@ class kamarJenis : Fragment() {
             setCurrentFragment(detailFragment)
         }
         recyclerView.adapter = adapter
-
+binding.backButton.setOnClickListener(){
+    setCurrentFragment(user_home())
+}
         val jenis = arguments?.getString(ARG_JENIS)
         binding.textViewJenis.text = "List Kamar Jenis $jenis"
 

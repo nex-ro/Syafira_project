@@ -13,7 +13,6 @@ import java.util.Calendar
 import java.util.Locale
 import androidx.core.content.ContextCompat
 
-
 class TanggalAdapter(
     private val dates: List<DateItem>,
     private val onDateClick: (Int) -> Unit

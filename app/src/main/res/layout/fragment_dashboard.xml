@@ -95,28 +95,12 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
                         android:layout_centerVertical="true"
-                        android:layout_marginStart="6dp"
                         android:text="Kelolah Kunjungan"
                         android:textColor="@color/blackLite"
-                        android:textSize="13sp"
+                        android:textSize="14sp"
                         android:textStyle="bold" />
-
-                    <FrameLayout
-                        android:layout_width="40dp"
-                        android:layout_height="40dp"
-                        android:layout_alignParentEnd="true"
-                        android:layout_centerVertical="true"
-                        android:layout_marginEnd="8dp"
-                        android:background="@drawable/circle_shape">
-
-                        <ImageView
-                            android:layout_width="20dp"
-                            android:layout_height="20dp"
-                            android:layout_gravity="center"
-                            android:src="@drawable/ic_person"
-                            android:scaleType="fitCenter"/>
-                    </FrameLayout>
                 </RelativeLayout>
             </androidx.cardview.widget.CardView>
             <!-- First CardView - "Kunjungan" -->
@@ -127,7 +111,6 @@
                 android:layout_weight="1"
                 app:cardCornerRadius="16dp"
                 app:cardElevation="3dp"
-                android:layout_marginLeft="4dp"
                 app:strokeWidth="3dp"
                 app:strokeColor="@color/black">
 
@@ -139,28 +122,14 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
                         android:layout_centerVertical="true"
-                        android:layout_marginStart="6dp"
                         android:text="History Kunjungan"
                         android:textColor="@color/black"
-                        android:textSize="13sp"
+                        android:textSize="14sp"
                         android:textStyle="bold" />
 
-                    <FrameLayout
-                        android:layout_width="40dp"
-                        android:layout_height="40dp"
-                        android:layout_alignParentEnd="true"
-                        android:layout_centerVertical="true"
-                        android:layout_marginEnd="8dp"
-                        android:background="@drawable/circle_shape">
 
-                        <ImageView
-                            android:layout_width="20dp"
-                            android:layout_height="20dp"
-                            android:layout_gravity="center"
-                            android:src="@drawable/ic_person"
-                            android:scaleType="fitCenter"/>
-                    </FrameLayout>
                 </RelativeLayout>
             </androidx.cardview.widget.CardView>
 

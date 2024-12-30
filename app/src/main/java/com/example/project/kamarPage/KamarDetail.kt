@@ -5,10 +5,12 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.example.project.Dashboard
 import com.example.project.R
 import com.example.project.Data.Ruangan
 import com.example.project.databinding.FragmentKamarDetailBinding
 import com.example.project.databinding.FragmentKamarJenisBinding
+import com.example.project.user.user_home
 import com.google.firebase.database.*
 class KamarDetail : Fragment() {
     private lateinit var binding: FragmentKamarDetailBinding
@@ -20,7 +22,9 @@ class KamarDetail : Fragment() {
     ): View? {
         binding = FragmentKamarDetailBinding.inflate(inflater, container, false)
         ref = FirebaseDatabase.getInstance().getReference("Ruangan")
-
+        binding.backButton.setOnClickListener(){
+            setCurrentFragment(user_home())
+        }
         val idRuangan = arguments?.getString(ARG_ID)
         if (idRuangan != null) {
             fetchRuanganDetail(idRuangan)
@@ -44,6 +48,12 @@ class KamarDetail : Fragment() {
 //                Log.e("KamarDetail", "Error fetching data: ${error.message}")
             }
         })
+    }
+    private fun setCurrentFragment(fragment: Fragment) {
+        parentFragmentManager.beginTransaction()
+            .replace(R.id.flFragment, fragment)
+            .addToBackStack(null)
+            .commit()
     }
 
     companion object {

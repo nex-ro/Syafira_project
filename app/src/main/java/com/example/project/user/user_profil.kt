@@ -23,6 +23,7 @@ class user_profil : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        requireActivity().window.statusBarColor = ContextCompat.getColor(requireContext(), R.color.bg)
         binding = FragmentUserProfilBinding.inflate(inflater, container, false)
         sharedPreferences = requireContext().getSharedPreferences("UserSession", Context.MODE_PRIVATE)
         val isLoggedIn = sharedPreferences.getBoolean("isLoggedIn", false)

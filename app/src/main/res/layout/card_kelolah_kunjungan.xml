@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:padding="16dp"
+    android:layout_marginTop="5dp"
+    android:layout_marginBottom="5dp"
+    android:background="@drawable/cari_org"
+    android:layout_height="wrap_content">
+<RelativeLayout
+    android:id="@+id/head"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical">
+        <ImageView
+            android:id="@+id/profileImage"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="8dp"
+            android:background="@drawable/circle_shape"
+            android:backgroundTint="#D9D9D9"
+            android:scaleType="centerCrop"
+            android:src="@drawable/ic_person" />
+
+        <!-- Konten Teks -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_toEndOf="@id/profileImage"
+            android:layout_centerInParent="true"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/namaPasien"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Deri"
+                android:textSize="16sp"
+                android:textColor="@android:color/black"
+                android:textStyle="bold" />
+            <TextView
+                android:id="@+id/ruangPasien"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="user"
+                android:textSize="14sp"
+                android:textColor="@android:color/darker_gray" />
+
+        </LinearLayout>
+
+        <!-- Panah Navigasi -->
+    </RelativeLayout>
+<LinearLayout
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:layout_below="@+id/head"
+    android:layout_marginTop="10dp"
+    android:layout_height="wrap_content">
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Permohonan Kunjungan untuk pasien :"
+        android:textSize="14sp"
+        android:textColor="#222222"
+        android:textStyle="bold" />
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <TextView
+            android:id="@+id/kelolah_nama"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Nama Pasien :"
+            android:textSize="12sp"
+            android:textColor="#444444"
+            android:textStyle="bold" />
+        <TextView
+            android:id="@+id/kelolah_kamar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/kelolah_nama"
+            android:text="Kamar Pasien :"
+            android:textSize="12sp"
+            android:textColor="#444444"
+            android:textStyle="bold" />
+        <TextView
+            android:id="@+id/kelolahtgl"
+            android:layout_below="@+id/kelolah_kamar"
+
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Tanggal Kunjungan:"
+            android:textSize="12sp"
+            android:textColor="#444444"
+            android:textStyle="bold" />
+        <TextView
+            android:id="@+id/kelolahjam"
+            android:layout_below="@+id/kelolahtgl"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Jam Kunjungan :"
+            android:textSize="12sp"
+            android:textColor="#444444"
+            android:textStyle="bold" />
+        <TextView
+            android:id="@+id/kelolahHubungan"
+            android:layout_below="@+id/kelolahjam"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Hubungan dengan pasien :"
+            android:textSize="12sp"
+            android:textColor="#444444"
+            android:textStyle="bold" />
+    </RelativeLayout>
+
+
+    <EditText
+        android:id="@+id/inputan_keterangan"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="7dp"
+        android:background="@drawable/input"
+        android:hint="Keterangan "
+        android:imeOptions="actionDone"
+        android:inputType="text"
+        android:minHeight="48dp"
+        android:padding="5dp"
+        android:singleLine="true" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="end">
+
+        <Button
+            android:id="@+id/btnTolak"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingStart="20dp"
+            android:paddingEnd="20dp"
+            android:layout_marginEnd="8dp"
+            android:backgroundTint="@color/red"
+
+            android:text="Tolak"
+            android:textColor="@color/white"
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton" />
+
+        <Button
+            android:id="@+id/btnTerima"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:backgroundTint="@color/green"
+            android:paddingStart="20dp"
+            android:paddingEnd="20dp"
+            android:text="Terima"
+            android:textColor="@color/white" />
+    </LinearLayout>
+</LinearLayout>
+</RelativeLayout>

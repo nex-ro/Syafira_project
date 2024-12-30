@@ -12,7 +12,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="140dp"
         android:layout_height="wrap_content"
-        android:background="@color/colorPrimaryDark"
+        android:background="@color/bg"
         android:padding="5dp">
         <ImageView
             android:id="@+id/gambarCard"
@@ -26,7 +26,7 @@
             android:layout_height="wrap_content"
             android:text="Ruangan"
             android:textAlignment="center"
-            android:textColor="@color/white"
+            android:textColor="@color/black"
             android:textSize="17sp"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
@@ -38,7 +38,7 @@
             android:layout_height="wrap_content"
             android:text="Nomor : 5"
             android:textAlignment="textEnd"
-            android:textColor="@color/white"
+            android:textColor="@color/blackLite"
             android:textSize="13sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -49,7 +49,7 @@
             android:layout_height="wrap_content"
             android:text="Status : Kosong"
             android:textAlignment="textEnd"
-            android:textColor="@color/white"
+            android:textColor="@color/black"
             android:textSize="13sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

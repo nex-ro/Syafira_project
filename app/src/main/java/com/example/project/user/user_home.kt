@@ -33,7 +33,6 @@ class user_home : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-
         requireActivity().window.statusBarColor = ContextCompat.getColor(requireContext(), R.color.bg)
         binding = FragmentUserHomeBinding.inflate(inflater, container, false)
         sharedPreferences = requireContext().getSharedPreferences("UserSession", Context.MODE_PRIVATE)
@@ -96,8 +95,7 @@ class user_home : Fragment() {
                         val jenis = entry.key
                         val list = entry.value
                         val kosongCount = list.count { it.status == "kosong" }
-                        val terisiCount = list.count { it.status == "terisi" }
-
+                        val terisiCount = list.count { it.status == "terisi" && it.status=="penuh" }
                         cardData(
                             jenis = jenis,
                             kosong = kosongCount,

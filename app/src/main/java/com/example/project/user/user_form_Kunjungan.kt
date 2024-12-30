@@ -10,6 +10,7 @@ import android.view.WindowManager
 import android.widget.ArrayAdapter
 import android.widget.AdapterView
 import android.widget.Toast
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.example.project.R
 import com.example.project.databinding.FragmentUserFormKunjunganBinding
@@ -51,6 +52,8 @@ class user_form_Kunjungan : Fragment() {
     }
 
     private fun setupSpinners() {
+        requireActivity().window.statusBarColor = ContextCompat.getColor(requireContext(), R.color.ungu)
+
         binding.dropdownKamarPasien.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                 val selectedRuanganName = parent?.getItemAtPosition(position).toString()

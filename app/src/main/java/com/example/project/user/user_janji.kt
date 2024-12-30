@@ -11,6 +11,7 @@ import com.example.project.R
 import com.example.project.databinding.FragmentUserJanjiBinding
 import android.content.SharedPreferences
 import android.widget.Toast
+import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.project.Data.Kunjungan
@@ -28,6 +29,8 @@ class user_janji : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        requireActivity().window.statusBarColor = ContextCompat.getColor(requireContext(), R.color.bg)
+
         binding = FragmentUserJanjiBinding.inflate(inflater, container, false)
         sharedPreferences = requireContext().getSharedPreferences("UserSession", Context.MODE_PRIVATE)
         databaseRef = FirebaseDatabase.getInstance().getReference("Kunjungan")
