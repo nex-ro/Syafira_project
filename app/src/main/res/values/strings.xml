@@ -18,5 +18,13 @@
         <item>November</item>
         <item>December</item>
     </string-array>
+    <string name="prompt_pilih_penyakit">Pilih Penyakit</string>
 
+    <string-array name="penyakit_umum">
+        <item>Demam</item>
+        <item>Batuk</item>
+        <item>Flu</item>
+        <item>Infeksi</item>
+        <item>Diabetes</item>
+    </string-array>
 </resources>

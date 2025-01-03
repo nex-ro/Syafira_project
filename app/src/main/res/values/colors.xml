@@ -30,8 +30,10 @@
     <color name="gray">#999696</color> <!-- Putih -->
 
 
-    <color name="Aktif">#00B319</color>
-    <color name="Sibuk">#AF0000</color>
+    <color name="terisi">#00B319</color>
+    <color name="penuh">#AF0000</color>
+    <color name="kosong">#000000</color>
+    <color name="unknown">#6F6F6F</color>
 
 
 </resources>
