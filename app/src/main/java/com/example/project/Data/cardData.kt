@@ -8,4 +8,5 @@ data class cardData(
     val status: String? = null,
     val kosong:Int?=0 ,
     val terisi:Int?=0 ,
+    val penuh:Int?=0 ,
 )
