@@ -1,10 +1,16 @@
-<LinearLayout
+<androidx.cardview.widget.CardView
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="12dp"
+    android:backgroundTint="@android:color/white"
+    app:cardCornerRadius="8dp">
+<LinearLayout
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:padding="8dp">
-
+    android:padding="16dp">
     <TextView
         android:id="@+id/tvNamaPasien"
         android:layout_width="wrap_content"
@@ -34,11 +40,10 @@
         android:id="@+id/btnPindahRuangan"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:textColor="@color/white"
+        android:backgroundTint="@color/biru"
+
         android:text="Pindah Ruangan" />
 
-    <Button
-        android:id="@+id/btnSudahSehat"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Sudah Sehat" />
 </LinearLayout>
+</androidx.cardview.widget.CardView>

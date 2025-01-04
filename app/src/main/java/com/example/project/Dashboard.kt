@@ -3,36 +3,48 @@ package com.example.project
 import android.content.Context
 import android.content.SharedPreferences
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.Fragment
+import com.example.project.Data.Pasien
 import com.example.project.databinding.FragmentDashboardBinding
 import com.github.mikephil.charting.charts.BarChart
+import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.data.BarData
 import com.github.mikephil.charting.data.BarDataSet
 import com.github.mikephil.charting.data.BarEntry
-import android.widget.Toast
+import com.github.mikephil.charting.formatter.IndexAxisValueFormatter
+import com.github.mikephil.charting.formatter.ValueFormatter
+import com.google.firebase.database.*
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 import android.content.Intent
 import com.example.project.admin.admin_history_kunjungan
 import com.example.project.admin.admin_kelolah_kunjungan
 
 class Dashboard : Fragment() {
 
-    // Deklarasikan binding
     private var _binding: FragmentDashboardBinding? = null
     private val binding get() = _binding!!
     private lateinit var sharedPreferences: SharedPreferences
+    private lateinit var database: DatabaseReference
+
+    companion object {
+        private const val TAG = "DashboardFragment"
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        // Inisialisasi ViewBinding
         requireActivity().window.statusBarColor = ContextCompat.getColor(requireContext(), R.color.bg)
         _binding = FragmentDashboardBinding.inflate(inflater, container, false)
         return binding.root
@@ -41,7 +53,6 @@ class Dashboard : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // Terapkan padding untuk sistem bar
         sharedPreferences = requireContext().getSharedPreferences("UserSession", Context.MODE_PRIVATE)
         val isLoggedIn = sharedPreferences.getBoolean("isLoggedIn", false)
 
@@ -60,26 +71,134 @@ class Dashboard : Fragment() {
                 else -> false
             }
         }
-        binding.historyKunjungan.setOnClickListener(){
+        binding.historyKunjungan.setOnClickListener {
             setCurrentFragment(admin_history_kunjungan())
         }
-        binding.kelolahKunjungan.setOnClickListener(){
+        binding.kelolahKunjungan.setOnClickListener {
             setCurrentFragment(admin_kelolah_kunjungan())
         }
-        val barChart1: BarChart = binding.barChart1
-        val barChart2: BarChart = binding.barChart2
 
-        // Data Rumah Sakit
-        val data1 = data() // Data dummy untuk Rumah Sakit
-        setupBarChart(barChart1, data1)
+        database = FirebaseDatabase.getInstance().getReference("pasien")
+        fetchStatistik("Pasien", "tanggal_Masuk", binding.barChart1, "Jumlah Pasien per Hari")
 
-        // Data Unit Perawatan
-        val data2 = data2() // Data dummy untuk Unit Perawatan
-        setupBarChart(barChart2, data2)
+        database = FirebaseDatabase.getInstance().getReference("Kunjungan")
+        fetchStatistik("Kunjungan", "tanggal_kunjungan", binding.barChart2, "Jumlah Pengunjung per Hari")
+    }
+
+    private fun fetchStatistik(
+        jenisData: String,
+        tanggalKey: String,
+        namaChart: BarChart,
+        labelData: String
+    ) {
+        try {
+            database.addValueEventListener(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    try {
+                        val dataStatistik = mutableMapOf<String, Int>()
+                        val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+
+                        for (childSnapshot in snapshot.children) {
+                            val tanggalLong = childSnapshot.child(tanggalKey).getValue(Long::class.java)
+                            if (tanggalLong != null) {
+                                try {
+                                    val tanggal = Date(tanggalLong)
+                                    val formattedDate = dateFormat.format(tanggal)
+                                    dataStatistik[formattedDate] = dataStatistik.getOrDefault(formattedDate, 0) + 1
+                                    Log.d(TAG, "$jenisData - Formatted Date: $formattedDate, Count: ${dataStatistik[formattedDate]}")
+                                } catch (e: Exception) {
+                                    Log.e(TAG, "Error saat memproses tanggal: ${e.message}", e)
+                                }
+                            } else {
+                                Log.w(TAG, "$jenisData - Tanggal null atau tidak valid")
+                            }
+                        }
+
+                        Log.d(TAG, "$jenisData Statistik per Tanggal: $dataStatistik")
+
+                        val dataList = dataStatistik.map { it.key to it.value }
+                        if (dataList.isNotEmpty()) {
+                            setupBarChart(namaChart, dataList, labelData)
+                        } else {
+                            Log.w(TAG, "Tidak ada data $jenisData ditemukan.")
+                            Toast.makeText(requireContext(), "Tidak ada data $jenisData!", Toast.LENGTH_SHORT).show()
+                        }
+
+                    } catch (e: Exception) {
+                        Log.e(TAG, "Error saat memproses data: ${e.message}", e)
+                        Toast.makeText(requireContext(), "Error saat memproses data!", Toast.LENGTH_SHORT).show()
+                    }
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+                    Log.e(TAG, "Database Error: ${error.message}", error.toException())
+                    Toast.makeText(requireContext(), "Database Error: ${error.message}", Toast.LENGTH_SHORT).show()
+                }
+            })
+        } catch (e: Exception) {
+            Log.e(TAG, "Error saat mengambil data Firebase: ${e.message}", e)
+            Toast.makeText(requireContext(), "Error saat mengambil data!", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    private fun setupBarChart(barChart: BarChart, dailyData: List<Pair<String, Int>>, labelData: String) {
+        val entries = dailyData.mapIndexed { index, data ->
+            BarEntry(index.toFloat(), data.second.toFloat())
+        }
+
+        val dataSet = BarDataSet(entries, labelData)
+        dataSet.color = ContextCompat.getColor(requireContext(), R.color.biru)
+        dataSet.valueTextSize = 10f
+        dataSet.valueFormatter = object : ValueFormatter() {
+            override fun getFormattedValue(value: Float): String {
+                return value.toInt().toString()
+            }
+        }
+
+        val barData = BarData(dataSet)
+        barData.barWidth = 0.9f
+
+        barChart.data = barData
+
+        barChart.xAxis.apply {
+            setDrawLabels(true)
+            setDrawGridLines(false)
+            setDrawAxisLine(false)
+            granularity = 1f
+            position = XAxis.XAxisPosition.BOTTOM
+            valueFormatter = object : ValueFormatter() {
+                override fun getFormattedValue(value: Float): String {
+                    val index = value.toInt()
+                    val dataSize = dailyData.size
+
+                    return when (index) {
+                        0 -> dailyData[index].first
+                        dataSize - 1 -> dailyData[index].first
+                        else -> ""
+                    }
+                }
+            }
+        }
+
+        barChart.axisLeft.apply {
+            axisLineWidth = 0f
+            setDrawLabels(false)
+            axisMinimum = 0f
+            granularity = 1f
+            setDrawGridLines(false)
+            setDrawAxisLine(false)
+        }
+
+        barChart.axisRight.isEnabled = false
+        barChart.description.isEnabled = false
+        barChart.setScaleEnabled(false)
+        barChart.setTouchEnabled(false)
+        barChart.legend.isEnabled = true
+
+        barChart.invalidate()
     }
 
     private fun logoutUser() {
-        // Clear SharedPreferences
         val editor = sharedPreferences.edit()
         editor.clear()
         editor.apply()
@@ -88,78 +207,16 @@ class Dashboard : Fragment() {
         startActivity(intent)
         requireActivity().finish()
     }
-    // Data dummy untuk Rumah Sakit
-    private fun data(): List<Pair<String, Int>> {
-        return listOf(
-            "2024-01-01" to 20,
-            "2024-01-02" to 15,
-            "2024-01-03" to 30,
-            "2024-01-04" to 25,
-            "2024-01-05" to 20,
-            "2024-01-06" to 30,
-            "2024-01-07" to 15,
-            "2024-01-08" to 10
-        )
-    }
 
-    // Data dummy untuk Unit Perawatan
-    private fun data2(): List<Pair<String, Int>> {
-        return listOf(
-            "2024-01-01" to 10,
-            "2024-01-02" to 20,
-            "2024-01-03" to 15,
-            "2024-01-04" to 30,
-            "2024-01-05" to 20,
-            "2024-01-06" to 15,
-            "2024-01-07" to 20,
-            "2024-01-08" to 30
-        )
-    }
-
-    private fun setupBarChart(barChart: BarChart, dailySales: List<Pair<String, Int>>) {
-        // Ubah data ke format BarEntry
-        val entries = dailySales.mapIndexed { index, data ->
-            BarEntry(index.toFloat(), data.second.toFloat()) // X = indeks, Y = jumlah penjualan
-        }
-
-        // Buat DataSet untuk grafik
-        val dataSet = BarDataSet(entries, "")
-        dataSet.color = ContextCompat.getColor(requireContext(), R.color.biru) // Warna batang
-        dataSet.setDrawValues(false)
-        dataSet.valueTextSize = 0f
-        val barData = BarData(dataSet)
-        barChart.data = barData
-
-        // Konfigurasi sumbu X
-        barChart.xAxis.apply {
-            setDrawLabels(false)
-            setDrawGridLines(false)
-            setDrawAxisLine(false)
-        }
-        barChart.axisRight.isEnabled = false // Sembunyikan garis sumbu Y sebelah kanan
-        barChart.axisLeft.apply {
-            setDrawLabels(false)
-            setDrawGridLines(false)
-            setDrawAxisLine(false)
-        }
-
-        // Nonaktifkan deskripsi
-        barChart.description.isEnabled = false
-
-        // Nonaktifkan interaksi
-        barChart.setScaleEnabled(false) // Nonaktifkan zoom
-        barChart.setTouchEnabled(false) // Nonaktifkan interaksi sentuh
-        barChart.invalidate()
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
-    }
     private fun setCurrentFragment(fragment: Fragment) =
         parentFragmentManager.beginTransaction().apply {
             replace(R.id.flFragment, fragment)
             addToBackStack(null)
             commit()
         }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
 }

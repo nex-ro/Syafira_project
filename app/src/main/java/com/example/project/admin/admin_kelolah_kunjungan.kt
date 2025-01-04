@@ -19,6 +19,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
+import android.util.Log
 
 
 class admin_kelolah_kunjungan : Fragment() {
@@ -114,16 +115,21 @@ class admin_kelolah_kunjungan : Fragment() {
                     override fun onDataChange(snapshot: DataSnapshot) {
                         try {
                             val kunjunganList = mutableListOf<Kunjungan>()
+
                             for (dataSnapshot in snapshot.children) {
-                                val kunjungan = dataSnapshot.getValue(Kunjungan::class.java)
-                                if (kunjungan?.status == "menunggu") {
-                                    kunjunganList.add(kunjungan)
+                                dataSnapshot.getValue(Kunjungan::class.java)?.let { kunjungan ->
+                                    // Only add kunjungan with status "menunggu"
+                                    if (kunjungan.status == "menunggu") {
+                                        kunjunganList.add(kunjungan)
+                                    }
                                 }
                             }
 
                             if (isAdded && context != null) {
+                                // Update RecyclerView with filtered data
                                 kunjunganAdapter.updateData(kunjunganList)
 
+                                // Show/hide empty state based on filtered results
                                 if (kunjunganList.isEmpty()) {
                                     binding.emptyStateText.visibility = View.VISIBLE
                                     binding.recyclerViewKunjungan.visibility = View.GONE
@@ -133,6 +139,7 @@ class admin_kelolah_kunjungan : Fragment() {
                                 }
                             }
                         } catch (e: Exception) {
+                            Log.e("LoadData", "Error processing data: ${e.message}")
                             e.printStackTrace()
                         } finally {
                             hideLoading()
@@ -147,61 +154,168 @@ class admin_kelolah_kunjungan : Fragment() {
                     }
                 })
         } catch (e: Exception) {
+            Log.e("LoadData", "Error in loadKunjunganData: ${e.message}")
             e.printStackTrace()
             hideLoading()
         }
-    }    private fun onTerimaClick(kunjungan: Kunjungan, keterangan: String) {
-        if (!isAdded) return  // Check if Fragment is attached
+    }
+    private fun onTerimaClick(kunjungan: Kunjungan, keterangan: String) {
+        if (!isAdded) return
 
         try {
             showLoading()
-            val kunjunganRef = databaseReference.child("Kunjungan").child(kunjungan.id_pengunjung.toString())
-            val updates = hashMapOf<String, Any>(
-                "status" to "Diterima",
-                "keterangan" to keterangan
-            )
 
-            kunjunganRef.updateChildren(updates)
-                .addOnSuccessListener {
-                    if (isAdded) {
+            // Langsung update menggunakan path yang benar
+            val kunjunganRef = databaseReference.child("Kunjungan")
+
+            // 1. Pertama, cari data berdasarkan id_pengunjung untuk mendapatkan push ID
+            kunjunganRef.addListenerForSingleValueEvent(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    var pushId: String? = null
+
+                    // Cari push ID yang sesuai dengan id_pengunjung
+                    for (child in snapshot.children) {
+                        val data = child.getValue(Kunjungan::class.java)
+                        if (data?.id_pengunjung == kunjungan.id_pengunjung) {
+                            pushId = child.key
+                            break
+                        }
+                    }
+
+                    if (pushId != null) {
+                        Log.d("Firebase", "Found Push ID: $pushId")
+
+                        // 2. Update data menggunakan push ID yang ditemukan
+                        val updates = HashMap<String, Any>()
+                        updates["hubungan"] = kunjungan.hubungan ?: ""
+                        updates["id_pengunjung"] = kunjungan.id_pengunjung ?: ""
+                        updates["jam_kunjungan"] = kunjungan.jam_kunjungan ?: ""
+                        updates["kamar_pasien"] = kunjungan.kamar_pasien ?: ""
+                        updates["nama"] = kunjungan.nama ?: ""
+                        updates["nama_pasien"] = kunjungan.nama_pasien ?: ""
+                        updates["tanggal_kunjungan"] = kunjungan.tanggal_kunjungan
+                        updates["status"] = "Diterima"  // Update status
+                        updates["keterangan"] = keterangan  // Update keterangan
+
+                        // Update menggunakan push ID
+                        kunjunganRef.child(pushId).updateChildren(updates)
+                            .addOnSuccessListener {
+                                Log.d("Firebase", "Update berhasil dengan Push ID: $pushId")
+                                if (isAdded) {
+                                    hideLoading()
+                                    Toast.makeText(context, "Kunjungan diterima", Toast.LENGTH_SHORT).show()
+                                    // Verifikasi update
+                                    kunjunganRef.child(pushId).get().addOnSuccessListener { updatedSnapshot ->
+                                        Log.d("Firebase", "Data setelah update: ${updatedSnapshot.value}")
+                                    }
+                                    loadKunjunganData(Calendar.getInstance().time)
+                                }
+                            }
+                            .addOnFailureListener { exception ->
+                                Log.e("Firebase", "Update gagal: ${exception.message}")
+                                if (isAdded) {
+                                    hideLoading()
+                                    Toast.makeText(context, "Error: ${exception.message}", Toast.LENGTH_SHORT).show()
+                                }
+                            }
+                    } else {
+                        Log.d("Firebase", "Push ID tidak ditemukan untuk ID Pengunjung: ${kunjungan.id_pengunjung}")
                         hideLoading()
-                        Toast.makeText(context, "Kunjungan diterima", Toast.LENGTH_SHORT).show()
-                        loadKunjunganData(Calendar.getInstance().time)
+                        Toast.makeText(context, "Data kunjungan tidak ditemukan", Toast.LENGTH_SHORT).show()
                     }
                 }
-                .addOnFailureListener { exception ->
-                    if (isAdded) {
-                        hideLoading()
-                        Toast.makeText(context, "Error: ${exception.message}", Toast.LENGTH_SHORT).show()
-                    }
+
+                override fun onCancelled(error: DatabaseError) {
+                    Log.e("Firebase", "Query dibatalkan: ${error.message}")
+                    hideLoading()
+                    Toast.makeText(context, "Error: ${error.message}", Toast.LENGTH_SHORT).show()
                 }
+            })
+
         } catch (e: Exception) {
+            Log.e("Firebase", "Error umum: ${e.message}")
             e.printStackTrace()
             hideLoading()
+            Toast.makeText(context, "Error: ${e.message}", Toast.LENGTH_SHORT).show()
         }
     }
+
+    // Fungsi onTolakClick dengan cara yang sama
     private fun onTolakClick(kunjungan: Kunjungan, keterangan: String) {
+        if (!isAdded) return
 
+        try {
+            showLoading()
 
-        showLoading()
-        val kunjunganRef = databaseReference.child("Kunjungan").child(kunjungan.id_pengunjung.toString())
-        val updates = hashMapOf<String, Any>(
-            "status" to "Ditolak",
-            "keterangan" to keterangan
-        )
+            val kunjunganRef = databaseReference.child("Kunjungan")
 
-        kunjunganRef.updateChildren(updates)
-            .addOnSuccessListener {
-                hideLoading()
-                Toast.makeText(context, "Kunjungan ditolak", Toast.LENGTH_SHORT).show()
-                // Reload data to refresh the list
-                loadKunjunganData(Calendar.getInstance().time)
-            }
-            .addOnFailureListener { exception ->
-                hideLoading()
-                Toast.makeText(context, "Error: ${exception.message}", Toast.LENGTH_SHORT).show()
-            }
+            kunjunganRef.addListenerForSingleValueEvent(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    var pushId: String? = null
+
+                    for (child in snapshot.children) {
+                        val data = child.getValue(Kunjungan::class.java)
+                        if (data?.id_pengunjung == kunjungan.id_pengunjung) {
+                            pushId = child.key
+                            break
+                        }
+                    }
+
+                    if (pushId != null) {
+                        Log.d("Firebase", "Found Push ID: $pushId")
+
+                        val updates = HashMap<String, Any>()
+                        updates["hubungan"] = kunjungan.hubungan ?: ""
+                        updates["id_pengunjung"] = kunjungan.id_pengunjung ?: ""
+                        updates["jam_kunjungan"] = kunjungan.jam_kunjungan ?: ""
+                        updates["kamar_pasien"] = kunjungan.kamar_pasien ?: ""
+                        updates["nama"] = kunjungan.nama ?: ""
+                        updates["nama_pasien"] = kunjungan.nama_pasien ?: ""
+                        updates["tanggal_kunjungan"] = kunjungan.tanggal_kunjungan
+                        updates["status"] = "Ditolak"
+                        updates["keterangan"] = keterangan
+
+                        kunjunganRef.child(pushId).updateChildren(updates)
+                            .addOnSuccessListener {
+                                Log.d("Firebase", "Update berhasil dengan Push ID: $pushId")
+                                if (isAdded) {
+                                    hideLoading()
+                                    Toast.makeText(context, "Kunjungan ditolak", Toast.LENGTH_SHORT).show()
+                                    kunjunganRef.child(pushId).get().addOnSuccessListener { updatedSnapshot ->
+                                        Log.d("Firebase", "Data setelah update: ${updatedSnapshot.value}")
+                                    }
+                                    loadKunjunganData(Calendar.getInstance().time)
+                                }
+                            }
+                            .addOnFailureListener { exception ->
+                                Log.e("Firebase", "Update gagal: ${exception.message}")
+                                if (isAdded) {
+                                    hideLoading()
+                                    Toast.makeText(context, "Error: ${exception.message}", Toast.LENGTH_SHORT).show()
+                                }
+                            }
+                    } else {
+                        Log.d("Firebase", "Push ID tidak ditemukan untuk ID Pengunjung: ${kunjungan.id_pengunjung}")
+                        hideLoading()
+                        Toast.makeText(context, "Data kunjungan tidak ditemukan", Toast.LENGTH_SHORT).show()
+                    }
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+                    Log.e("Firebase", "Query dibatalkan: ${error.message}")
+                    hideLoading()
+                    Toast.makeText(context, "Error: ${error.message}", Toast.LENGTH_SHORT).show()
+                }
+            })
+
+        } catch (e: Exception) {
+            Log.e("Firebase", "Error umum: ${e.message}")
+            e.printStackTrace()
+            hideLoading()
+            Toast.makeText(context, "Error: ${e.message}", Toast.LENGTH_SHORT).show()
+        }
     }
+
 
     private fun generateDateList(): List<DateItem> {
         val dateList = mutableListOf<DateItem>()

@@ -18,6 +18,7 @@ import com.example.project.R
 import com.example.project.admin.adapter.history_kj_Adapter
 import com.google.firebase.database.*
 import java.util.*
+import android.util.Log
 
 class admin_history_kunjungan : Fragment() {
 
