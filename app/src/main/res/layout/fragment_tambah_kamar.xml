@@ -1,105 +1,120 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:background="@color/colorPrimary"
-    android:padding="16dp">
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="10dp"
-        android:layout_gravity="center_horizontal"
-        android:text="Tambah Kamar"
-        android:textColor="@color/white"
-        android:textSize="20sp"
-        android:textStyle="bold" />
-    <com.google.android.material.card.MaterialCardView
+    android:layout_height="wrap_content"
+    android:layout_margin="16dp"
+    app:cardCornerRadius="16dp"
+    app:cardElevation="8dp">
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="8dp"
-        android:backgroundTint="@color/ungu2"
-        app:cardCornerRadius="50dp">
-        <LinearLayout
+        android:orientation="vertical"
+        android:padding="16dp">
+        <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="20dp"
-            android:orientation="vertical">
+            android:text="Tambah Ruangan"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:gravity="center"
+            android:layout_marginBottom="16dp" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="@color/white"
-                android:text="Informasi Ruangan"
-                android:textSize="16sp" />
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            app:boxBackgroundMode="outline"
+            app:cardCornerRadius="16dp"
+            app:boxBackgroundColor="@android:color/white"
+            app:boxStrokeColor="@color/bg"
+            app:hintTextColor="@color/black">
 
-            <!-- Nomor Ruangan -->
-            <com.google.android.material.textfield.TextInputLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:hintTextColor="@color/ungu"
-                android:hint="Nomor Ruangan">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/input_nomor_ruangan"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:inputType="number" />
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <!-- Nama Ruangan -->
-            <com.google.android.material.textfield.TextInputLayout
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/inputNamaRuangan"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Nama Ruangan"
-                app:hintTextColor="@color/ungu"
-                android:layout_marginTop="8dp">
+                android:imeOptions="actionDone"
+                android:singleLine="true" />
+        </com.google.android.material.textfield.TextInputLayout>
 
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/input_nama_ruangan"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:inputType="text" />
-            </com.google.android.material.textfield.TextInputLayout>
-            <com.google.android.material.textfield.TextInputLayout
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            app:boxBackgroundMode="outline"
+            app:cardCornerRadius="16dp"
+            app:boxBackgroundColor="@android:color/white"
+            app:boxStrokeColor="@color/bg"
+            app:hintTextColor="@color/bg">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/inputNomorRuangan"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Kapasitas Ruangan"
-                app:hintTextColor="@color/ungu"
-                android:layout_marginTop="8dp">
+                android:hint="Nomor Ruangan"
+                android:inputType="number"
+                android:textColor="@color/black"
+                android:imeOptions="actionDone"
+                android:singleLine="true" />
+        </com.google.android.material.textfield.TextInputLayout>
 
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/inputkapasitas"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:inputType="number" />
-            </com.google.android.material.textfield.TextInputLayout>
-            <!-- Jenis Ruangan -->
-            <TextView
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="12dp"
+            app:boxBackgroundMode="outline"
+            app:cardCornerRadius="16dp"
+            app:boxBackgroundColor="@android:color/white"
+            app:boxStrokeColor="@color/bg"
+            app:hintTextColor="@color/bg">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/inputKapasitas"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Kapasitas"
+                android:inputType="number"
+                android:imeOptions="actionDone"
+                android:textColor="@color/black"
+                android:textColorHint="@color/black"
+                android:singleLine="true" />
+        </com.google.android.material.textfield.TextInputLayout>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16px"
+            android:background="@drawable/spinner_bg">
+        <Spinner
+            android:id="@+id/spinnerJenis"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:minHeight="48dp" />
+        </RelativeLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="end">
+
+            <Button
+                android:id="@+id/buttonBatal"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@color/white"
-                android:text="Jenis Ruangan"
-                android:textSize="16sp"
-                android:layout_marginTop="12dp" />
+                android:text="Batal"
+                android:backgroundTint="@color/biru"
+                android:layout_marginEnd="8dp"
+                style="@style/Widget.MaterialComponents.Button.TextButton" />
 
-            <Spinner
-                android:id="@+id/spinner_jenis"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@android:drawable/btn_dropdown" />
-
-            <!-- Button Simpan -->
             <Button
-                android:id="@+id/button_simpan"
-                android:layout_width="match_parent"
+                android:id="@+id/buttonSimpan"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:text="Simpan"
-                android:backgroundTint="@color/ungu"
-                android:textColor="@android:color/white" />
+                android:backgroundTint="@color/green"
+                android:text="Simpan" />
         </LinearLayout>
-    </com.google.android.material.card.MaterialCardView>
-
-</LinearLayout>
+    </LinearLayout>
+</androidx.cardview.widget.CardView>

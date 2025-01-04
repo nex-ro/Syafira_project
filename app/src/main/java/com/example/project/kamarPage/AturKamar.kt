@@ -1,157 +1,128 @@
 package com.example.project.kamarPage
 
+import android.app.Dialog
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.Window
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
-import android.widget.Spinner
 import android.widget.Toast
-import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.constraintlayout.widget.ConstraintSet
-import androidx.fragment.app.Fragment
+import androidx.fragment.app.DialogFragment
 import com.example.project.Data.History
 import com.example.project.Data.Pasien
-import com.example.project.Data.Ruangan
-import com.example.project.R
 import com.example.project.databinding.FragmentAturKamarBinding
-import com.example.project.kamar_adm
 import com.google.firebase.database.*
-import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
 
-class AturKamar : Fragment() {
-
-    private lateinit var jenisPasienSpinner: Spinner
-    private lateinit var kamarSpinner: Spinner
+class AturKamar : DialogFragment() {
+    private var _binding: FragmentAturKamarBinding? = null
+    private val binding get() = _binding!!
     private lateinit var database: DatabaseReference
-    private lateinit var binding: FragmentAturKamarBinding
     private lateinit var ref_pasien: DatabaseReference
     private lateinit var ref_History: DatabaseReference
+
+    private var isSubmitting = false
+
+    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+        val dialog = super.onCreateDialog(savedInstanceState)
+        dialog.window?.requestFeature(Window.FEATURE_NO_TITLE)
+        return dialog
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View {
-        binding = FragmentAturKamarBinding.inflate(inflater, container, false)
-        database = FirebaseDatabase.getInstance().reference.child("Ruangan")
-        ref_pasien=FirebaseDatabase.getInstance().reference.child("pasien")
-        ref_History=FirebaseDatabase.getInstance().reference.child("history")
-        // Initialize Spinners
-        jenisPasienSpinner = binding.JenisPasien
-        kamarSpinner = binding.SpinnerKamar
-
+    ): View? {
+        _binding = FragmentAturKamarBinding.inflate(inflater, container, false)
+        dialog?.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        setupDatabase()
+        setupViews()
         setupJenisPasienSpinner()
-        binding.buttonSubmitt.setOnClickListener{
-            val nama=binding.editTextNamaPasien.text.toString()
-            val jenis=binding.JenisPasien.selectedItem.toString()
-            val penyakit=binding.editTextPenyakit.text.toString()
-            val waktu =System.currentTimeMillis().toLong()
+        return binding.root
+    }
 
-            if(jenis=="Rawat Jalan"){
-                val idHistory=ref_History.push().key ?: ""
-                val historyy=History(nama,penyakit,waktu,waktu)
-                ref_History.child(idHistory).setValue(historyy).addOnCompleteListener { task ->
-                    if (task.isSuccessful) {
-                        Toast.makeText(
-                            requireContext(),
-                            "Data berhasil ditambahkan",
-                            Toast.LENGTH_SHORT
-                        ).show()
-                        setCurrentFragment(kamar_adm())
-                    } else {
-                        Toast.makeText(
-                            requireContext(),
-                            "Gagal menambahkan data",
-                            Toast.LENGTH_SHORT
-                        ).show()
-                    }
-                }
+    override fun onStart() {
+        super.onStart()
+        val width = (resources.displayMetrics.widthPixels * 0.85).toInt()
+        val height = ViewGroup.LayoutParams.WRAP_CONTENT
+        dialog?.window?.setLayout(width, height)
+    }
 
-                }else{
-                val idPasien = ref_pasien.push().key ?: ""
-                val kamar=binding.SpinnerKamar.selectedItem.toString()
-                val pasienn = Pasien(nama,penyakit,kamar,waktu,jenis)
-                ref_pasien.child(idPasien).setValue(pasienn).addOnCompleteListener { task ->
-                    if (task.isSuccessful) {
-                        updateRuanganStatus(kamar)
-                        Toast.makeText(
-                            requireContext(),
-                            "Data berhasil ditambahkan",
-                            Toast.LENGTH_SHORT
-                        ).show()
-                        setCurrentFragment(kamar_adm())
-                    } else {
-                        Toast.makeText(
-                            requireContext(),
-                            "Gagal menambahkan data",
-                            Toast.LENGTH_SHORT
-                        ).show()
-                    }
-                }
+    private fun setupDatabase() {
+        database = FirebaseDatabase.getInstance().reference.child("Ruangan")
+        ref_pasien = FirebaseDatabase.getInstance().reference.child("pasien")
+        ref_History = FirebaseDatabase.getInstance().reference.child("history")
+    }
+
+    private fun setupViews() {
+        binding.buttonSubmit.setOnClickListener {
+            if (!isSubmitting) {
+                handleSubmit()
             }
         }
-        return binding.root
+
+        binding.buttonBatal.setOnClickListener {
+            dismiss()
+        }
     }
 
     private fun setupJenisPasienSpinner() {
         val jenisOptions = listOf("Rawat Jalan", "Rawat Darurat", "Rawat Inap")
         val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, jenisOptions)
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-        jenisPasienSpinner.adapter = adapter
+        binding.spinnerJenisPasien.adapter = adapter
 
-        jenisPasienSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+        binding.spinnerJenisPasien.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                 val selectedJenis = jenisOptions[position]
-
-                if (selectedJenis == "Rawat Jalan") {
-                    kamarSpinner.visibility = View.GONE
-                    adjustConstraintsForHiddenKamarSpinner()
-                } else {
-                    kamarSpinner.visibility = View.VISIBLE
-                    adjustConstraintsForVisibleKamarSpinner()
-                    when (selectedJenis) {
-                        "Rawat Inap" -> loadKamarData(selectedJenis, excludeIcuHcu = true)
-                        "Rawat Darurat" -> loadKamarData(selectedJenis, excludeIcuHcu = false)
-                    }
-                }
+                handleJenisPasienSelection(selectedJenis)
             }
 
-            override fun onNothingSelected(parent: AdapterView<*>?) {
-                // Do nothing
-            }
+            override fun onNothingSelected(parent: AdapterView<*>?) {}
         }
     }
 
-    private fun loadKamarData(selectedJenis: String, excludeIcuHcu: Boolean) {
-        database.addValueEventListener(object : ValueEventListener {
+    private fun handleJenisPasienSelection(selectedJenis: String) {
+        binding.spinnerKamar.visibility = if (selectedJenis == "Rawat Jalan") View.GONE else View.VISIBLE
+
+        when (selectedJenis) {
+            "Rawat Inap" -> loadKamarData(excludeIcuHcu = true)
+            "Rawat Darurat" -> loadKamarData(excludeIcuHcu = false)
+        }
+    }
+
+    private fun loadKamarData(excludeIcuHcu: Boolean) {
+        database.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 val kamarList = mutableListOf<String>()
 
                 for (roomSnapshot in snapshot.children) {
-                    val namaRuangan = roomSnapshot.child("nama_Ruangan").value.toString()
-                    val jenisRuangan = roomSnapshot.child("jenis").value.toString()
-                    val statusRuangan = roomSnapshot.child("status").value.toString()
+                    val namaRuangan = roomSnapshot.child("nama_Ruangan").value?.toString() ?: continue
+                    val jenisRuangan = roomSnapshot.child("jenis").value?.toString() ?: continue
+                    val statusRuangan = roomSnapshot.child("status").value?.toString() ?: continue
 
                     if (statusRuangan != "penuh") {
-                        if (excludeIcuHcu) {
-                            if (jenisRuangan != "ICU" && jenisRuangan != "HCU") {
-                                kamarList.add(namaRuangan)
-                            }
-                        } else {
-                            if (jenisRuangan == "ICU" || jenisRuangan == "HCU") {
-                                kamarList.add(namaRuangan)
-                            }
+                        if (excludeIcuHcu && jenisRuangan != "ICU" && jenisRuangan != "HCU") {
+                            kamarList.add(namaRuangan)
+                        } else if (!excludeIcuHcu && (jenisRuangan == "ICU" || jenisRuangan == "HCU")) {
+                            kamarList.add(namaRuangan)
                         }
                     }
                 }
-                setupKamarSpinner(kamarList)
+
+                if (kamarList.isEmpty()) {
+                    showError("Tidak ada kamar yang tersedia")
+                } else {
+                    setupKamarSpinner(kamarList)
+                }
             }
 
             override fun onCancelled(error: DatabaseError) {
-                Toast.makeText(requireContext(), "Failed to load data: ${error.message}", Toast.LENGTH_SHORT).show()
+                showError("Gagal memuat data kamar: ${error.message}")
             }
         })
     }
@@ -159,63 +130,120 @@ class AturKamar : Fragment() {
     private fun setupKamarSpinner(kamarList: List<String>) {
         val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, kamarList)
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-        kamarSpinner.adapter = adapter
+        binding.spinnerKamar.adapter = adapter
     }
 
-    private fun adjustConstraintsForHiddenKamarSpinner() {
-        val constraintLayout = binding.root as ConstraintLayout
-        val constraintSet = ConstraintSet()
-        constraintSet.clone(constraintLayout)
+    private fun handleSubmit() {
+        isSubmitting = true
 
-        constraintSet.connect(
-            R.id.buttonSubmitt,
-            ConstraintSet.TOP,
-            R.id.JenisPasien,
-            ConstraintSet.BOTTOM,
-            16
-        )
-        constraintSet.applyTo(constraintLayout)
-    }
+        val nama = binding.editTextNamaPasien.text?.toString()?.trim() ?: ""
+        val jenis = binding.spinnerJenisPasien.selectedItem?.toString() ?: ""
+        val penyakit = binding.editTextPenyakit.text?.toString()?.trim() ?: ""
+        val waktu = System.currentTimeMillis()
 
-    private fun adjustConstraintsForVisibleKamarSpinner() {
-        val constraintLayout = binding.root as ConstraintLayout
-        val constraintSet = ConstraintSet()
-        constraintSet.clone(constraintLayout)
-
-        constraintSet.connect(
-            R.id.buttonSubmitt,
-            ConstraintSet.TOP,
-            R.id.SpinnerKamar,
-            ConstraintSet.BOTTOM,
-            16
-        )
-        constraintSet.applyTo(constraintLayout)
-    }
-    private fun setCurrentFragment(fragment: Fragment) =
-        parentFragmentManager.beginTransaction().apply {
-            replace(R.id.flFragment, fragment)
-            addToBackStack(null) // Tambahkan ke backstack
-            commit()
+        if (nama.isEmpty() || penyakit.isEmpty()) {
+            showError("Mohon isi semua data")
+            isSubmitting = false
+            return
         }
 
-    private fun updateRuanganStatus(namaRuangan: String) {
-        database.orderByChild("nama_Ruangan").equalTo(namaRuangan).addListenerForSingleValueEvent(object : ValueEventListener {
-            override fun onDataChange(snapshot: DataSnapshot) {
-                for (roomSnapshot in snapshot.children) {
-                    val currentIsi = roomSnapshot.child("isi").getValue(Int::class.java) ?: 0
-                    val kapasitas = roomSnapshot.child("kapasitas").getValue(Int::class.java) ?: 0
-
-                    val updatedIsi = currentIsi + 1
-                    val updatedStatus = if (updatedIsi >= kapasitas) "penuh" else "terisi"
-
-                    roomSnapshot.ref.child("isi").setValue(updatedIsi)
-                    roomSnapshot.ref.child("status").setValue(updatedStatus)
+        when (jenis) {
+            "Rawat Jalan" -> submitRawatJalan(nama, penyakit, waktu)
+            "Rawat Darurat", "Rawat Inap" -> {
+                val kamar = binding.spinnerKamar.selectedItem?.toString()
+                if (kamar == null) {
+                    showError("Pilih kamar terlebih dahulu")
+                    isSubmitting = false
+                    return
                 }
+                submitRawatInapDarurat(nama, penyakit, jenis, kamar, waktu)
             }
-            override fun onCancelled(error: DatabaseError) {
-                Toast.makeText(requireContext(), "Gagal memperbarui status ruangan: ${error.message}", Toast.LENGTH_SHORT).show()
-            }
-        })
+        }
     }
 
+    private fun submitRawatJalan(nama: String, penyakit: String, waktu: Long) {
+        val idHistory = ref_History.push().key ?: return
+        val history = History(nama, penyakit, waktu, waktu)
+
+        ref_History.child(idHistory).setValue(history)
+            .addOnSuccessListener {
+                handleSubmitResult(true)
+            }
+            .addOnFailureListener {
+                handleSubmitResult(false)
+            }
+    }
+
+    private fun submitRawatInapDarurat(nama: String, penyakit: String, jenis: String, kamar: String, waktu: Long) {
+        val idPasien = ref_pasien.push().key ?: return
+        val pasien = Pasien(nama, penyakit, kamar, waktu, jenis)
+
+        ref_pasien.child(idPasien).setValue(pasien)
+            .addOnSuccessListener {
+                updateRuanganStatus(kamar, idPasien)
+            }
+            .addOnFailureListener {
+                handleSubmitResult(false)
+            }
+    }
+
+    private fun updateRuanganStatus(namaRuangan: String, idPasien: String) {
+        database.orderByChild("nama_Ruangan").equalTo(namaRuangan)
+            .addListenerForSingleValueEvent(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    for (roomSnapshot in snapshot.children) {
+                        val currentIsi = roomSnapshot.child("isi").getValue(Int::class.java) ?: 0
+                        val kapasitas = roomSnapshot.child("kapasitas").getValue(Int::class.java) ?: 1
+
+                        if (currentIsi + 1 > kapasitas) {
+                            ref_pasien.child(idPasien).removeValue()
+                            showError("Kamar penuh, data dibatalkan")
+                            isSubmitting = false
+                            return
+                        }
+
+                        val updates = mapOf(
+                            "isi" to currentIsi + 1,
+                            "status" to if (currentIsi + 1 == kapasitas) "penuh" else "terisi"
+                        )
+
+                        roomSnapshot.ref.updateChildren(updates)
+                            .addOnSuccessListener {
+                                handleSubmitResult(true)
+                            }
+                            .addOnFailureListener {
+                                handleSubmitResult(false)
+                            }
+                    }
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+                    ref_pasien.child(idPasien).removeValue()
+                    showError("Gagal memperbarui status kamar: ${error.message}")
+                }
+            })
+    }
+
+    private fun handleSubmitResult(isSuccessful: Boolean) {
+        if (isSuccessful) {
+            showSuccess("Data berhasil ditambahkan")
+            dismiss()
+        } else {
+            showError("Gagal menambahkan data")
+        }
+        isSubmitting = false
+    }
+
+    private fun showError(message: String) {
+        Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
+    }
+
+    private fun showSuccess(message: String) {
+        Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
 }

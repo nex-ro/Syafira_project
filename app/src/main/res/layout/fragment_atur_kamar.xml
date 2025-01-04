@@ -1,67 +1,117 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
+<androidx.cardview.widget.CardView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".kamarPage.AturKamar">
+    android:layout_height="wrap_content"
+    android:layout_margin="16dp"
+    app:cardCornerRadius="16dp"
+    app:cardElevation="8dp">
 
-
-    <EditText
-        android:id="@+id/editTextNamaPasien"
-        android:layout_width="0dp"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Nama Pasien"
-        android:layout_marginTop="16dp"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:padding="16dp"/>
-    <!-- Penyakit -->
-    <EditText
-        android:id="@+id/editTextPenyakit"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:hint="Penyakit"
-        android:layout_marginTop="16dp"
-        app:layout_constraintTop_toBottomOf="@id/editTextNamaPasien"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:padding="16dp"/>
+        android:padding="16dp">
 
-    <Spinner
-        android:id="@+id/JenisPasien"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        app:layout_constraintTop_toBottomOf="@id/editTextPenyakit"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:padding="16dp"/>
+        <!-- Title Text -->
+        <TextView
+            android:id="@+id/titleText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Atur Kamar Pasien"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:gravity="center"
+            android:layout_marginBottom="16dp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
 
-    <!-- Tingkat Hunian (Spinner for selection) -->
-    <Spinner
-        android:id="@+id/SpinnerKamar"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        app:layout_constraintTop_toBottomOf="@id/JenisPasien"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:padding="16dp"/>
+        <!-- Nama Pasien Input -->
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/namaPasienLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            app:boxBackgroundMode="outline"
+            app:cardCornerRadius="16dp"
+            app:boxBackgroundColor="@android:color/white"
+            app:boxStrokeColor="@color/bg"
+            app:hintTextColor="@color/bg"
+            app:layout_constraintTop_toBottomOf="@id/titleText">
 
-    <!-- ID Ruangan -->
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/editTextNamaPasien"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Nama Pasien" />
+        </com.google.android.material.textfield.TextInputLayout>
 
-    <Button
-        android:id="@+id/buttonSubmitt"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:text="Submit"
-        android:layout_marginTop="16dp"
-        app:layout_constraintTop_toBottomOf="@id/SpinnerKamar"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:padding="16dp"/>
+        <!-- Penyakit Input -->
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/penyakitLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            app:boxBackgroundMode="outline"
+            app:cardCornerRadius="16dp"
+            app:boxBackgroundColor="@android:color/white"
+            app:boxStrokeColor="@color/bg"
+            app:hintTextColor="@color/bg"
+            app:layout_constraintTop_toBottomOf="@id/namaPasienLayout">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/editTextPenyakit"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Penyakit" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!-- Spinner Jenis Pasien -->
+        <Spinner
+            android:id="@+id/spinnerJenisPasien"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_marginTop="16dp"
+            app:layout_constraintTop_toBottomOf="@id/penyakitLayout"
+            android:background="@drawable/spinner_bg" />
+
+        <!-- Spinner Kamar -->
+        <Spinner
+            android:id="@+id/spinnerKamar"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_marginTop="16dp"
+            app:layout_constraintTop_toBottomOf="@id/spinnerJenisPasien"
+            android:background="@drawable/spinner_bg" />
+
+        <!-- Buttons -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="end"
+            android:layout_marginTop="16dp"
+            app:layout_constraintTop_toBottomOf="@id/spinnerKamar">
+
+            <Button
+                android:id="@+id/buttonBatal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Batal"
+                android:layout_marginEnd="8dp"
+                android:backgroundTint="@color/biru"
+                android:textColor="@color/white"
+                style="@style/Widget.MaterialComponents.Button.TextButton" />
+
+            <Button
+                android:id="@+id/buttonSubmit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@color/green"
+                android:textColor="@color/white"
+                android:text="Submit" />
+        </LinearLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.cardview.widget.CardView>

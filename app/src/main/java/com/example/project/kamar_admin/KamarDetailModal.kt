@@ -9,7 +9,9 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.project.Data.Ruangan
 import com.example.project.Data.Pasien
+import com.example.project.R
 import com.example.project.databinding.FragmentKamarDetailModalBinding
+import com.example.project.kamar_adm
 import com.example.project.kamar_admin.detail.PasienAdapter
 import com.google.firebase.database.*
 
@@ -39,11 +41,12 @@ class KamarDetailModal : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
         binding = FragmentKamarDetailModalBinding.inflate(inflater, container, false)
-        binding.jenisKamarModal.text = jenis
-        binding.nomorKamarModal.text = nomorRuangan.toString()
+        binding.TextDetail.text = "Kamar $namaRuangan"
+        binding.backButton.setOnClickListener {
+            setCurrentFragment(kamar_adm())
+        }
 
         ref_pasien = FirebaseDatabase.getInstance().reference.child("pasien")
-
         Log.d("KamarDetailModal", "Nama Ruangan: $namaRuangan")
         fetchDataPasien()
         return binding.root
@@ -61,17 +64,35 @@ class KamarDetailModal : Fragment() {
                                 pasienList.add(pasien)
                             }
                         }
-                        setupRecyclerView(pasienList)
+
+                        if (pasienList.isEmpty()) {
+                            showEmptyState()
+                        } else {
+                            showPasienList(pasienList)
+                        }
                         Log.d("KamarDetailModal", "Data Pasien: $pasienList")
                     } else {
+                        showEmptyState()
                         Log.d("KamarDetailModal", "No data found for ruangan: $namaRuangan")
                     }
                 }
 
                 override fun onCancelled(error: DatabaseError) {
                     Log.e("KamarDetailModal", "Firebase error: ${error.message}")
+                    showEmptyState()
                 }
             })
+    }
+
+    private fun showEmptyState() {
+        binding.recyclerViewPasien.visibility = View.GONE
+        binding.emptyStateLayout.visibility = View.VISIBLE
+    }
+
+    private fun showPasienList(pasienList: List<Pasien>) {
+        binding.recyclerViewPasien.visibility = View.VISIBLE
+        binding.emptyStateLayout.visibility = View.GONE
+        setupRecyclerView(pasienList)
     }
 
     private fun setupRecyclerView(pasienList: List<Pasien>) {
@@ -79,14 +100,18 @@ class KamarDetailModal : Fragment() {
         val adapter = PasienAdapter(
             pasienList,
             onPindahRuanganClick = { pasien ->
-                Log.d("PasienAdapter", "Pindah Ruangan clicked for: ${pasien.nama_Pasien}")
-            },
-            onSudahSehatClick = { pasien ->
-                Log.d("PasienAdapter", "Sudah Sehat clicked for: ${pasien.nama_Pasien}")
-            }
+                val dialog = PindahKamar(pasien)
+                dialog.show(parentFragmentManager, "PindahKamarDialog")            }
         )
         binding.recyclerViewPasien.adapter = adapter
     }
+
+    private fun setCurrentFragment(fragment: Fragment) =
+        parentFragmentManager.beginTransaction().apply {
+            replace(R.id.flFragment, fragment)
+            addToBackStack(null)
+            commit()
+        }
 
     companion object {
         fun newInstance(ruangan: Ruangan): KamarDetailModal {

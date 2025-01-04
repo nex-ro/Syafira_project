@@ -14,7 +14,6 @@ import java.util.*
 class PasienAdapter(
     private val pasienList: List<Pasien>,
     private val onPindahRuanganClick: (Pasien) -> Unit,
-    private val onSudahSehatClick: (Pasien) -> Unit
 ) : RecyclerView.Adapter<PasienAdapter.PasienViewHolder>() {
 
     inner class PasienViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -23,7 +22,6 @@ class PasienAdapter(
         val status: TextView = itemView.findViewById(R.id.tvStatus)
         val tanggalMasuk: TextView = itemView.findViewById(R.id.tvTanggalMasuk)
         val btnPindahRuangan: Button = itemView.findViewById(R.id.btnPindahRuangan)
-        val btnSudahSehat: Button = itemView.findViewById(R.id.btnSudahSehat)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PasienViewHolder {
@@ -41,9 +39,7 @@ class PasienAdapter(
         val sdf = SimpleDateFormat("dd-MM-yyyy", Locale.getDefault())
         val date = Date(pasien.tanggal_Masuk?.toLong() ?: 0L)
         holder.tanggalMasuk.text = sdf.format(date)
-
         holder.btnPindahRuangan.setOnClickListener { onPindahRuanganClick(pasien) }
-        holder.btnSudahSehat.setOnClickListener { onSudahSehatClick(pasien) }
     }
 
     override fun getItemCount(): Int = pasienList.size

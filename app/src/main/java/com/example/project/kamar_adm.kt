@@ -1,5 +1,6 @@
 package com.example.project
 
+import TambahKamar
 import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
@@ -15,7 +16,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.project.Data.Ruangan
 import com.example.project.databinding.FragmentKamarAdmBinding
 import com.example.project.kamarPage.AturKamar
-import com.example.project.kamarPage.TambahKamar
 import com.example.project.kamar_admin.Card_kamar_adm
 import com.github.mikephil.charting.data.PieData
 import com.github.mikephil.charting.data.PieDataSet
@@ -37,7 +37,7 @@ class kamar_adm : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        requireActivity().window.statusBarColor = ContextCompat.getColor(requireContext(), R.color.bg)
+        requireActivity().window.statusBarColor = ContextCompat.getColor(requireContext(), R.color.ungu)
 
         _binding = FragmentKamarAdmBinding.inflate(inflater, container, false)
         setupPieChart()
@@ -47,12 +47,13 @@ class kamar_adm : Fragment() {
         ref_ruangan = FirebaseDatabase.getInstance().reference.child("Ruangan")
         fetchRealtimeData()
         binding.buttonTambahPasien.setOnClickListener {
-            val aturKamar = AturKamar()
-            setCurrentFragment(aturKamar)
+            val dialog = AturKamar()
+            dialog.show(parentFragmentManager, "AturKamarDialog")
         }
+        // In kamar_adm.kt
         binding.buttonTambahRuangan.setOnClickListener {
-            val tambahKamar = TambahKamar()
-            setCurrentFragment(tambahKamar)
+            val dialog = TambahKamar()
+            dialog.show(parentFragmentManager, "TambahKamarDialog")
         }
         binding.buttonCari.setOnClickListener {
             val cariPasien = CariPasien()

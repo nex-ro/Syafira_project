@@ -29,7 +29,11 @@ class CariPasien : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentCariPasienBinding.inflate(inflater, container, false)
+        binding.backButton.setOnClickListener(){
+setCurrentFragment(kamar_adm())
+        }
         setupRecyclerView()
+
         setupDatabase()
         setupSearchView()
         setupSpinner()
@@ -139,7 +143,12 @@ class CariPasien : Fragment() {
             }
         })
     }
-
+    private fun setCurrentFragment(fragment: Fragment) =
+        parentFragmentManager.beginTransaction().apply {
+            replace(R.id.flFragment, fragment)
+            addToBackStack(null)
+            commit()
+        }
     private fun filterData(query: String) {
         val selectedPosition = binding.spinnerBulan.selectedItemPosition
 
