@@ -65,27 +65,11 @@ class waktu_tunggu : Fragment() {
         setupBackButton()
         binding.recyclerViewWaktuTunggu.layoutManager = LinearLayoutManager(requireContext())
 
-        chartFragment = WaktuTungguChartFragment()
-        childFragmentManager.beginTransaction()
-            .add(R.id.chartContainer, chartFragment)
-            .commit()
 
-        val viewTypeTabs = binding.root.findViewById<TabLayout>(R.id.tabLayoutViewType)
-        viewTypeTabs.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
-            override fun onTabSelected(tab: TabLayout.Tab?) {
-                if (tab?.text == "Grafik") {
-                    binding.recyclerViewWaktuTunggu.visibility = View.GONE
-                    binding.chartContainer.visibility = View.VISIBLE
-                    chartFragment.updateChartData(filteredList)
-                } else {
-                    binding.recyclerViewWaktuTunggu.visibility = View.VISIBLE
-                    binding.chartContainer.visibility = View.GONE
-                }
-            }
 
-            override fun onTabUnselected(tab: TabLayout.Tab?) {}
-            override fun onTabReselected(tab: TabLayout.Tab?) {}
-        })
+
+
+
     }
 
 
@@ -160,12 +144,8 @@ class waktu_tunggu : Fragment() {
                         (selectedStatus == null || antrian.status == selectedStatus)
             }
         )
-
-        if (binding.chartContainer.visibility == View.VISIBLE) {
-            chartFragment.updateChartData(filteredList)
-        } else {
             binding.recyclerViewWaktuTunggu.adapter = WaktuTungguAdapter(filteredList)
-        }
+
     }
 
     override fun onDestroyView() {
