@@ -52,6 +52,8 @@ class Statistik_Medis : Fragment() {
         }
         setupFilterButtons()
         fetchPatientStatistics(TimeFilter.WEEK)
+        updateFilterButtonsUI() // Ensure the UI reflects the default filter
+        fetchPatientStatistics(currentFilter) // Fetch data for the default filter
         // Fetch waktu tunggu
         fetchWaktuTunggu()
         return binding.root
@@ -101,59 +103,129 @@ class Statistik_Medis : Fragment() {
     private fun fetchWaktuTunggu() {
         database.child("history_antrian").addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
-                Log.d("FirebaseDebug", "Fetching data from history_antrian")
+                val waitingTimes = mutableMapOf<String, Int>()
+
+                // Initialize categories
+                waitingTimes["Radiologi"] = 0
+                waitingTimes["Laboratorium"] = 0
+                waitingTimes["Farmasi"] = 0
 
                 if (snapshot.exists()) {
                     val waktuTungguMap = mutableMapOf<String, MutableList<Int>>()
+
                     snapshot.children.forEach { data ->
                         val kategori = data.child("jenis_ruangan").value.toString()
                         val waktuString = data.child("waktu_tunggu").value.toString().replace(" Menit", "")
                         val waktu = waktuString.toIntOrNull()
 
-
                         if (kategori.isNotBlank() && waktu != null) {
                             waktuTungguMap.putIfAbsent(kategori, mutableListOf())
                             waktuTungguMap[kategori]?.add(waktu)
-                        } else {
-                            Log.w("FirebaseDebug", "Invalid data found: Kategori=$kategori, Waktu=$waktu")
                         }
                     }
 
-                    // Hitung rata-rata dan update UI
+                    // Calculate averages
                     waktuTungguMap.forEach { (kategori, waktuList) ->
-                        val rataRata = if (waktuList.isNotEmpty()) waktuList.average().toInt() else 0
-
-                        updateWaktuTungguUI(kategori, rataRata)
+                        if (waktuList.isNotEmpty()) {
+                            waitingTimes[kategori] = waktuList.average().toInt()
+                        }
                     }
-                } else {
-                    Log.e("FirebaseDebug", "Data history_antrian tidak ditemukan.")
                 }
+
+                updateWaitingTimeChart(waitingTimes)
             }
 
             override fun onCancelled(error: DatabaseError) {
-                Log.e("FirebaseDebug", "Error fetching data: ${error.message}")
                 Toast.makeText(requireContext(), "Error: ${error.message}", Toast.LENGTH_SHORT).show()
             }
         })
     }
+    private fun updateWaitingTimeChart(waitingTimes: Map<String, Int>) {
+        val chart = binding.root.findViewById<BarChart>(R.id.waitingTimeChart)
 
-    private fun updateWaktuTungguUI(kategori: String, rataRata: Int) {
-
-
-        val waktuTextView: TextView? = when (kategori) {
-            "Radiologi" -> binding.root.findViewById(R.id.textRadiologi)
-            "Laboratorium" -> binding.root.findViewById(R.id.textLaboratorium)
-            "Farmasi" -> binding.root.findViewById(R.id.textFarmasi)
-            else -> null
+        // Convert Map data to BarEntries
+        val entries = waitingTimes.entries.mapIndexed { index, entry ->
+            BarEntry(index.toFloat(), entry.value.toFloat())
         }
 
-        if (waktuTextView != null) {
-            waktuTextView.text = "$rataRata Menit"
+        // Create the dataset
+        val barDataSet = BarDataSet(entries, "").apply {  // Remove label from dataset
+            color = resources.getColor(R.color.ungu, null)
+            valueTextSize = 12f
+            valueTextColor = Color.BLACK  // Make value text black for better visibility
+            valueFormatter = object : ValueFormatter() {
+                override fun getFormattedValue(value: Float): String {
+                    return "${value.toInt()},00"  // Format like 19,00
+                }
+            }
+        }
 
-        } else {
-            Log.w("FirebaseDebug", "TextView not found for kategori: $kategori")
+        // Create BarData from the dataset
+        val barData = BarData(barDataSet)
+        barData.barWidth = 0.6f  // Make bars slightly thinner
+
+        // Configure the chart
+        chart.apply {
+            this.data = barData
+
+            description.apply {
+                isEnabled = true
+                text = "Waktu Tunggu (Menit)"  // Move label to description
+                textSize = 12f
+                textColor = Color.BLACK
+                setPosition(width / 2f, 40f)  // Position at top center
+            }
+
+            xAxis.apply {
+                valueFormatter = IndexAxisValueFormatter(waitingTimes.keys.toList())
+                position = XAxis.XAxisPosition.BOTTOM
+                granularity = 1f
+                setDrawGridLines(false)
+                textSize = 11f
+                labelRotationAngle = 0f  // Keep labels horizontal
+            }
+
+            axisLeft.apply {
+                setDrawGridLines(true)
+                gridColor = Color.LTGRAY
+                axisMinimum = 0f
+                axisMaximum = 25f  // Set max value to avoid crowding
+                textSize = 11f
+                valueFormatter = object : ValueFormatter() {
+                    override fun getFormattedValue(value: Float): String {
+                        return value.toInt().toString()
+                    }
+                }
+            }
+
+            axisRight.isEnabled = false
+
+            legend.isEnabled = false  // Disable legend since we use description
+
+            setExtraOffsets(10f, 30f, 10f, 10f)  // Add padding around chart
+
+            setFitBars(true)
+            animateY(1000)
+            invalidate()
         }
     }
+//    private fun updateWaktuTungguUI(kategori: String, rataRata: Int) {
+//
+//
+//        val waktuTextView: TextView? = when (kategori) {
+//            "Radiologi" -> binding.root.findViewById(R.id.textRadiologi)
+//            "Laboratorium" -> binding.root.findViewById(R.id.textLaboratorium)
+//            "Farmasi" -> binding.root.findViewById(R.id.textFarmasi)
+//            else -> null
+//        }
+//
+//        if (waktuTextView != null) {
+//            waktuTextView.text = "$rataRata Menit"
+//
+//        } else {
+//            Log.w("FirebaseDebug", "TextView not found for kategori: $kategori")
+//        }
+//    }
 
     private fun updateUI(roomjenis: String, roomStatus: String) {
         // Ensure _binding is not null to prevent crashes
@@ -188,39 +260,13 @@ class Statistik_Medis : Fragment() {
         }
     }
 
-//    private fun setupBarChart(dataMap: Map<String, Int>) {
-//        // Definisikan kategori pasien
-//        val categories = listOf("Rawat Jalan", "Rawat Inap")
-//
-//        // Map kategori menjadi BarEntry
-//        val entries = dataMap.map {
-//            val index = categories.indexOf(it.key).toFloat() // Ambil indeks kategori
-//            BarEntry(index, it.value.toFloat()) // Masukkan nilai ke BarEntry
-//        }
-//
-//        // Set data pada grafik batang
-//        val barDataSet = BarDataSet(entries, "Jumlah Pasien")
-//        barDataSet.colors = ColorTemplate.MATERIAL_COLORS.toList() // Warna grafik
-//        barDataSet.valueTextSize = 12f
-//
-//        val barData = BarData(barDataSet)
-//        binding.root.findViewById<BarChart>(R.id.barChart).apply {
-//            data = barData
-//            description.text = "Status Pasien"
-//            xAxis.apply {
-//                granularity = 1f // Pastikan nilai X teratur
-//                valueFormatter = IndexAxisValueFormatter(categories) // Tampilkan nama kategori
-//            }
-//            animateY(1000)
-//            invalidate() // Refresh grafik
-//        }
-//    }
 
     private enum class TimeFilter {
         WEEK, MONTH, YEAR
     }
 
     private var currentFilter = TimeFilter.WEEK
+
     private fun setupFilterButtons() {
         binding.weekButton.apply {
             setOnClickListener {
@@ -246,6 +292,7 @@ class Statistik_Medis : Fragment() {
             }
         }
     }
+
 
     private fun updateFilterButtonsUI() {
         // Update button states based on selected filter
@@ -388,6 +435,8 @@ class Statistik_Medis : Fragment() {
                 }
                 textSize = 12f
                 textColor = resources.getColor(R.color.ungu, null)
+                // Set position to the upper-right corner
+                setPosition(width - 10f, 140f) // Adjust based on your chart's dimensions
             }
 
             xAxis.apply {
@@ -436,57 +485,8 @@ class Statistik_Medis : Fragment() {
         }
     }
 
-    // Fungsi untuk mengonversi timestamp ke string tanggal
-    private fun convertTimestampToDate(timestamp: Long): String {
-        val formatter = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
-        val calendar = Calendar.getInstance()
-        calendar.timeInMillis = timestamp
-        return formatter.format(calendar.time)
-    }
 
-    private fun isWithinLastWeek(dateString: String): Boolean {
-        val formatter = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
-        return try {
-            val date = formatter.parse(dateString)
-            val calendar = Calendar.getInstance()
-            val today = calendar.time
-            calendar.add(Calendar.DAY_OF_YEAR, -7)
-            val lastWeek = calendar.time
 
-            date != null && date.after(lastWeek) && date.before(today)
-        } catch (e: ParseException) {
-            false
-        }
-    }
-
-//    private fun setupLineChart(dataMap: Map<String, Int>) {
-//        val entries = dataMap.entries.mapIndexed { index, entry ->
-//            Entry(index.toFloat(), entry.value.toFloat())
-//        }
-//
-//        val lineDataSet = LineDataSet(entries, "Jumlah Pasien")
-//        lineDataSet.color = ColorTemplate.COLORFUL_COLORS[0]
-//        lineDataSet.valueTextSize = 10f
-//        lineDataSet.setCircleColor(ColorTemplate.COLORFUL_COLORS[0])
-//
-//        val lineData = LineData(lineDataSet)
-//
-//        val lineChart = binding.root.findViewById<LineChart>(R.id.lineChart)
-//        if (lineChart != null) {
-//            lineChart.apply {
-//                data = lineData
-//                description.text = "Jumlah Pasien Selama 1 Minggu"
-//                xAxis.apply {
-//                    granularity = 1f
-//                    valueFormatter = IndexAxisValueFormatter(dataMap.keys.toList())
-//                }
-//                animateX(1500)
-//                invalidate()
-//            }
-//        } else {
-//            Log.e("LineChartError", "LineChart view is null")
-//        }
-//    }
     private fun setCurrentFragment(fragment: Fragment) =
         parentFragmentManager.beginTransaction().apply {
             replace(R.id.flFragment, fragment)
