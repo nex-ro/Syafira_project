@@ -19,6 +19,8 @@
         <item>December</item>
     </string-array>
     <string name="prompt_pilih_penyakit">Pilih Penyakit</string>
+    <string name="filter_jenis_ruangan">Pilih Jenis Ruangan</string>
+    <string name="filter_status">Pilih Status</string>
 
     <string-array name="penyakit_umum">
         <item>Demam</item>

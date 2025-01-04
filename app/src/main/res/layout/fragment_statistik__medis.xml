@@ -167,17 +167,16 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:textStyle="bold"
                     android:text="Radiologi"
-
-                    android:textSize="14sp" />
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
 
                 <TextView
+                    android:id="@+id/textRadiologi"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="15 Menit"
+                    android:text="Uknwon"
                     android:background="@drawable/bar_chart_background"
-
                     android:textSize="12sp" />
             </LinearLayout>
 
@@ -191,17 +190,16 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:textStyle="bold"
                     android:text="Laboratorium"
-
-                    android:textSize="14sp" />
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
 
                 <TextView
+                    android:id="@+id/textLaboratorium"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="20 Menit"
+                    android:text="Uknwon"
                     android:background="@drawable/bar_chart_background"
-
                     android:textSize="12sp" />
             </LinearLayout>
 
@@ -212,20 +210,19 @@
                 android:layout_marginTop="4dp">
 
                 <TextView
-                    android:layout_width="147dp"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="Farmasi"
                     android:textSize="14sp"
-
                     android:textStyle="bold" />
 
                 <TextView
+                    android:id="@+id/textFarmasi"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="25 Menit"
+                    android:text="Uknwon"
                     android:background="@drawable/bar_chart_background"
-
                     android:textSize="12sp" />
             </LinearLayout>
         </LinearLayout>
