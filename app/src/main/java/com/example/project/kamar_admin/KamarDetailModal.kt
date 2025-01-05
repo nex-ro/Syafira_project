@@ -20,6 +20,7 @@ class KamarDetailModal : Fragment() {
     private lateinit var idRuangan: String
     private var nomorRuangan: Int = 0
     private lateinit var jenis: String
+    private lateinit var listener: ValueEventListener
     private lateinit var namaRuangan: String
     private lateinit var status: String
     private var lantai: Int = 0
@@ -48,13 +49,47 @@ class KamarDetailModal : Fragment() {
 
         ref_pasien = FirebaseDatabase.getInstance().reference.child("pasien")
         Log.d("KamarDetailModal", "Nama Ruangan: $namaRuangan")
-        fetchDataPasien()
+
+        // Inisialisasi listener
+        listener = object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                if (snapshot.exists()) {
+                    val pasienList = mutableListOf<Pasien>()
+                    for (data in snapshot.children) {
+                        val pasien = data.getValue(Pasien::class.java)
+                        if (pasien != null) {
+                            pasienList.add(pasien)
+                        }
+                    }
+
+                    if (pasienList.isEmpty()) {
+                        showEmptyState()
+                    } else {
+                        showPasienList(pasienList)
+                    }
+                    Log.d("KamarDetailModal", "Data Pasien: $pasienList")
+                } else {
+                    showEmptyState()
+                    Log.d("KamarDetailModal", "No data found for ruangan: $namaRuangan")
+                }
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                Log.e("KamarDetailModal", "Firebase error: ${error.message}")
+                showEmptyState()
+            }
+        }
+
+        // Pasang listener ke referensi Firebase
+        ref_pasien.orderByChild("nama_Ruangan").equalTo(namaRuangan).addValueEventListener(listener)
+
         return binding.root
     }
 
+
     private fun fetchDataPasien() {
         ref_pasien.orderByChild("nama_Ruangan").equalTo(namaRuangan)
-            .addListenerForSingleValueEvent(object : ValueEventListener {
+            .addValueEventListener(object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
                     if (snapshot.exists()) {
                         val pasienList = mutableListOf<Pasien>()
@@ -112,6 +147,10 @@ class KamarDetailModal : Fragment() {
             addToBackStack(null)
             commit()
         }
+    override fun onDestroyView() {
+        super.onDestroyView()
+        ref_pasien.removeEventListener(listener)
+    }
 
     companion object {
         fun newInstance(ruangan: Ruangan): KamarDetailModal {

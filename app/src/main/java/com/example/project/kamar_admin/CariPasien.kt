@@ -128,7 +128,7 @@ setCurrentFragment(kamar_adm())
                 fullHistoryList.clear()
                 snapshot.children.forEach { data ->
                     data.getValue(History::class.java)?.let { history ->
-                        if (history.tanggal_Masuk != 0L) {
+                        if (history.tanggal_Keluar != 0L) {
                             fullHistoryList.add(history)
                         }
                     }
@@ -156,8 +156,8 @@ setCurrentFragment(kamar_adm())
             val matchesSearch = history.nama?.contains(query, ignoreCase = true) == true
             val matchesDate = when {
                 selectedPosition == 0 -> true // All time
-                selectedPosition == 1 -> isToday(history.tanggal_Masuk) // Today
-                else -> isInMonth(history.tanggal_Masuk, selectedPosition - 1) // Months (adjusted for new spinner positions)
+                selectedPosition == 1 -> isToday(history.tanggal_Keluar) // Today
+                else -> isInMonth(history.tanggal_Keluar, selectedPosition - 1) // Months (adjusted for new spinner positions)
             }
             matchesSearch && matchesDate
         }

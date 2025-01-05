@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import android.widget.Toast
 import androidx.fragment.app.DialogFragment
 import com.example.project.Data.History
 import com.example.project.Data.Pasien
@@ -48,14 +49,17 @@ class PindahKamar(private val pasien: Pasien) : DialogFragment() {
         binding.editTextNamaPasien.setText(pasien.nama_Pasien)
         binding.editTextPenyakit.setText(pasien.penyakit)
 
-        binding.editTextNamaPasien.isEnabled = false // Disable name editing
+        binding.editTextNamaPasien.isEnabled = false
         binding.editTextPenyakit.hint = "Penyakit (${pasien.penyakit})"
     }
 
     private fun setupStatusSpinner() {
         val statusOptions = arrayOf("Rawat Jalan", "Rawat Darurat", "Rawat Inap")
-        val statusAdapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item,
-            statusOptions.map { "$it ${if (it == pasien.status) "(Kondisi Saat Ini)" else ""}" })
+        val statusAdapter = ArrayAdapter(
+            requireContext(),
+            android.R.layout.simple_spinner_item,
+            statusOptions.map { "$it ${if (it == pasien.status) "(Kondisi Saat Ini)" else ""}" }
+        )
         statusAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
 
         binding.spinnerJenisPasien.adapter = statusAdapter
@@ -69,7 +73,12 @@ class PindahKamar(private val pasien: Pasien) : DialogFragment() {
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                 val selectedStatus = statusOptions[position]
                 when (selectedStatus) {
-                    "Rawat Jalan" -> binding.spinnerKamar.visibility = View.GONE
+                    "Rawat Jalan" -> {
+                        binding.spinnerKamar.visibility = View.GONE
+                        if (pasien.status != "Rawat Jalan") {
+                            handleStatusChangeToRawatJalan()
+                        }
+                    }
                     "Rawat Darurat" -> {
                         binding.spinnerKamar.visibility = View.VISIBLE
                         loadRuangan(isEmergency = true)
@@ -113,6 +122,7 @@ class PindahKamar(private val pasien: Pasien) : DialogFragment() {
             }
 
             override fun onCancelled(error: DatabaseError) {
+                Toast.makeText(requireContext(), "Gagal memuat ruangan: ${error.message}", Toast.LENGTH_SHORT).show()
                 val errorAdapter = ArrayAdapter(
                     requireContext(),
                     android.R.layout.simple_spinner_item,
@@ -152,14 +162,76 @@ class PindahKamar(private val pasien: Pasien) : DialogFragment() {
             binding.spinnerKamar.setSelection(currentRoomIndex)
         }
     }
+
+    private fun handleStatusChangeToRawatJalan() {
+        database.child("pasien")
+            .orderByChild("nama_Pasien")
+            .equalTo(pasien.nama_Pasien)
+            .addListenerForSingleValueEvent(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    val patientKey = snapshot.children.firstOrNull()?.key
+                    if (patientKey != null) {
+                        moveToHistory(patientKey)
+                    }
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+                    Toast.makeText(requireContext(), "Gagal mengubah status: ${error.message}", Toast.LENGTH_SHORT).show()
+                }
+            })
+    }
+
+    private fun moveToHistory(patientKey: String) {
+        val currentTime = System.currentTimeMillis()
+
+        val historyEntry = History(
+            nama = pasien.nama_Pasien,
+            penyakit = binding.editTextPenyakit.text.toString(),
+            tanggal_Masuk = pasien.tanggal_Masuk ?: currentTime,
+            tanggal_Keluar = currentTime,
+        )
+
+        database.child("history")
+            .push()
+            .setValue(historyEntry)
+            .addOnSuccessListener {
+                Toast.makeText(requireContext(), "Pasien berhasil dipindahkan ke riwayat.", Toast.LENGTH_SHORT).show()
+                if (pasien.nama_Ruangan != null) {
+                    updateOldRoom {
+                        removePatientAndFinish(patientKey)
+                    }
+                } else {
+                    removePatientAndFinish(patientKey)
+                }
+            }
+            .addOnFailureListener { exception ->
+                Toast.makeText(requireContext(), "Gagal memindahkan ke riwayat: ${exception.message}", Toast.LENGTH_SHORT).show()
+            }
+    }
+
+    private fun removePatientAndFinish(patientKey: String) {
+        database.child("pasien")
+            .child(patientKey)
+            .removeValue()
+            .addOnSuccessListener {
+                Toast.makeText(requireContext(), "Pasien berhasil dihapus.", Toast.LENGTH_SHORT).show()
+                dismiss()
+            }
+            .addOnFailureListener { exception ->
+                Toast.makeText(requireContext(), "Gagal menghapus pasien: ${exception.message}", Toast.LENGTH_SHORT).show()
+            }
+    }
+
     override fun onStart() {
         super.onStart()
         val width = (resources.displayMetrics.widthPixels * 0.85).toInt()
         val height = ViewGroup.LayoutParams.WRAP_CONTENT
         dialog?.window?.setLayout(width, height)
     }
+
     private fun setupButtons() {
         binding.buttonBatal.setOnClickListener {
+            Toast.makeText(requireContext(), "Operasi dibatalkan.", Toast.LENGTH_SHORT).show()
             dismiss()
         }
 
@@ -170,124 +242,146 @@ class PindahKamar(private val pasien: Pasien) : DialogFragment() {
 
     private fun updateData() {
         val selectedStatus = binding.spinnerJenisPasien.selectedItem.toString().split(" (")[0]
-        val patientRef = database.child("pasien").child(pasien.nama_Pasien ?: "")
         val newPenyakit = binding.editTextPenyakit.text.toString()
 
-        when (selectedStatus) {
-            "Rawat Jalan" -> {
-                // Create history record for outpatient
-                val history = History(
-                    nama = pasien.nama_Pasien,
-                    penyakit = newPenyakit,
-                    tanggal_Masuk = pasien.tanggal_Masuk ?: 0L,
-                    tanggal_Keluar = System.currentTimeMillis()
-                )
+        database.child("pasien")
+            .orderByChild("nama_Pasien")
+            .equalTo(pasien.nama_Pasien)
+            .addListenerForSingleValueEvent(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    val patientKey = snapshot.children.firstOrNull()?.key
+                    if (patientKey != null) {
+                        when (selectedStatus) {
+                            "Rawat Jalan" -> moveToHistory(patientKey)
+                            else -> handleOtherStatus(patientKey, selectedStatus, newPenyakit)
+                        }
+                    }
+                }
 
-                // Update the old room first
+                override fun onCancelled(error: DatabaseError) {
+                    Toast.makeText(requireContext(), "Gagal memperbarui data: ${error.message}", Toast.LENGTH_SHORT).show()
+                }
+            })
+    }
+
+    private fun handleOtherStatus(patientKey: String, selectedStatus: String, newPenyakit: String) {
+        if (binding.spinnerKamar.visibility == View.VISIBLE && ruanganList.isEmpty()) {
+            Toast.makeText(requireContext(), "Ruangan tidak tersedia untuk status ini.", Toast.LENGTH_SHORT).show()
+            return
+        }
+
+        val updates = mutableMapOf<String, Any>(
+            "penyakit" to newPenyakit,
+            "status" to selectedStatus
+        )
+
+        if (binding.spinnerKamar.visibility == View.VISIBLE) {
+            val selectedRuangan = ruanganList[binding.spinnerKamar.selectedItemPosition]
+
+            if (selectedRuangan.nama_Ruangan != pasien.nama_Ruangan) {
+                updates["nama_Ruangan"] = selectedRuangan.nama_Ruangan ?: ""
+
                 updateOldRoom {
-                    // Save to history and remove from active patients
-                    database.child("history").push().setValue(history).addOnSuccessListener {
-                        // Remove patient data after successfully creating history
-                        patientRef.removeValue().addOnSuccessListener {
-                            dismiss()
-                        }
-                    }
-                }
-            }
-            else -> {
-                if (binding.spinnerKamar.visibility == View.VISIBLE && ruanganList.isEmpty()) {
-                    return
-                }
-
-                // Create updates map for patient data
-                val updates = mutableMapOf<String, Any>(
-                    "penyakit" to newPenyakit,
-                    "status" to selectedStatus
-                )
-
-                // Only update room if visible and selected
-                if (binding.spinnerKamar.visibility == View.VISIBLE) {
-                    val selectedRuangan = ruanganList[binding.spinnerKamar.selectedItemPosition]
-
-                    if (selectedRuangan.nama_Ruangan != pasien.nama_Ruangan) {
-                        updates["nama_Ruangan"] = selectedRuangan.nama_Ruangan ?: ""
-
-                        // Update both old and new rooms
-                        updateOldRoom {
-                            updateNewRoom(selectedRuangan) {
-                                // Update patient data after rooms are updated
-                                patientRef.updateChildren(updates).addOnSuccessListener {
-                                    dismiss()
-                                }
+                    updateNewRoom(selectedRuangan) {
+                        database.child("pasien")
+                            .child(patientKey)
+                            .updateChildren(updates)
+                            .addOnSuccessListener {
+                                Toast.makeText(requireContext(), "Data pasien berhasil diperbarui.", Toast.LENGTH_SHORT).show()
+                                dismiss()
                             }
-                        }
-                    } else {
-                        // Just update patient data if room hasn't changed
-                        patientRef.updateChildren(updates).addOnSuccessListener {
-                            dismiss()
-                        }
                     }
-                } else {
-                    // Update patient data without room changes
-                    patientRef.updateChildren(updates).addOnSuccessListener {
+                }
+            } else {
+                database.child("pasien")
+                    .child(patientKey)
+                    .updateChildren(updates)
+                    .addOnSuccessListener {
+                        Toast.makeText(requireContext(), "Data pasien berhasil diperbarui.", Toast.LENGTH_SHORT).show()
                         dismiss()
                     }
-                }
             }
+        } else {
+            database.child("pasien")
+                .child(patientKey)
+                .updateChildren(updates)
+                .addOnSuccessListener {
+                    Toast.makeText(requireContext(), "Data pasien berhasil diperbarui.", Toast.LENGTH_SHORT).show()
+                    dismiss()
+                }
         }
     }
+
     private fun updateOldRoom(onComplete: () -> Unit = {}) {
         if (pasien.nama_Ruangan == null) {
             onComplete()
             return
         }
 
-        database.child("ruangan")
+        database.child("Ruangan")
             .orderByChild("nama_Ruangan")
             .equalTo(pasien.nama_Ruangan)
             .addListenerForSingleValueEvent(object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
-                    snapshot.children.forEach { ruanganSnapshot ->
-                        val ruangan = ruanganSnapshot.getValue(Ruangan::class.java)
+                    val roomKey = snapshot.children.firstOrNull()?.key
+                    if (roomKey != null) {
+                        val ruangan = snapshot.children.first().getValue(Ruangan::class.java)
                         ruangan?.let {
                             val newIsi = (it.isi ?: 1) - 1
                             val updates = hashMapOf<String, Any>(
                                 "isi" to newIsi,
                                 "status" to if (newIsi == 0) "kosong" else "terisi"
                             )
-                            ruanganSnapshot.ref.updateChildren(updates).addOnSuccessListener {
-                                onComplete()
-                            }
+                            database.child("Ruangan")
+                                .child(roomKey)
+                                .updateChildren(updates)
+                                .addOnSuccessListener {
+                                    Toast.makeText(requireContext(), "Ruangan lama berhasil diperbarui.", Toast.LENGTH_SHORT).show()
+                                    onComplete()
+                                }
                         }
+                    } else {
+                        Toast.makeText(requireContext(), "Ruangan lama tidak ditemukan.", Toast.LENGTH_SHORT).show()
                     }
                 }
+
                 override fun onCancelled(error: DatabaseError) {
-                    onComplete()
+                    Toast.makeText(requireContext(), "Gagal memperbarui ruangan lama: ${error.message}", Toast.LENGTH_SHORT).show()
                 }
             })
     }
-    private fun updateNewRoom(selectedRuangan: Ruangan, onComplete: () -> Unit = {}) {
-        database.child("ruangan")
+
+    private fun updateNewRoom(newRuangan: Ruangan, onComplete: () -> Unit = {}) {
+        database.child("Ruangan")
             .orderByChild("nama_Ruangan")
-            .equalTo(selectedRuangan.nama_Ruangan)
+            .equalTo(newRuangan.nama_Ruangan)
             .addListenerForSingleValueEvent(object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
-                    snapshot.children.forEach { ruanganSnapshot ->
-                        val ruangan = ruanganSnapshot.getValue(Ruangan::class.java)
+                    val roomKey = snapshot.children.firstOrNull()?.key
+                    if (roomKey != null) {
+                        val ruangan = snapshot.children.first().getValue(Ruangan::class.java)
                         ruangan?.let {
                             val newIsi = (it.isi ?: 0) + 1
                             val updates = hashMapOf<String, Any>(
                                 "isi" to newIsi,
                                 "status" to if (newIsi >= (it.kapasitas ?: 1)) "penuh" else "terisi"
                             )
-                            ruanganSnapshot.ref.updateChildren(updates).addOnSuccessListener {
-                                onComplete()
-                            }
+                            database.child("Ruangan")
+                                .child(roomKey)
+                                .updateChildren(updates)
+                                .addOnSuccessListener {
+                                    Toast.makeText(requireContext(), "Ruangan baru berhasil diperbarui.", Toast.LENGTH_SHORT).show()
+                                    onComplete()
+                                }
                         }
+                    } else {
+                        Toast.makeText(requireContext(), "Ruangan baru tidak ditemukan.", Toast.LENGTH_SHORT).show()
                     }
                 }
+
                 override fun onCancelled(error: DatabaseError) {
-                    onComplete()
+                    Toast.makeText(requireContext(), "Gagal memperbarui ruangan baru: ${error.message}", Toast.LENGTH_SHORT).show()
                 }
             })
-    }}
+    }
+}
