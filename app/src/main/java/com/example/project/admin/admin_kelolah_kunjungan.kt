@@ -164,8 +164,6 @@ class admin_kelolah_kunjungan : Fragment() {
 
         try {
             showLoading()
-
-            // Langsung update menggunakan path yang benar
             val kunjunganRef = databaseReference.child("Kunjungan")
 
             // 1. Pertama, cari data berdasarkan id_pengunjung untuk mendapatkan push ID
