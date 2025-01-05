@@ -15,7 +15,7 @@
     <color name="colorAccent">#FFFFFFFF</color>
     <color name="pink">#DC89CB</color>
     <color name="lavender">#A592FF</color>
-
+    <color name="notification_badge">#F44336</color>
 
     <color name="green">#28a745</color>
     <color name="red">#E91E2F</color>
