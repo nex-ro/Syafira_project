@@ -32,6 +32,7 @@ class laporan_medis : Fragment() {
     private val jenisList = listOf("Semua Jenis", "VVIP", "VIP", "Kelas I", "Kelas II", "Kelas III", "Laboratorium", "ICU", "HCU")
     private var selectedJenis: String = "Semua Jenis"
     private var selectedPenyakit: String = "Semua Penyakit"
+    private var pasienListener: ValueEventListener? = null
 
 
     override fun onCreateView(
@@ -65,6 +66,9 @@ class laporan_medis : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+        if (pasienListener != null) {
+            database.removeEventListener(pasienListener!!)
+        }
     }
 
 
@@ -196,15 +200,15 @@ class laporan_medis : Fragment() {
 
 
     private fun fetchPasienData(ruanganMap: Map<String, String>) {
-        database.addValueEventListener(object : ValueEventListener {
+        pasienListener = object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
+                if (_binding == null) return // Check if the view is still active
+
                 laporanList.clear()
                 snapshot.children.forEach { data ->
                     val laporan = data.getValue(Laporan_Penanganan::class.java)
-                    Log.d("FetchData", "Laporan: $laporan") // Log data laporan
                     laporan?.let {
                         val namaRuangan = it.nama_Ruangan?.lowercase(Locale.getDefault()) ?: ""
-                        Log.d("MappingRuangan", "Nama Ruangan: $namaRuangan -> Jenis: ${ruanganMap[namaRuangan]}")
                         it.jenis = ruanganMap[namaRuangan] ?: "Tidak diketahui"
                         laporanList.add(it)
                     }
@@ -212,18 +216,21 @@ class laporan_medis : Fragment() {
                 filterLaporan()
             }
 
-
-
             override fun onCancelled(error: DatabaseError) {
-                Toast.makeText(requireContext(), "Gagal memuat data pasien: ${error.message}", Toast.LENGTH_SHORT).show()
+                if (_binding != null) {
+                    Toast.makeText(requireContext(), "Gagal memuat data pasien: ${error.message}", Toast.LENGTH_SHORT).show()
+                }
             }
-        })
+        }
+
+        database.addValueEventListener(pasienListener!!)
     }
 
 
 
     // Modifikasi fungsi filter utama
     private fun filterLaporan() {
+        if (_binding == null) return // Avoid accessing binding if the view is destroyed
         val query = binding.searchBar.text.toString().trim().lowercase(Locale.getDefault())
         filteredList.clear()
         filteredList.addAll(laporanList.filter { laporan ->
@@ -234,12 +241,6 @@ class laporan_medis : Fragment() {
         })
         adapter.notifyDataSetChanged()
     }
-
-
-
-
-
-
 
     private fun filterLaporanByJenis(jenis: String) {
         selectedJenis = jenis

@@ -6,44 +6,62 @@
     android:layout_marginBottom="12dp"
     android:backgroundTint="@android:color/white"
     app:cardCornerRadius="8dp">
-<LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:padding="16dp">
-    <TextView
-        android:id="@+id/tvNamaPasien"
-        android:layout_width="wrap_content"
+
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Nama Pasien"
-        android:textStyle="bold" />
+        android:orientation="vertical"
+        android:padding="16dp">
 
-    <TextView
-        android:id="@+id/tvPenyakit"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Penyakit" />
+        <TextView
+            android:id="@+id/tvNamaPasien"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Nama Pasien"
+            android:textStyle="bold" />
 
-    <TextView
-        android:id="@+id/tvStatus"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Status" />
+        <TextView
+            android:id="@+id/tvPenyakit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Penyakit" />
 
-    <TextView
-        android:id="@+id/tvTanggalMasuk"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Tanggal Masuk" />
+        <TextView
+            android:id="@+id/tvStatus"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Status" />
 
-    <Button
-        android:id="@+id/btnPindahRuangan"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textColor="@color/white"
-        android:backgroundTint="@color/biru"
+        <TextView
+            android:id="@+id/tvTanggalMasuk"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Tanggal Masuk" />
 
-        android:text="Pindah Ruangan" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="8dp">
 
-</LinearLayout>
+            <Button
+                android:id="@+id/btnPindahRuangan"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/white"
+                android:backgroundTint="@color/biru"
+                android:layout_marginEnd="8dp"
+                android:text="Pindah Ruangan" />
+
+            <Button
+                android:id="@+id/btnPerluPerhatian"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/white"
+                android:backgroundTint="@color/red"
+                android:text="Perlu Perhatian" />
+
+        </LinearLayout>
+
+    </LinearLayout>
 </androidx.cardview.widget.CardView>
