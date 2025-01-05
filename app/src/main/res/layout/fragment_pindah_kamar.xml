@@ -13,7 +13,7 @@
         android:layout_height="wrap_content"
         android:padding="16dp">
 
-        <!-- Title -->
+        <!-- Title Text -->
         <TextView
             android:id="@+id/titleText"
             android:layout_width="match_parent"
@@ -21,96 +21,69 @@
             android:text="Pindah Kamar"
             android:textSize="20sp"
             android:textStyle="bold"
-            android:textColor="@color/ungu"
             android:gravity="center"
             android:layout_marginBottom="16dp"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />
 
-        <!-- Nama Pasien Label -->
-        <TextView
-            android:id="@+id/labelNamaPasien"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Nama Pasien"
-            android:textColor="@color/black"
-            android:textStyle="bold"
-            android:layout_marginTop="16dp"
-            app:layout_constraintTop_toBottomOf="@id/titleText"
-            app:layout_constraintStart_toStartOf="parent"/>
-
-        <!-- Nama Pasien Value -->
-        <TextView
-            android:id="@+id/textNamaPasien"
+        <!-- Nama Pasien Input -->
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/namaPasienLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="@color/black"
-            android:layout_marginTop="4dp"
-            app:layout_constraintTop_toBottomOf="@id/labelNamaPasien"/>
-
-        <!-- Penyakit Label -->
-        <TextView
-            android:id="@+id/labelPenyakit"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Penyakit"
-            android:textColor="@color/black"
-            android:textStyle="bold"
             android:layout_marginTop="16dp"
-            app:layout_constraintTop_toBottomOf="@id/textNamaPasien"
-            app:layout_constraintStart_toStartOf="parent"/>
+            app:boxBackgroundMode="outline"
+            app:cardCornerRadius="16dp"
+            app:boxBackgroundColor="@android:color/white"
+            app:boxStrokeColor="@color/bg"
+            app:hintTextColor="@color/bg"
+            app:layout_constraintTop_toBottomOf="@id/titleText">
 
-        <!-- Penyakit Value -->
-        <TextView
-            android:id="@+id/textPenyakit"
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/editTextNamaPasien"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Nama Pasien" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!-- Penyakit Input -->
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/penyakitLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="@color/black"
-            android:layout_marginTop="4dp"
-            app:layout_constraintTop_toBottomOf="@id/labelPenyakit"/>
+            android:layout_marginTop="8dp"
+            app:boxBackgroundMode="outline"
+            app:cardCornerRadius="16dp"
+            app:boxBackgroundColor="@android:color/white"
+            app:boxStrokeColor="@color/bg"
+            app:hintTextColor="@color/bg"
+            app:layout_constraintTop_toBottomOf="@id/namaPasienLayout">
 
-        <!-- Kamar Saat Ini Label -->
-        <TextView
-            android:id="@+id/labelKamarSekarang"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Kamar Saat Ini"
-            android:textColor="@color/black"
-            android:textStyle="bold"
-            android:layout_marginTop="16dp"
-            app:layout_constraintTop_toBottomOf="@id/textPenyakit"
-            app:layout_constraintStart_toStartOf="parent"/>
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/editTextPenyakit"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Penyakit" />
+        </com.google.android.material.textfield.TextInputLayout>
 
-        <!-- Kamar Saat Ini Value -->
-        <TextView
-            android:id="@+id/textKamarSekarang"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textColor="@color/black"
-            android:layout_marginTop="4dp"
-            app:layout_constraintTop_toBottomOf="@id/labelKamarSekarang"/>
-
-        <!-- Pilih Kamar Baru Label -->
-        <TextView
-            android:id="@+id/labelKamarBaru"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Pilih Kamar Baru"
-            android:textColor="@color/black"
-            android:textStyle="bold"
-            android:layout_marginTop="16dp"
-            app:layout_constraintTop_toBottomOf="@id/textKamarSekarang"
-            app:layout_constraintStart_toStartOf="parent"/>
-
-        <!-- Spinner Kamar Baru -->
+        <!-- Spinner Jenis Pasien -->
         <Spinner
-            android:id="@+id/spinnerKamarBaru"
+            android:id="@+id/spinnerJenisPasien"
             android:layout_width="match_parent"
             android:layout_height="48dp"
-            android:layout_marginTop="4dp"
-            android:background="@drawable/spinner_bg"
-            app:layout_constraintTop_toBottomOf="@id/labelKamarBaru"/>
+            android:layout_marginTop="16dp"
+            app:layout_constraintTop_toBottomOf="@id/penyakitLayout"
+            android:background="@drawable/spinner_bg" />
+
+        <!-- Spinner Kamar -->
+        <Spinner
+            android:id="@+id/spinnerKamar"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_marginTop="16dp"
+            app:layout_constraintTop_toBottomOf="@id/spinnerJenisPasien"
+            android:background="@drawable/spinner_bg" />
 
         <!-- Buttons -->
         <LinearLayout
@@ -118,8 +91,8 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:gravity="end"
-            android:layout_marginTop="24dp"
-            app:layout_constraintTop_toBottomOf="@id/spinnerKamarBaru">
+            android:layout_marginTop="16dp"
+            app:layout_constraintTop_toBottomOf="@id/spinnerKamar">
 
             <Button
                 android:id="@+id/buttonBatal"
@@ -137,7 +110,7 @@
                 android:layout_height="wrap_content"
                 android:backgroundTint="@color/green"
                 android:textColor="@color/white"
-                android:text="Simpan" />
+                android:text="Submit" />
         </LinearLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
