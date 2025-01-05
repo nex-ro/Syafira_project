@@ -164,21 +164,37 @@ class PindahKamar(private val pasien: Pasien) : DialogFragment() {
     }
 
     private fun handleStatusChangeToRawatJalan() {
-        database.child("pasien")
-            .orderByChild("nama_Pasien")
-            .equalTo(pasien.nama_Pasien)
-            .addListenerForSingleValueEvent(object : ValueEventListener {
-                override fun onDataChange(snapshot: DataSnapshot) {
-                    val patientKey = snapshot.children.firstOrNull()?.key
-                    if (patientKey != null) {
-                        moveToHistory(patientKey)
+        try {
+            database.child("pasien")
+                .orderByChild("nama_Pasien")
+                .equalTo(pasien.nama_Pasien)
+                .addListenerForSingleValueEvent(object : ValueEventListener {
+                    override fun onDataChange(snapshot: DataSnapshot) {
+                        try {
+                            val patientKey = snapshot.children.firstOrNull()?.key
+                            if (patientKey != null) {
+                                if (pasien.nama_Ruangan != null) {
+                                    updateOldRoom {
+                                        moveToHistory(patientKey)
+                                    }
+                                } else {
+                                    moveToHistory(patientKey)
+                                }
+                            } else {
+                                Toast.makeText(requireContext(), "Pasien tidak ditemukan.", Toast.LENGTH_SHORT).show()
+                            }
+                        } catch (e: Exception) {
+                            Toast.makeText(requireContext(), "Error: ${e.message}", Toast.LENGTH_SHORT).show()
+                        }
                     }
-                }
 
-                override fun onCancelled(error: DatabaseError) {
-                    Toast.makeText(requireContext(), "Gagal mengubah status: ${error.message}", Toast.LENGTH_SHORT).show()
-                }
-            })
+                    override fun onCancelled(error: DatabaseError) {
+                        Toast.makeText(requireContext(), "Gagal mengubah status: ${error.message}", Toast.LENGTH_SHORT).show()
+                    }
+                })
+        } catch (e: Exception) {
+            Toast.makeText(requireContext(), "Error: ${e.message}", Toast.LENGTH_SHORT).show()
+        }
     }
 
     private fun moveToHistory(patientKey: String) {
