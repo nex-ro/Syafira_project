@@ -2,24 +2,39 @@ package com.example.project.user.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.example.project.Data.Pasien
+import com.example.project.Pop_up
 import com.example.project.databinding.CardCariPasienBinding
+import android.content.SharedPreferences
 
 class PatientAdapter(
-    private var patientList: MutableList<Pasien>,
-    private val onItemClick: (Pasien) -> Unit
+    private val patientList: MutableList<Pasien>,
+    private val sharedPreferences: SharedPreferences,
+    private val showPatientDetail: (Pasien) -> Unit
 ) : RecyclerView.Adapter<PatientAdapter.PatientViewHolder>() {
 
     inner class PatientViewHolder(private val binding: CardCariPasienBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
         fun bind(patient: Pasien) {
-            binding.namaPasien.text = patient.nama_Pasien
-            binding.ruangPasien.text = patient.nama_Ruangan
+            with(binding) {
+                namaPasien.text = patient.nama_Pasien
+                ruangPasien.text = patient.nama_Ruangan
 
-            itemView.setOnClickListener {
-                onItemClick(patient)
+                root.setOnClickListener {
+                    val isLoggedIn = sharedPreferences.getBoolean("isLoggedIn", false)
+                    if (isLoggedIn) {
+                        showPatientDetail(patient) // Callback untuk menampilkan halaman detail
+                    } else {
+                        val context = itemView.context
+                        if (context is FragmentActivity) {
+                            val customDialog = Pop_up(context)
+                            customDialog.show()
+                        }
+                    }
+                }
             }
         }
     }
@@ -38,17 +53,5 @@ class PatientAdapter(
     }
 
     override fun getItemCount() = patientList.size
-
-    fun updateData(newList: List<Pasien>) {
-        patientList.clear()
-        patientList.addAll(newList)
-        notifyDataSetChanged()
-    }
-
-    fun filterList(query: String) {
-        val filteredList = patientList.filter { patient ->
-            patient.nama_Pasien?.contains(query, ignoreCase = true) == true
-        }
-        updateData(filteredList)
-    }
 }
+

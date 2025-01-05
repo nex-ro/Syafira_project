@@ -17,6 +17,7 @@ import com.example.project.Pop_up
 import com.example.project.R
 import com.example.project.databinding.FragmentUserCariPasienBinding
 import com.example.project.user.adapter.PatientAdapter
+import com.example.project.user.adapter.User_patientDetail
 import com.google.firebase.database.*
 
 class user_cari_Pasien : Fragment() {
@@ -45,7 +46,7 @@ class user_cari_Pasien : Fragment() {
     }
     private fun setupViews() {
         // Initialize RecyclerView and Adapter
-        patientAdapter = PatientAdapter(patientList) { patient ->
+        patientAdapter = PatientAdapter(patientList, sharedPreferences) { patient ->
             navigateToDetail(patient)
         }
 
@@ -165,27 +166,16 @@ class user_cari_Pasien : Fragment() {
 
     private fun navigateToDetail(patient: Pasien) {
         try {
-            val isLoggedIn = sharedPreferences.getBoolean("isLoggedIn", false)
-            if(isLoggedIn){
-                Log.d("Navigation", "Navigating to detail for patient: ${patient.nama_Pasien}")
+            Log.d("Navigation", "Navigating to detail for patient: ${patient.nama_Pasien}")
+            val detailDialog = User_patientDetail.newInstance(
+                namaPasien = patient.nama_Pasien,
+                penyakit = patient.penyakit,
+                namaRuangan = patient.nama_Ruangan,
+                tanggalMasuk = patient.tanggal_Masuk,
+                status = patient.status
+            )
 
-                val formFragment = user_form_Kunjungan().apply {
-                    arguments = Bundle().apply {
-                        putString("nama_pasien", patient.nama_Pasien)
-                        putString("nama_ruangan", patient.nama_Ruangan)
-                    }
-                }
-
-                parentFragmentManager.beginTransaction().apply {
-                    replace(R.id.flFragment, formFragment)
-                    addToBackStack(null)
-                    commit()
-                }
-
-            }else{
-                val customDialog = Pop_up(requireContext())
-                customDialog.show()
-            }
+            detailDialog.show(parentFragmentManager, "PatientDetailDialog")
 
         } catch (e: Exception) {
             Log.e("Navigation", "Error navigating to detail", e)

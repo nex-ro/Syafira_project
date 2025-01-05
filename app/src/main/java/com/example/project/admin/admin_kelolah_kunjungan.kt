@@ -119,7 +119,7 @@ class admin_kelolah_kunjungan : Fragment() {
                             for (dataSnapshot in snapshot.children) {
                                 dataSnapshot.getValue(Kunjungan::class.java)?.let { kunjungan ->
                                     // Only add kunjungan with status "menunggu"
-                                    if (kunjungan.status == "menunggu") {
+                                        if (kunjungan.status == "menunggu") {
                                         kunjunganList.add(kunjungan)
                                     }
                                 }
