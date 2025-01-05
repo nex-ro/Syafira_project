@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.util.Patterns
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.project.MainActivity
@@ -51,6 +52,48 @@ class Register : AppCompatActivity() {
         }
     }
 
+    private fun isValidEmail(email: String): Boolean {
+        return if (email.isEmpty()) {
+            binding.editTxtEmail.error = "Email tidak boleh kosong"
+            false
+        } else if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+            binding.editTxtEmail.error = "Format email tidak valid"
+            false
+        } else {
+            binding.editTxtEmail.error = null
+            true
+        }
+    }
+
+    private fun isValidPassword(password: String): Boolean {
+        val containsUpperCase = password.any { it.isUpperCase() }
+        val containsNumber = password.any { it.isDigit() }
+        val isLongEnough = password.length >= 8
+
+        return when {
+            password.isEmpty() -> {
+                binding.editTextPassword.error = "Password tidak boleh kosong"
+                false
+            }
+            !isLongEnough -> {
+                binding.editTextPassword.error = "Password harus minimal 8 karakter"
+                false
+            }
+            !containsUpperCase -> {
+                binding.editTextPassword.error = "Password harus mengandung minimal 1 huruf besar"
+                false
+            }
+            !containsNumber -> {
+                binding.editTextPassword.error = "Password harus mengandung minimal 1 angka"
+                false
+            }
+            else -> {
+                binding.editTextPassword.error = null
+                true
+            }
+        }
+    }
+
     private fun registerUser() {
         val username = binding.editTxtUsername.text.toString().trim()
         val fullName = binding.editTxtFullname.text.toString().trim()
@@ -63,10 +106,31 @@ class Register : AppCompatActivity() {
             else -> ""
         }
 
-        // Validation
-        if (username.isEmpty() || fullName.isEmpty() || email.isEmpty() ||
-            phone.isEmpty() || password.isEmpty() || gender.isEmpty()) {
-            Toast.makeText(this, "Semua field harus diisi!", Toast.LENGTH_SHORT).show()
+        // Field validation
+        when {
+            username.isEmpty() -> {
+                binding.editTxtUsername.error = "Username tidak boleh kosong"
+                binding.editTxtUsername.requestFocus()
+                return
+            }
+            fullName.isEmpty() -> {
+                binding.editTxtFullname.error = "Nama lengkap tidak boleh kosong"
+                binding.editTxtFullname.requestFocus()
+                return
+            }
+            phone.isEmpty() -> {
+                binding.editTxtnoHP.error = "Nomor HP tidak boleh kosong"
+                binding.editTxtnoHP.requestFocus()
+                return
+            }
+            gender.isEmpty() -> {
+                Toast.makeText(this, "Pilih jenis kelamin", Toast.LENGTH_SHORT).show()
+                return
+            }
+        }
+
+        // Validate email and password
+        if (!isValidEmail(email) || !isValidPassword(password)) {
             return
         }
 
@@ -106,7 +170,9 @@ class Register : AppCompatActivity() {
     private fun setupPasswordVisibilityToggle() {
         binding.editTextPassword.transformationMethod = PasswordTransformationMethod.getInstance()
         binding.editTextPassword.setCompoundDrawablesWithIntrinsicBounds(
-            null, null, ContextCompat.getDrawable(this, R.drawable.ic_visibility_off), null
+            null, null,
+            ContextCompat.getDrawable(this, R.drawable.ic_visibility_off),
+            null
         )
 
         binding.editTextPassword.setOnTouchListener { _, event ->
