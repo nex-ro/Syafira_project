@@ -32,6 +32,7 @@ import java.util.Date
 import java.util.Locale
 
 class Statistik_Medis : Fragment() {
+
     private var _binding: FragmentStatistikMedisBinding? = null
     private val binding get() = _binding!! // Ensure non-nullable usage
     private lateinit var database: DatabaseReference
@@ -44,13 +45,10 @@ class Statistik_Medis : Fragment() {
         _binding = FragmentStatistikMedisBinding.inflate(inflater, container, false)
         database = FirebaseDatabase.getInstance().reference
         // Pass necessary views to RoomNotificationSystem
-        notificationSystem = RoomNotificationSystem(
-            this,
-            binding.notificationFab,
-            binding.notificationBadge
-        )
-        notificationSystem.initialize()
+
+
         fetchRoomStatus()
+
         binding.cardStatusRuangan.setOnClickListener {
             setCurrentFragment(laporan_medis())
         }
@@ -68,7 +66,13 @@ class Statistik_Medis : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        notificationSystem = RoomNotificationSystem(
+            this,
 
+            binding.notificationFab,
+            binding.notificationBadge
+        )
+        notificationSystem.initialize()
 
     }
 
@@ -76,6 +80,7 @@ class Statistik_Medis : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null // Clear the binding to avoid memory leaks
+        notificationSystem.cleanup()
     }
 
     private fun fetchRoomStatus() {
