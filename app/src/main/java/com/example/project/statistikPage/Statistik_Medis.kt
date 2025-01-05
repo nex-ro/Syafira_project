@@ -35,7 +35,7 @@ class Statistik_Medis : Fragment() {
     private var _binding: FragmentStatistikMedisBinding? = null
     private val binding get() = _binding!! // Ensure non-nullable usage
     private lateinit var database: DatabaseReference
-
+    private lateinit var notificationSystem: RoomNotificationSystem
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -43,6 +43,13 @@ class Statistik_Medis : Fragment() {
     ): View {
         _binding = FragmentStatistikMedisBinding.inflate(inflater, container, false)
         database = FirebaseDatabase.getInstance().reference
+        // Pass necessary views to RoomNotificationSystem
+        notificationSystem = RoomNotificationSystem(
+            this,
+            binding.notificationFab,
+            binding.notificationBadge
+        )
+        notificationSystem.initialize()
         fetchRoomStatus()
         binding.cardStatusRuangan.setOnClickListener {
             setCurrentFragment(laporan_medis())

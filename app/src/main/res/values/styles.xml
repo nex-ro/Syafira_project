@@ -1,0 +1,12 @@
+<resources>
+
+
+
+    <!-- Custom AlertDialog Style -->
+    <style name="CustomAlertDialog" parent="Theme.MaterialComponents.Light.Dialog.Alert">
+        <item name="android:windowBackground">@drawable/dialog_background</item>
+        <item name="android:windowMinWidthMajor">90%</item>
+        <item name="android:windowMinWidthMinor">90%</item>
+    </style>
+
+</resources>
