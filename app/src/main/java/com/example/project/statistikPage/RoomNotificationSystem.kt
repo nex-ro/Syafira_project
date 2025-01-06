@@ -1,5 +1,8 @@
 package com.example.project.statistikPage
+
+import android.app.Activity
 import android.app.AlertDialog
+import android.content.Context
 import android.graphics.Color
 import android.util.Log
 import android.view.Gravity
@@ -16,7 +19,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 class RoomNotificationSystem(
-    private val fragment: Fragment,
+    private val context: Context,
     private val fab: FloatingActionButton,
     private val notificationBadge: TextView
 ) {
@@ -70,16 +73,11 @@ class RoomNotificationSystem(
                     .equalTo(false)
                     .addValueEventListener(object : ValueEventListener {
                         override fun onDataChange(snapshot: DataSnapshot) {
-                            if (!fragment.isAdded) return
-
                             val count = snapshot.childrenCount.toInt()
-                            fragment.activity?.runOnUiThread {
-                                updateNotificationBadge(count)
-                            }
+                            updateNotificationBadge(count)
                         }
 
                         override fun onCancelled(error: DatabaseError) {
-                            if (!fragment.isAdded) return
                             showError("Failed to update notification badge: ${error.message}")
                         }
                     })
@@ -142,24 +140,20 @@ class RoomNotificationSystem(
         val currentTime = System.currentTimeMillis()
         val twoHoursInMillis = 2 * 60 * 60 * 1000 // 2 hours in milliseconds
 
-        // Create a key for the current room statuses
         val currentKey = createNotificationKey(currentRooms)
-
-        // Check if we have a similar notification within the last 2 hours
         val existingNotification = notificationHistory[currentKey]
+
         if (existingNotification != null) {
             val timeDifference = currentTime - existingNotification.timestamp
             if (timeDifference < twoHoursInMillis) {
-                return true // Duplicate notification within 2 hours
+                return true
             }
         }
 
-        // Clean up old entries
         notificationHistory.entries.removeIf { entry ->
             currentTime - entry.value.timestamp > twoHoursInMillis
         }
 
-        // Add current notification to history
         val notificationMessage = createNotificationMessage(currentRooms)
         notificationHistory[currentKey] = NotificationData(
             message = notificationMessage,
@@ -169,8 +163,8 @@ class RoomNotificationSystem(
 
         return false
     }
+
     private fun createNotificationKey(rooms: List<RoomStatus>): String {
-        // Create a unique key based on room names and occupancy levels
         return rooms.sortedBy { it.name }
             .joinToString("|") { "${it.name}:${it.occupancy}" }
     }
@@ -183,14 +177,8 @@ class RoomNotificationSystem(
         return message.toString().trim()
     }
 
-
-
-
     private fun createAggregatedNotification(rooms: List<RoomStatus>) {
-        val notificationMessage = StringBuilder("Beberapa ruangan memiliki tingkat hunian tinggi:\n\n")
-        rooms.forEach { room ->
-            notificationMessage.append("• ${room.name}: ${room.occupancy}% kapasitas\n")
-        }
+        val notificationMessage = createNotificationMessage(rooms)
 
         val notification = hashMapOf(
             "rooms" to rooms.map { room ->
@@ -200,7 +188,7 @@ class RoomNotificationSystem(
                 )
             },
             "timestamp" to ServerValue.TIMESTAMP,
-            "message" to notificationMessage.toString().trim(),
+            "message" to notificationMessage,
             "isRead" to false
         )
 
@@ -248,9 +236,9 @@ class RoomNotificationSystem(
     }
 
     private fun showCustomNotificationDialog(notifications: List<NotificationItem>) {
-        val builder = AlertDialog.Builder(fragment.requireContext(), R.style.CustomAlertDialogTheme)
-        val view = LayoutInflater.from(fragment.requireContext())
-            .inflate(R.layout.dialog_notifications, null)
+        val builder = AlertDialog.Builder(context, R.style.CustomAlertDialogTheme)
+        val inflater = LayoutInflater.from(context)
+        val view = inflater.inflate(R.layout.dialog_notifications, null)
 
         val containerLayout = view.findViewById<LinearLayout>(R.id.notificationsContainer)
         val dateFormat = SimpleDateFormat("dd MMM yyyy, HH:mm", Locale("id"))
@@ -275,16 +263,14 @@ class RoomNotificationSystem(
         dateFormat: SimpleDateFormat,
         containerLayout: LinearLayout
     ): View {
-        val itemView = LayoutInflater.from(fragment.requireContext())
-            .inflate(R.layout.item_notification, null)
+        val inflater = LayoutInflater.from(context)
+        val itemView = inflater.inflate(R.layout.item_notification, null)
 
         val timeText = itemView.findViewById<TextView>(R.id.timeText)
         val contentText = itemView.findViewById<TextView>(R.id.contentText)
         val deleteButton = itemView.findViewById<TextView>(R.id.deleteButton)
 
         timeText.text = dateFormat.format(Date(notification.timestamp))
-
-        // Directly use the message as it's already formatted properly
         contentText.text = notification.message
 
         deleteButton.setOnClickListener {
@@ -298,7 +284,6 @@ class RoomNotificationSystem(
 
         return itemView
     }
-
 
     private fun deleteNotification(notificationId: String, onSuccess: () -> Unit) {
         notificationsRef.child(notificationId).removeValue()
@@ -320,31 +305,32 @@ class RoomNotificationSystem(
             }
     }
 
-
     private fun showMessage(message: String) {
-        Snackbar.make(fragment.requireView(), message, Snackbar.LENGTH_SHORT).show()
+        if (context is Activity) {
+            val rootView = (context as Activity).findViewById<View>(android.R.id.content)
+            Snackbar.make(rootView, message, Snackbar.LENGTH_SHORT).show()
+        }
     }
 
     private fun showError(error: String) {
-        Snackbar.make(fragment.requireView(), error, Snackbar.LENGTH_LONG)
-            .setBackgroundTint(fragment.resources.getColor(android.R.color.holo_red_light, null))
-            .show()
+        if (context is Activity) {
+            val rootView = (context as Activity).findViewById<View>(android.R.id.content)
+            Snackbar.make(rootView, error, Snackbar.LENGTH_LONG)
+                .setBackgroundTint(context.resources.getColor(android.R.color.holo_red_light, null))
+                .show()
+        }
     }
 
-
-    // Data class for room status
     private data class RoomStatus(val name: String, val occupancy: Int)
 
-    // Data class for notification items
     private data class NotificationItem(
         val id: String,
         val rooms: List<RoomStatus>,
         val timestamp: Long,
-        val message: String // Tambahkan properti ini
+        val message: String
     )
 
     companion object {
         private const val MIN_NOTIFICATION_INTERVAL = 5 * 60 * 1000 // 5 minutes in milliseconds
     }
-
 }

@@ -66,13 +66,7 @@ class Statistik_Medis : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        notificationSystem = RoomNotificationSystem(
-            this,
 
-            binding.notificationFab,
-            binding.notificationBadge
-        )
-        notificationSystem.initialize()
 
     }
 
@@ -80,7 +74,7 @@ class Statistik_Medis : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null // Clear the binding to avoid memory leaks
-        notificationSystem.cleanup()
+
     }
 
     private fun fetchRoomStatus() {
