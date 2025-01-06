@@ -149,16 +149,17 @@ class admin_history_kunjungan : Fragment() {
 
     private fun filterData(query: String) {
         val selectedPosition = binding.spinnerBulan.selectedItemPosition
+        val currentYear = Calendar.getInstance().get(Calendar.YEAR)
 
         val filteredList = fullKunjunganList.filter { kunjungan ->
             val matchesSearch = kunjungan.nama?.contains(query, ignoreCase = true) == true
-            val matchesDate = when {
-                selectedPosition == 0 -> true
-                selectedPosition == 1 -> isToday(kunjungan.tanggal_kunjungan ?: 0L)
-                else -> isInMonth(kunjungan.tanggal_kunjungan ?: 0L, selectedPosition - 1)
+            val matchesDate = when (selectedPosition) {
+                0 -> true // All time
+                1 -> isToday(kunjungan.tanggal_kunjungan) // Today
+                else -> isInMonth(kunjungan.tanggal_kunjungan, selectedPosition - 2) // January starts at position 2
             }
             matchesSearch && matchesDate
-        }
+        }.sortedByDescending { it.tanggal_kunjungan } // Sort by most recent visits first
 
         KunjunganList.clear()
         KunjunganList.addAll(filteredList)
@@ -167,12 +168,9 @@ class admin_history_kunjungan : Fragment() {
         showNoDataMessage(KunjunganList.isEmpty())
     }
 
-    private fun showNoDataMessage(show: Boolean) {
-        binding.noDataText.visibility = if (show) View.VISIBLE else View.GONE
-        binding.recyclerViewPasien.visibility = if (show) View.GONE else View.VISIBLE
-    }
-
     private fun isToday(timestamp: Long): Boolean {
+        if (timestamp == 0L) return false
+
         val calendar = Calendar.getInstance()
         val today = Calendar.getInstance()
         calendar.timeInMillis = timestamp
@@ -181,9 +179,19 @@ class admin_history_kunjungan : Fragment() {
                 calendar.get(Calendar.DAY_OF_YEAR) == today.get(Calendar.DAY_OF_YEAR)
     }
 
-    private fun isInMonth(timestamp: Long, month: Int): Boolean {
+    private fun isInMonth(timestamp: Long, monthIndex: Int): Boolean {
+        if (timestamp == 0L) return false
+
         val calendar = Calendar.getInstance()
+        val currentYear = calendar.get(Calendar.YEAR)
+
         calendar.timeInMillis = timestamp
-        return calendar.get(Calendar.MONTH) == month
+        return calendar.get(Calendar.MONTH) == monthIndex &&
+                calendar.get(Calendar.YEAR) == currentYear
     }
+    private fun showNoDataMessage(show: Boolean) {
+        binding.noDataText.visibility = if (show) View.VISIBLE else View.GONE
+        binding.recyclerViewPasien.visibility = if (show) View.GONE else View.VISIBLE
+    }
+
 }

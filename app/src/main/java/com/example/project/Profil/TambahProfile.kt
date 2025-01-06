@@ -135,7 +135,8 @@ class TambahProfile : Fragment() {
                                                 email,
                                                 phone,
                                                 gender,
-                                                password
+                                                password,
+                                                "Admin"
                                             )
 
                                             // Save the user to Firebase Realtime Database
